@@ -1,6 +1,6 @@
 import { HighlightableMap } from 'highlightable-map';
-import { mapValues } from 'lodash';
-import { makeAutoObservable } from 'mobx';
+import { groupBy, mapValues } from 'lodash';
+import { makeAutoObservable, observable } from 'mobx';
 import { ECountry } from '../types/ECountry';
 import { TAgency } from '../types/TAgency';
 import { TAgencyActivity } from '../types/TAgencyActivity';
@@ -9,7 +9,7 @@ import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
 
 export class State {
 	constructor() {
-		makeAutoObservable(this);
+		makeAutoObservable(this, { data: false });
 	}
 	data: {
 		agency_presence: TAgencyPresence[];
@@ -41,6 +41,10 @@ export class State {
 
 	get countries() {
 		return Object.keys(this.agenciesInCountry);
+	}
+
+	get activitesByCountry() {
+		return groupBy(this.data.agency_activity, 'Country');
 	}
 
 	selectedCountry: string = '';

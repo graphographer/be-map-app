@@ -3,6 +3,7 @@ import '@material/web/tabs/primary-tab';
 import '@material/web/tabs/tabs';
 import './BeMap';
 import './BeMapCountryDropdown';
+import './BeMapCountryActivities';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
@@ -44,6 +45,12 @@ export class BeMapApp extends StateProvider {
 
 			<section>
 				<be-map></be-map>
+			</section>
+
+			<section>
+				<be-map-country-activities
+					country=${this.state.selectedCountry}
+				></be-map-country-activities>
 			</section>
 		</main>`;
 	}

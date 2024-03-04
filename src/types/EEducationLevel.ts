@@ -3,5 +3,5 @@ export enum EEducationLevel {
 	'Primary' = 'Primary',
 	'Secondary' = 'Secondary',
 	'Workforce Development' = 'Workforce Development',
-	'Education Systems Training' = 'Education Systems Training'
+	'Education Systems Strengthening' = 'Education Systems Strengthening'
 }
