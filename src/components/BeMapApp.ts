@@ -2,58 +2,49 @@ import '@material/web/icon/icon';
 import '@material/web/tabs/primary-tab';
 import '@material/web/tabs/tabs';
 import './BeMap';
+import './BeMapCountryDropdown';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { observable } from 'mobx';
+import { live } from 'lit/directives/live.js';
 import { StateProvider } from './StateProvider';
-import { shadowDom } from './styles';
 
 @customElement('be-map-app')
 export class BeMapApp extends StateProvider {
 	static styles = [
-		shadowDom,
+		...super.styles,
 		css`
 			:host {
-				--md-ref-typeface-brand: 'Source Sans Pro', sans-serif;
-				--md-ref-typeface-plain: 'Source Sans Pro', sans-serif;
-				--md-sys-color: var(--rich-black);
-				--md-sys-color-primary: var(--web-blue);
-				--md-sys-color-surface: var(--light-gray);
+				display: grid;
+				grid-template-columns: 1fr min(75rem, 95%) 1fr;
+			}
+			:host > * {
+				grid-column: 2;
 			}
 		`
 	];
 
-	@observable
-	selectedTab: string = 'videos';
-
 	render() {
-		return html` 
-			<main>
-				<h1>BE Map Refresh</h1>
+		return html` <main>
+			<h1>BE Map Refresh</h1>
 
-				<section>
-					<be-map></be-map>
-				</section>
+			<be-map-country-dropdown
+				id="country"
+				@input=${(e: InputEvent) =>
+					this.state.setCountry(
+						(e.composedPath()[0] as HTMLSelectElement).value
+					)}
+			></be-map-country-dropdown>
 
-				<section>
-					<md-tabs aria-label="Content to view" @change=${(e: any) =>
-						console.log(e.target.activeTabIndex)}>
-						<md-primary-tab id="photos-tab" aria-controls="photos-panel">
-							Data View A
-						</md-primary-tab>
-						<md-primary-tab id="videos-tab" aria-controls="videos-panel">
-							Data View B
-						</md-primary-tab>
-						<md-primary-tab id="music-tab" aria-controls="music-panel">
-							Data View C
-						</md-primary-tab>
-					</md-tabs>
-				</section>
+			<section>
+				<be-map-agency-disbursement-chart
+					.country=${live(this.state.selectedCountry)}
+				></be-map-agency-disbursement-chart>
+			</section>
 
-				<section>
-					<pre></code>${JSON.stringify(this.state.data, null, 2)}</code></pre>
-				</section>
-			</main>`;
+			<section>
+				<be-map></be-map>
+			</section>
+		</main>`;
 	}
 }

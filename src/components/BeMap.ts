@@ -25,6 +25,9 @@ export class BeMap extends StateProvider {
 		) as HighlightableMap;
 		this.highlightableMap.setAttribute('tooltip', '');
 		this.highlightableMap.setAttribute('autozoom', '');
+		this.highlightableMap.addEventListener('click-country', (e: any) => {
+			this.state.setCountry(e.detail.feature.properties.SOVEREIGNT);
+		});
 
 		this.highlightableMap.addEventListener(
 			'hm-rendered',
@@ -59,6 +62,11 @@ export class BeMap extends StateProvider {
 	}
 
 	render() {
+		return this.hm;
+	}
+
+	get hm() {
+		this.highlightableMap.selected = [this.state.selectedCountry];
 		return this.highlightableMap;
 	}
 }

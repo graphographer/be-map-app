@@ -1,0 +1,32 @@
+:root {
+    --usaid-blue: #002F6C;
+    --usaid-red: #BA0C2F;
+    --rich-black: #212721;
+    --medium-blue: #0067B9;
+    --light-blue: #A7C6ED;
+    --ultralight-blue: #a7c6ed73;
+    --web-blue: #205493;
+    --dark-red: #651D32;
+    --dark-gray: #6C6463;
+    --medium-gray: #8C8985;
+    --light-gray: #f6f6f6;
+
+    /* Set sans-serif & mono fonts */
+    --sans-font: 'Open Sans Pro', sans-serif;
+    --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    --standard-border-radius: 5px;
+
+    /* Default (light) theme */
+    --bg: #fff;
+    --accent-bg: #f5f7ff;
+    --text: var(--rich-black);
+    --text-light: var(--light-gray);
+    --border: #898EA4;
+    --accent: #0d47a1;
+    --accent-hover: #1266e2;
+    --accent-text: var(--web-blue);
+    --code: var(--usaid-red);
+    --preformatted: #444;
+    --marked: #ffdd33;
+    --disabled: #efefef;
+}

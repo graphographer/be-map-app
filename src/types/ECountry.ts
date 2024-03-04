@@ -1,4 +1,4 @@
-export enum ECountries {
+export enum ECountry {
 	'Afghanistan' = 'Afghanistan',
 	'Albania' = 'Albania',
 	'Algeria' = 'Algeria',
