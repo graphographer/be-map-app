@@ -5,3 +5,5 @@ export enum EEducationLevel {
 	'Workforce Development' = 'Workforce Development',
 	'Education Systems Strengthening' = 'Education Systems Strengthening'
 }
+
+export const EDUCATION_LEVELS = Object.keys(EEducationLevel);

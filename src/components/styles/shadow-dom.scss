@@ -366,9 +366,7 @@ input {
 label {
 	display: block;
 
-	>textarea,
-	select,
-	input {
+	>* {
 		display: block;
 	}
 }

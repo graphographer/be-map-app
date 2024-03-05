@@ -1,7 +1,7 @@
 import { customElement, property } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
 import { PropertyValueMap, html } from 'lit';
-import { shortToLongAgencyName } from './helpers/shortToLongAgencyName';
+import { agencyNameSwitcher } from './helpers/agencyNameSwitcher';
 
 @customElement('be-map-country-activities')
 export class BeMapCountryActivities extends StateProvider {
@@ -30,7 +30,7 @@ export class BeMapCountryActivities extends StateProvider {
 			return html`
 				<details>
 					<summary>
-						${name} ${Agency && `(${shortToLongAgencyName(Agency)})`}
+						${name} ${Agency && `(${agencyNameSwitcher(Agency)})`}
 					</summary>
 
 					${Implementer && html`<b>Implementer:</b> ${Implementer}`}

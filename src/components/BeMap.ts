@@ -3,6 +3,8 @@ import 'highlightable-map/dist/HighlightableMapBundled.min.js';
 import { customElement } from 'lit/decorators.js';
 import { autorun } from 'mobx';
 import { StateProvider } from './StateProvider';
+import { html } from 'lit';
+import './BeMapCountryDropdown';
 
 const HIGHLIGHT_COLORS: Record<number, string> = {
 	5: '#002F6C',
@@ -26,14 +28,12 @@ export class BeMap extends StateProvider {
 		this.highlightableMap.setAttribute('tooltip', '');
 		this.highlightableMap.setAttribute('autozoom', '');
 		this.highlightableMap.addEventListener('click-country', (e: any) => {
-			this.state.setCountry(e.detail.feature.properties.SOVEREIGNT);
+			this.state.setCountry(e.detail.feature.properties.ADM0_A3_US);
 		});
 
 		this.highlightableMap.addEventListener(
 			'hm-rendered',
 			() => {
-				// this might not need to be an autorun, if there is no other state
-				// that can change the highlighting after the initial render
 				this.disposers.push(
 					autorun(() => {
 						const toHighlight: string[] = [];
@@ -41,13 +41,17 @@ export class BeMap extends StateProvider {
 							([country, numberOfAgencies]) => {
 								const el = this.highlightableMap.countryEls.get(country);
 
-								el?.style.setProperty(
-									'fill',
-									HIGHLIGHT_COLORS[numberOfAgencies]
-								);
+								if (!this.state.filteredCountries.includes(country)) {
+									el?.style.setProperty('fill', HIGHLIGHT_COLORS[0]);
+								} else {
+									el?.style.setProperty(
+										'fill',
+										HIGHLIGHT_COLORS[numberOfAgencies]
+									);
 
-								if (numberOfAgencies > 0) {
-									toHighlight.push(country);
+									if (numberOfAgencies > 0) {
+										toHighlight.push(country);
+									}
 								}
 							}
 						);
@@ -58,11 +62,28 @@ export class BeMap extends StateProvider {
 			{ once: true }
 		);
 
+		// this.highlightableMap.setTooltipFn((e, tt) => {
+		// 	tt.setContent(e.propagatedFrom.feature.properties.SOVEREIGNT).openOn(
+		// 		this.highlightableMap.leafletMap
+		// 	);
+		// });
+
 		this.state.highlightableMap = this.highlightableMap;
 	}
 
 	render() {
-		return this.hm;
+		return html` <label>
+				Select a country (not filtered, for screen readers)
+				<be-map-country-dropdown
+					.countries=${this.state.countries}
+					@input=${(e: InputEvent) =>
+						this.state.setCountry(
+							(e.composedPath()[0] as HTMLSelectElement).value
+						)}
+				></be-map-country-dropdown
+			></label>
+
+			${this.hm}`;
 	}
 
 	get hm() {

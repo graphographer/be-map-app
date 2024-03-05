@@ -2,8 +2,9 @@ import '@material/web/icon/icon';
 import '@material/web/tabs/primary-tab';
 import '@material/web/tabs/tabs';
 import './BeMap';
-import './BeMapCountryDropdown';
 import './BeMapCountryActivities';
+import './BeMapCountryDropdown';
+import './BeMapFilters';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
@@ -27,31 +28,36 @@ export class BeMapApp extends StateProvider {
 
 	render() {
 		return html` <main>
-			<h1>BE Map Refresh</h1>
+			<h4>BE Map Refresh</h4>
 
-			<be-map-country-dropdown
-				id="country"
-				@input=${(e: InputEvent) =>
-					this.state.setCountry(
-						(e.composedPath()[0] as HTMLSelectElement).value
-					)}
-			></be-map-country-dropdown>
+			<be-map-filters></be-map-filters>
 
-			<section>
-				<be-map-agency-disbursement-chart
-					.country=${live(this.state.selectedCountry)}
-				></be-map-agency-disbursement-chart>
-			</section>
+			<label>
+				Filtered Countries
+				<be-map-country-dropdown
+					.countries=${this.state.filteredCountries}
+					@input=${(e: InputEvent) =>
+						this.state.setCountry(
+							(e.composedPath()[0] as HTMLSelectElement).value
+						)}
+				></be-map-country-dropdown
+			></label>
 
 			<section>
 				<be-map></be-map>
 			</section>
 
-			<section>
-				<be-map-country-activities
-					country=${this.state.selectedCountry}
-				></be-map-country-activities>
-			</section>
+			${this.state.selectedCountry &&
+			html` <section>
+					<be-map-country-activities
+						country=${this.state.selectedCountry}
+					></be-map-country-activities>
+				</section>
+				<section>
+					<be-map-agency-disbursement-chart
+						.country=${live(this.state.selectedCountry)}
+					></be-map-agency-disbursement-chart>
+				</section>`}
 		</main>`;
 	}
 }
