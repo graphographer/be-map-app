@@ -8,9 +8,10 @@ import {
 	Title,
 	Tooltip
 } from 'chart.js';
-import { PropertyValueMap, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { css, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import {
 	action,
 	computed,
@@ -24,8 +25,8 @@ import { AGENCIES_LONG_TO_SHORT, TAgency } from '../types/TAgency';
 import { AGENCIES_SHORT, TAgencyShort } from '../types/TAgencyShort';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
 import { StateProvider } from './StateProvider';
-import { countryNameFormatter } from './helpers/countryNameFormatter';
 import { agencyNameSwitcher } from './helpers/agencyNameSwitcher';
+import { countryNameFormatter } from './helpers/countryNameFormatter';
 
 const HIGHLIGHT_COLORS: Record<string, string> = {
 	USAID: 'red',
@@ -33,7 +34,12 @@ const HIGHLIGHT_COLORS: Record<string, string> = {
 	'The Peace Corps': 'yellow',
 	'U.S. Department of Agriculture': 'green',
 	'U.S. Department of Labor': 'blue',
-	'U.S. Department of State': 'violet'
+	'U.S. Department of State': 'violet',
+	MCC: 'orange',
+	PC: 'yellow',
+	USDA: 'green',
+	DOL: 'blue',
+	DOS: 'violet'
 };
 
 const USD_FORMATTER = new Intl.NumberFormat('en-US', {
@@ -42,7 +48,7 @@ const USD_FORMATTER = new Intl.NumberFormat('en-US', {
 });
 
 const getTitle = (country: string) =>
-	`Yearly Disbursements to ${country} (by Agency)`;
+	`Yearly Disbursements to ${countryNameFormatter(country)} (by Agency)`;
 
 Chart.register(
 	CategoryScale,
@@ -60,6 +66,13 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 		css`
 			.container {
 				position: relative;
+			}
+			.box {
+				display: inline-block;
+				height: 1rem;
+				width: 1rem;
+				border-radius: var(--standard-border-radius);
+				border: 1px solid var(--border);
 			}
 		`
 	];
@@ -132,7 +145,6 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 	}
 
 	toggleAgency(agency: TAgencyShort, include: boolean) {
-		console.log('checked?', include);
 		if (include) {
 			this.agencyFilter.add(agency);
 		} else {
@@ -162,6 +174,12 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 										.checked=${live(this.agencyFilter.has(agency))}
 									/>
 									${agency}
+									<div
+										class="box"
+										style=${styleMap({
+											'background-color': HIGHLIGHT_COLORS[agency]
+										})}
+									></div>
 								</label>
 							`;
 						})}
@@ -218,10 +236,7 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 			reaction(
 				() => this.country,
 				country => {
-					console.log('TITLE', countryNameFormatter(country));
-					this.chart.options.plugins!.title!.text = getTitle(
-						countryNameFormatter(country)
-					);
+					this.chart.options.plugins!.title!.text = getTitle(country);
 					this.chart.update('none');
 
 					// reset filters

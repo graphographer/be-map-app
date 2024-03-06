@@ -364,8 +364,11 @@ input {
 }
 
 label {
+	&:not(:last-child) {
+		margin-right: 1rem;
+	}
 
-	*:not(select,
+	*:first-child:not(select,
 		textarea,
 		input[type="checkbox"], input[type="radio"]) {
 		display: block;
