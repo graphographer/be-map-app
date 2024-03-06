@@ -30,6 +30,14 @@ export class BeMapApp extends StateProvider {
 		return html` <main>
 			<h4>BE Map Refresh</h4>
 
+			<section>
+				<be-map></be-map>
+			</section>
+
+			<section>
+				<be-map-agency-disbursement-chart></be-map-agency-disbursement-chart>
+			</section>
+
 			<be-map-filters></be-map-filters>
 
 			<label>
@@ -42,10 +50,6 @@ export class BeMapApp extends StateProvider {
 						)}
 				></be-map-country-dropdown
 			></label>
-
-			<section>
-				<be-map></be-map>
-			</section>
 
 			${this.state.selectedCountry &&
 			html` <section>

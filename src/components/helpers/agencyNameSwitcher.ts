@@ -6,8 +6,12 @@ export function agencyNameSwitcher(name: string): string {
 			return 'Millenium Challenge Corporation';
 		case 'Millenium Challenge Corporation':
 			return 'MCC';
+		case 'PC':
+			return 'The Peace Corps';
+		case 'The Peace Corps':
+			return 'PC';
 		case 'Peace Corps':
-			return 'Peace Corps';
+			return 'PC';
 		case 'USDA':
 			return 'U.S. Department of Agriculture';
 		case 'U.S. Department of Agriculture':

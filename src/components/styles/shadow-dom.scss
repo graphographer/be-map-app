@@ -364,9 +364,10 @@ input {
 }
 
 label {
-	display: block;
 
-	>* {
+	*:not(select,
+		textarea,
+		input[type="checkbox"], input[type="radio"]) {
 		display: block;
 	}
 }

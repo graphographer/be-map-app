@@ -6,7 +6,10 @@ import { TAgency } from '../types/TAgency';
 import { TAgencyActivity } from '../types/TAgencyActivity';
 import { TAgencyPresence } from '../types/TAgencyPresence';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
-import { nameToThreeAlphas } from '../data/countryNameTo3Alpha';
+import {
+	nameToThreeAlphas,
+	threeAlphasToName
+} from '../data/countryNameTo3Alpha';
 
 export class State {
 	constructor() {
@@ -54,7 +57,7 @@ export class State {
 		return Object.keys(this.agenciesInCountry);
 	}
 
-	get activitesByCountry() {
+	get activitesByCountry(): { [k: string]: TAgencyActivity[] } {
 		return mapKeys(
 			groupBy(this.data.agency_activity, 'Country'),
 			(_val, key) => {
@@ -86,7 +89,7 @@ export class State {
 		return filtered.map(([country]) => country);
 	}
 
-	selectedCountry: string = '';
+	selectedCountry: string = 'ETH';
 
 	setCountry(country: string) {
 		this.selectedCountry = country;
