@@ -1,13 +1,4 @@
-import {
-	BarController,
-	BarElement,
-	CategoryScale,
-	Chart,
-	ChartData,
-	LinearScale,
-	Title,
-	Tooltip
-} from 'chart.js';
+import { Chart, ChartData } from 'chart.js';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
@@ -50,15 +41,6 @@ const USD_FORMATTER = new Intl.NumberFormat('en-US', {
 const getTitle = (country: string) =>
 	`Yearly Disbursements to ${countryNameFormatter(country)} (by Agency)`;
 
-Chart.register(
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	BarController,
-	Tooltip,
-	Title
-);
-
 @customElement('be-map-agency-disbursement-chart')
 export class BeMapAgencyDisbursementChart extends StateProvider {
 	static styles = [
@@ -73,6 +55,7 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 				width: 1rem;
 				border-radius: var(--standard-border-radius);
 				border: 1px solid var(--border);
+				margin-bottom: -1px;
 			}
 		`
 	];
@@ -88,10 +71,8 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 		return this.state.data.disbursement_by_agency
 			.filter(
 				disbursement =>
-					disbursement.Country === threeAlphasToName.get(this.country)?.[0]
-			)
-			.filter(disbursement =>
-				disbursement.Disbursements.some(([, amount]) => !!amount)
+					disbursement.Country === threeAlphasToName.get(this.country)?.[0] &&
+					disbursement.Disbursements.some(([, amount]) => !!amount)
 			)
 			.map(disbursement => {
 				return [disbursement.Agency, disbursement];
@@ -139,9 +120,6 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 			countryDisbursementsByAgency: computed,
 			data: computed
 		});
-
-		// @ts-ignore
-		window.chart = this;
 	}
 
 	toggleAgency(agency: TAgencyShort, include: boolean) {

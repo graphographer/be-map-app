@@ -5,6 +5,8 @@ import './BeMap';
 import './BeMapCountryActivities';
 import './BeMapCountryDropdown';
 import './BeMapFilters';
+import './BeMapLearningOutcomesChart';
+import './BeMapAgencyDisbursementChart';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
@@ -30,16 +32,6 @@ export class BeMapApp extends StateProvider {
 		return html` <main>
 			<h4>BE Map Refresh</h4>
 
-			<section>
-				<be-map></be-map>
-			</section>
-
-			<section>
-				<be-map-agency-disbursement-chart></be-map-agency-disbursement-chart>
-			</section>
-
-			<be-map-filters></be-map-filters>
-
 			<label>
 				Filtered Countries
 				<be-map-country-dropdown
@@ -51,17 +43,28 @@ export class BeMapApp extends StateProvider {
 				></be-map-country-dropdown
 			></label>
 
+			<section>
+				<be-map-learning-outcomes-chart></be-map-learning-outcomes-chart>
+			</section>
+
+			<section>
+				<be-map></be-map>
+			</section>
+
+			<section>
+				<be-map-agency-disbursement-chart></be-map-agency-disbursement-chart>
+			</section>
+
+			<be-map-filters></be-map-filters>
+
 			${this.state.selectedCountry &&
-			html` <section>
+			html`
+				<section>
 					<be-map-country-activities
 						country=${this.state.selectedCountry}
 					></be-map-country-activities>
 				</section>
-				<section>
-					<be-map-agency-disbursement-chart
-						.country=${live(this.state.selectedCountry)}
-					></be-map-agency-disbursement-chart>
-				</section>`}
+			`}
 		</main>`;
 	}
 }

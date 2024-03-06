@@ -1,15 +1,13 @@
 import { HighlightableMap } from 'highlightable-map';
 import { groupBy, mapKeys, mapValues } from 'lodash';
 import { makeAutoObservable, observable } from 'mobx';
+import { nameToThreeAlphas } from '../data/countryNameTo3Alpha';
 import { EEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
 import { TAgencyActivity } from '../types/TAgencyActivity';
 import { TAgencyPresence } from '../types/TAgencyPresence';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
-import {
-	nameToThreeAlphas,
-	threeAlphasToName
-} from '../data/countryNameTo3Alpha';
+import { TLearningOutcome } from '../types/TLearningOutcome';
 
 export class State {
 	constructor() {
@@ -19,6 +17,7 @@ export class State {
 		agency_presence: TAgencyPresence[];
 		disbursement_by_agency: TDisbursementByAgency[];
 		agency_activity: TAgencyActivity[];
+		learning_outcomes: TLearningOutcome[];
 	} = {} as State['data'];
 
 	highlightableMap!: HighlightableMap;
@@ -89,7 +88,7 @@ export class State {
 		return filtered.map(([country]) => country);
 	}
 
-	selectedCountry: string = 'ETH';
+	selectedCountry: string = 'MOZ';
 
 	setCountry(country: string) {
 		this.selectedCountry = country;
