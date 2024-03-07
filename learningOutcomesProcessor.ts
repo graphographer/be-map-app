@@ -25,7 +25,7 @@ export const learningOutcomesProcessor = dsv({
 
 			if (key.startsWith('FY')) {
 				const year = parseInt(key.replace('FY', '20'));
-				const outcome = parseInt(row[key]) / 100;
+				const outcome = parseInt(row[key]);
 				outcomes.push([year, outcome]);
 				delete row[key];
 			}

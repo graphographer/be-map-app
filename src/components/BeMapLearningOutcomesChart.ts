@@ -2,7 +2,7 @@ import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
 import { Chart } from 'chart.js';
-import { reaction } from 'mobx';
+import { autorun, reaction } from 'mobx';
 import { ScriptableLineSegmentContext } from 'chart.js';
 
 const SUBJECT_COLORS: { [k: string]: string } = {
@@ -46,7 +46,7 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 					},
 					data: outcome.outcomes.map(([year, pct]) => ({
 						x: `FY${year}`,
-						y: pct ? pct * 100 : pct
+						y: pct
 					}))
 				};
 			})
@@ -65,12 +65,7 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 	}
 
 	render() {
-		return html`<div class="container">${this.ctx}</div>
-			<pre><code>${JSON.stringify(
-				this.countryOutcomes,
-				undefined,
-				2
-			)}</code></pre> `;
+		return html`<div class="container">${this.ctx}</div> `;
 	}
 
 	firstUpdated() {
@@ -129,7 +124,37 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 					this.chart.data = data;
 					this.chart.update('none');
 				}
-			)
+			),
+			autorun(() => {
+				this.state.outcomeIndexesToChart.forEach((val, i) => {
+					this.chart.setDatasetVisibility(i, val);
+					this.chart.update();
+				});
+			}),
+			autorun(() => {
+				if (this.state.highlightOutcomeData.length) {
+					const [index, point] = this.state.highlightOutcomeData;
+					this.showTooltip(index, point);
+				} else {
+					this.ctx.dispatchEvent(
+						new MouseEvent('mouseout', { bubbles: true, composed: true })
+					);
+				}
+			})
+		);
+	}
+
+	private showTooltip(index: number, point: number) {
+		const { x, y } = this.chart.getDatasetMeta(index)?.data[point];
+		const { left, top } = this.ctx.getBoundingClientRect();
+
+		this.ctx.dispatchEvent(
+			new MouseEvent('mousemove', {
+				clientX: x + left,
+				clientY: y + top,
+				bubbles: true,
+				composed: true
+			})
 		);
 	}
 

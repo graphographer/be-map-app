@@ -2,15 +2,15 @@ import '@material/web/icon/icon';
 import '@material/web/tabs/primary-tab';
 import '@material/web/tabs/tabs';
 import './BeMap';
+import './BeMapAgencyDisbursementChart';
 import './BeMapCountryActivities';
 import './BeMapCountryDropdown';
 import './BeMapFilters';
 import './BeMapLearningOutcomesChart';
-import './BeMapAgencyDisbursementChart';
+import './BeMapLearningOutcomesTable';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { live } from 'lit/directives/live.js';
 import { StateProvider } from './StateProvider';
 
 @customElement('be-map-app')
@@ -44,6 +44,9 @@ export class BeMapApp extends StateProvider {
 			></label>
 
 			<section>
+				<be-map-learning-outcomes-table
+					.country=${this.state.selectedCountry}
+				></be-map-learning-outcomes-table>
 				<be-map-learning-outcomes-chart></be-map-learning-outcomes-chart>
 			</section>
 

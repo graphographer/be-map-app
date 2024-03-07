@@ -1,6 +1,6 @@
 import { HighlightableMap } from 'highlightable-map';
 import { groupBy, mapKeys, mapValues } from 'lodash';
-import { makeAutoObservable, observable } from 'mobx';
+import { isObservable, makeAutoObservable, observable } from 'mobx';
 import { nameToThreeAlphas } from '../data/countryNameTo3Alpha';
 import { EEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
@@ -29,6 +29,9 @@ export class State {
 		agency: undefined,
 		educationLevel: undefined
 	};
+
+	outcomeIndexesToChart: boolean[] = [];
+	highlightOutcomeData: [number, number] | [] = [];
 
 	get agenciesInCountry(): { [k: string]: TAgency[] } {
 		return this.data.agency_presence.reduce((acc, presence) => {
