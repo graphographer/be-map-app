@@ -1,8 +1,9 @@
 import { HighlightableMap } from 'highlightable-map';
-import { groupBy, mapKeys, mapValues } from 'lodash';
-import { isObservable, makeAutoObservable, observable } from 'mobx';
+import { groupBy, mapKeys, mapValues, omitBy } from 'lodash-es';
+import { makeAutoObservable, observable } from 'mobx';
 import { nameToThreeAlphas } from '../data/countryNameTo3Alpha';
-import { EEducationLevel } from '../types/EEducationLevel';
+import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
+import { TEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
 import { TAgencyActivity } from '../types/TAgencyActivity';
 import { TAgencyPresence } from '../types/TAgencyPresence';
@@ -23,15 +24,51 @@ export class State {
 	highlightableMap!: HighlightableMap;
 
 	filter: {
-		educationLevel?: EEducationLevel;
-		agency?: TAgency;
+		educationLevels?: TEducationLevel[];
+		agencies?: TAgency[];
 	} = {
-		agency: undefined,
-		educationLevel: undefined
+		agencies: undefined,
+		educationLevels: undefined
 	};
 
 	outcomeIndexesToChart: boolean[] = [];
 	highlightOutcomeData: [number, number] | [] = [];
+
+	overviewFiscalYear: number = 2023;
+
+	get totalYearlyDisbursements(): {
+		[k: string]: { [k: string]: number };
+	} {
+		return mapValues(
+			groupBy(this.data.disbursement_by_agency, 'Country'),
+			disbursements => {
+				return disbursements.reduce<{ [k: string]: number }>(
+					(acc, { Disbursements }) => {
+						Disbursements.forEach(([year, amt]) => {
+							if (typeof acc[year] !== 'number') {
+								acc[year] = 0;
+							}
+							acc[year] += amt;
+						});
+						return acc;
+					},
+					{}
+				);
+			}
+		);
+	}
+
+	get countryAgencyDisbursements() {
+		return omitBy(this.totalYearlyDisbursements, (_disbursement, country) => {
+			return !nameToThreeAlphas.has(country);
+		});
+	}
+
+	get regionalAgencyDisbursements() {
+		return omitBy(this.totalYearlyDisbursements, (_disbursement, country) => {
+			return nameToThreeAlphas.has(country);
+		});
+	}
 
 	get agenciesInCountry(): { [k: string]: TAgency[] } {
 		return this.data.agency_presence.reduce((acc, presence) => {
@@ -39,7 +76,7 @@ export class State {
 
 			if (!support) return acc;
 
-			const country3Alpha = nameToThreeAlphas.get(Country) || '';
+			const country3Alpha = nameToThreeAlphas.get(Country) || Country;
 
 			if (!acc[country3Alpha]) {
 				acc[country3Alpha] = [];
@@ -59,7 +96,7 @@ export class State {
 		return Object.keys(this.agenciesInCountry);
 	}
 
-	get activitesByCountry(): { [k: string]: TAgencyActivity[] } {
+	get activitiesByCountry(): { [k: string]: TAgencyActivity[] } {
 		return mapKeys(
 			groupBy(this.data.agency_activity, 'Country'),
 			(_val, key) => {
@@ -69,22 +106,33 @@ export class State {
 	}
 
 	get filteredCountries() {
-		const { educationLevel, agency } = this.filter;
+		const { educationLevels, agencies } = this.filter;
 
-		if (!educationLevel && !agency) return this.countries;
+		if (!educationLevels?.length && !agencies?.length) return this.countries;
 
-		let filtered = [...Object.entries(this.activitesByCountry)];
+		let filtered = [...Object.entries(this.activitiesByCountry)];
 
-		if (educationLevel) {
+		if (educationLevels?.length) {
 			filtered = filtered.filter(([, activities]) => {
-				return activities.find(activity =>
-					activity.educationLevels.includes(educationLevel)
+				const allEducationLevels = activities.reduce<TEducationLevel[]>(
+					(acc, { educationLevels }) => {
+						acc.push(...educationLevels);
+						return acc;
+					},
+					[]
+				);
+				return educationLevels.every(level =>
+					allEducationLevels.includes(level)
 				);
 			});
 		}
-		if (agency) {
+		if (agencies?.length) {
 			filtered = filtered.filter(([, activities]) => {
-				return activities.find(activity => activity.Agency === agency);
+				const allAgencies = activities.reduce<TAgency[]>((acc, { Agency }) => {
+					acc.push(Agency);
+					return acc;
+				}, []);
+				return agencies.some(agency => allAgencies.includes(agency));
 			});
 		}
 
@@ -92,6 +140,9 @@ export class State {
 	}
 
 	selectedCountry: string = 'MOZ';
+	get selectedCountryFormatted() {
+		return countryNameFormatter(this.selectedCountry);
+	}
 
 	setCountry(country: string) {
 		this.selectedCountry = country;

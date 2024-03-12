@@ -1,7 +1,7 @@
 import { customElement, property } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
 import { PropertyValueMap, html } from 'lit';
-import { agencyNameSwitcher } from './helpers/agencyNameSwitcher';
+import { agencyShortToLong } from '../data/helpers/agencyNameSwitcher';
 
 @customElement('be-map-country-activities')
 export class BeMapCountryActivities extends StateProvider {
@@ -9,7 +9,7 @@ export class BeMapCountryActivities extends StateProvider {
 	country: string = '';
 
 	get countryActivies() {
-		return this.state.activitesByCountry[this.country];
+		return this.state.activitiesByCountry[this.country];
 	}
 
 	render() {
@@ -30,7 +30,7 @@ export class BeMapCountryActivities extends StateProvider {
 			return html`
 				<details>
 					<summary>
-						${name} ${Agency && `(${agencyNameSwitcher(Agency)})`}
+						${name} ${Agency && `(${agencyShortToLong(Agency)})`}
 					</summary>
 
 					${Implementer && html`<b>Implementer:</b> ${Implementer}`}

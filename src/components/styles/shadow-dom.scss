@@ -632,3 +632,66 @@ sub {
 	padding: 1.5rem;
 	margin: 2rem 0;
 }
+
+/* Chota Card */
+.card {
+	padding: 1rem 2rem;
+	border-radius: 4px;
+	background: var(--bg-color);
+	box-shadow: 0 1px 3px var(--color-grey);
+}
+
+.card p:last-child {
+	margin: 0;
+}
+
+.card header>* {
+	margin-top: 0;
+	margin-bottom: 1rem;
+}
+
+/* Chota Tab */
+.tabs {
+	display: flex;
+}
+
+.tabs a {
+	text-decoration: none;
+}
+
+// .tabs>.dropdown>summary,
+.tabs>a {
+	padding: 1rem 2rem;
+	flex: 0 1 auto;
+	color: var(--text);
+	border-bottom: 2px solid var(--ultralight-blue);
+	text-align: center;
+}
+
+.tabs>a[aria-current="page"],
+.tabs>a.active,
+.tabs>a:hover {
+	opacity: 1;
+	border-bottom: 2px solid var(--web-blue);
+}
+
+.tabs>a[aria-current="page"],
+.tabs>a.active {
+	background-color: var(--ultralight-blue);
+	// border-left: 2px solid var(--web-blue);
+	// border-top: 2px solid var(--web-blue);
+	// border-right: 2px solid var(--web-blue);
+	border-color: var(--web-blue);
+}
+
+.tabs.is-full a {
+	flex: 1 1 auto;
+}
+
+.tabs .title {
+	// text-decoration: none;
+	display: flex;
+	align-items: center;
+	padding: 1rem 2rem;
+	color: var(--dark-gray);
+}

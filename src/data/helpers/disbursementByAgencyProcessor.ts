@@ -1,6 +1,6 @@
 import dsv from '@rollup/plugin-dsv';
 
-const parseMoney = /^\$(\d{1,3}(,\d{3})*(\.\d+)?)$/;
+const parseMoney = /^(\-)?\$(\d{1,3}(,\d{3})*(\.\d+)?)$/;
 
 export const disbursementByAgencyProcessor = dsv({
 	include: 'src/data/disbursement_by_agency.csv',
@@ -18,7 +18,7 @@ export const disbursementByAgencyProcessor = dsv({
 				FY,
 				row[key].startsWith('$ -')
 					? 0
-					: parseFloat(row[key].replace(parseMoney, '$1').replaceAll(',', ''))
+					: parseFloat(row[key].replace(parseMoney, '$1$2').replaceAll(',', ''))
 			]);
 
 			delete row[key];

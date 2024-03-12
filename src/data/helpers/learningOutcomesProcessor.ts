@@ -1,6 +1,6 @@
 import dsv from '@rollup/plugin-dsv';
-import { nameToThreeAlphas } from './src/data/countryNameTo3Alpha';
-import { TLearningOutcome } from './src/types/TLearningOutcome';
+import { nameToThreeAlphas } from '../countryNameTo3Alpha';
+import { TLearningOutcome } from '../../types/TLearningOutcome';
 
 export const learningOutcomesProcessor = dsv({
 	include: 'src/data/learning_outcomes.csv',

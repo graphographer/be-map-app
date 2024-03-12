@@ -1,4 +1,10 @@
-export type TAgencyShort = 'USAID' | 'The Peace Corps' | 'DOS' | 'USDA' | 'MCC';
+export type TAgencyShortDTO =
+	| 'USAID'
+	| 'Peace Corps'
+	| 'DOS'
+	| 'USDA'
+	| 'MCC'
+	| 'DOL';
 
 export const AGENCIES_SHORT = ['USAID', 'MCC', 'PC', 'USDA', 'DOL', 'DOS'];
 

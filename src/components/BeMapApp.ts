@@ -8,6 +8,7 @@ import './BeMapCountryDropdown';
 import './BeMapFilters';
 import './BeMapLearningOutcomesChart';
 import './BeMapLearningOutcomesTable';
+import './BeMapTabs';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
@@ -28,25 +29,52 @@ export class BeMapApp extends StateProvider {
 		`
 	];
 
+	get tabsConfig() {
+		return [
+			{
+				route: 'overview',
+				title: 'Overview',
+				template: () => html`<h3>Overview</h3>`
+			},
+			{
+				route: 'indicators',
+				title: 'Indicators',
+				template: () => html`<h3>Indicators</h3>`
+			},
+			{
+				route: 'outcomes',
+				title: 'Outcomes',
+				template: () => html`<h3>Outcomes</h3>`
+			},
+			{
+				route: 'disbursements',
+				title: 'Disbursements',
+				template: () => html`<h3>Disbursements</h3>`
+			},
+			{
+				route: 'activities',
+				title: 'Activities',
+				template: () => html`<h3>Activities</h3>`
+			}
+		];
+	}
+
 	render() {
 		return html` <main>
 			<h4>BE Map Refresh</h4>
 
-			<label>
-				Filtered Countries
+			<section>
+				<be-map></be-map>
 				<be-map-country-dropdown
-					.countries=${this.state.filteredCountries}
-					@input=${(e: InputEvent) =>
-						this.state.setCountry(
-							(e.composedPath()[0] as HTMLSelectElement).value
-						)}
-				></be-map-country-dropdown
-			></label>
+					.countries=${this.state.countries}
+				></be-map-country-dropdown>
+			</section>
+
+			<be-map-tabs .config=${this.tabsConfig}></be-map-tabs>
 
 			<section>
-				<be-map-learning-outcomes-table
-					.country=${this.state.selectedCountry}
-				></be-map-learning-outcomes-table>
+				<be-map-learning-outcomes-table .country=${this.state.selectedCountry}>
+				</be-map-learning-outcomes-table>
 				<be-map-learning-outcomes-chart></be-map-learning-outcomes-chart>
 			</section>
 
@@ -60,14 +88,15 @@ export class BeMapApp extends StateProvider {
 
 			<be-map-filters></be-map-filters>
 
-			${this.state.selectedCountry &&
-			html`
-				<section>
-					<be-map-country-activities
-						country=${this.state.selectedCountry}
-					></be-map-country-activities>
-				</section>
-			`}
+			${this.state.selectedCountry
+				? html`
+						<section>
+							<be-map-country-activities
+								country=${this.state.selectedCountry}
+							></be-map-country-activities>
+						</section>
+				  `
+				: ''}
 		</main>`;
 	}
 }

@@ -2,7 +2,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
 import { html } from 'lit';
 import { live } from 'lit/directives/live.js';
-import { countryNameFormatter } from './helpers/countryNameFormatter';
+import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
 
 @customElement('be-map-country-dropdown')
 export class BeMapCountryDropdown extends StateProvider {

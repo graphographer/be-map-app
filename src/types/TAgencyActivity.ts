@@ -1,15 +1,33 @@
-import { ECountry } from './ECountry';
-import { EEducationLevel } from './EEducationLevel';
-import { TAgencyShort } from './TAgencyShort';
+import { TEducationLevel } from './EEducationLevel';
+import { TAgency } from './TAgency';
+import { TAgencyShortDTO } from './TAgencyShort';
 
-export type TAgencyActivity = {
-	Agency: TAgencyShort;
-	Country: ECountry;
+export type TSheetsBoolean = 'TRUE' | 'FALSE';
+
+export type TAgencyActivityDTO = {
+	Agency: TAgencyShortDTO;
+	Country: string;
 	'Activity Name': string;
 	'Start Year': number | string;
 	'End Year': number | string;
 	Implementer: string;
 	Description: string;
 	'Link to Website': string;
-	educationLevels: EEducationLevel[];
+	Primary: TSheetsBoolean;
+	'Pre-Primary': TSheetsBoolean;
+	Secondary: TSheetsBoolean;
+	'Workforce Development': TSheetsBoolean;
+	'Education Systems Strengthening': TSheetsBoolean;
+};
+
+export type TAgencyActivity = {
+	Agency: TAgency;
+	Country: string;
+	'Activity Name': string;
+	'Start Year': number | string;
+	'End Year': number | string;
+	Implementer: string;
+	Description: string;
+	'Link to Website': string;
+	educationLevels: TEducationLevel[];
 };

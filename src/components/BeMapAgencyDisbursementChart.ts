@@ -12,25 +12,24 @@ import {
 	runInAction
 } from 'mobx';
 import { threeAlphasToName } from '../data/countryNameTo3Alpha';
-import { AGENCIES_LONG_TO_SHORT, TAgency } from '../types/TAgency';
-import { AGENCIES_SHORT, TAgencyShort } from '../types/TAgencyShort';
+import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
+import { AGENCIES_LONG, TAgency } from '../types/TAgency';
+import { AGENCIES_SHORT, TAgencyShortDTO } from '../types/TAgencyShort';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
 import { StateProvider } from './StateProvider';
-import { agencyNameSwitcher } from './helpers/agencyNameSwitcher';
-import { countryNameFormatter } from './helpers/countryNameFormatter';
 
 const HIGHLIGHT_COLORS: Record<string, string> = {
-	USAID: 'red',
-	'Millenium Challenge Corporation': 'orange',
-	'The Peace Corps': 'yellow',
-	'U.S. Department of Agriculture': 'green',
-	'U.S. Department of Labor': 'blue',
-	'U.S. Department of State': 'violet',
-	MCC: 'orange',
-	PC: 'yellow',
-	USDA: 'green',
-	DOL: 'blue',
-	DOS: 'violet'
+	USAID: '#002F6C',
+	'Millenium Challenge Corporation': '#0067B9',
+	'The Peace Corps': '#A7C6ED',
+	'U.S. Department of Agriculture': '#205493',
+	'U.S. Department of Labor': '#651D32',
+	'U.S. Department of State': '#BA0C2F',
+	MCC: '#0067B9',
+	PC: '#A7C6ED',
+	USDA: '#205493',
+	DOL: '#651D32',
+	DOS: '#BA0C2F'
 };
 
 const USD_FORMATTER = new Intl.NumberFormat('en-US', {
@@ -53,9 +52,12 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 				display: inline-block;
 				height: 1rem;
 				width: 1rem;
-				border-radius: var(--standard-border-radius);
+				/* border-radius: var(--standard-border-radius); */
 				border: 1px solid var(--border);
 				margin-bottom: -1px;
+			}
+			label:not(:last-child) {
+				margin-right: 1.2rem;
 			}
 		`
 	];
@@ -79,17 +81,11 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 			});
 	}
 
-	get agenciesDisbursingShort() {
-		return this.countryDisbursementsByAgency.map(([agencyLong]) =>
-			agencyNameSwitcher(agencyLong)
-		);
-	}
-
 	get data(): ChartData<'bar', { x: string; y: number }[]> {
 		return {
 			datasets: this.countryDisbursementsByAgency
 				.filter(([agency]) => {
-					return this.agencyFilter.has(AGENCIES_LONG_TO_SHORT[agency]);
+					return this.agencyFilter.has(agency);
 				})
 				.map(([agency, disbursement]) => {
 					return {
@@ -103,7 +99,7 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 		};
 	}
 
-	agencyFilter = new Set<string>(AGENCIES_SHORT);
+	agencyFilter = new Set<string>(AGENCIES_LONG);
 
 	constructor() {
 		super();
@@ -116,13 +112,12 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 			country: computed,
 			toggleAgency: action,
 			agencyFilter: observable,
-			agenciesDisbursingShort: computed,
 			countryDisbursementsByAgency: computed,
 			data: computed
 		});
 	}
 
-	toggleAgency(agency: TAgencyShort, include: boolean) {
+	toggleAgency(agency: TAgencyShortDTO, include: boolean) {
 		if (include) {
 			this.agencyFilter.add(agency);
 		} else {
@@ -132,18 +127,18 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 	}
 
 	render() {
-		return html` ${this.agenciesDisbursingShort.length > 1
+		return html` ${this.agencyFilter.size > 1
 				? html`<form
 						@change=${(e: InputEvent) => {
 							this.toggleAgency(
-								(e.target as HTMLInputElement)?.value as TAgencyShort,
+								(e.target as HTMLInputElement)?.value as TAgencyShortDTO,
 								(e.target as HTMLInputElement).checked
 							);
 						}}
 				  >
 						Filter by disbursing agency
 						<br />
-						${this.agenciesDisbursingShort.map(agency => {
+						${[...this.agencyFilter].map(agency => {
 							return html`
 								<label>
 									<input

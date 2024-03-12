@@ -10,7 +10,7 @@ import {
 	runInAction
 } from 'mobx';
 import { StateProvider } from './StateProvider';
-import { countryNameFormatter } from './helpers/countryNameFormatter';
+import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
 
 @customElement('be-map-learning-outcomes-table')
 export class BeMapLearningOutcomesTable extends StateProvider {
