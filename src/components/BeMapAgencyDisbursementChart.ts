@@ -24,12 +24,7 @@ const HIGHLIGHT_COLORS: Record<string, string> = {
 	'The Peace Corps': '#A7C6ED',
 	'U.S. Department of Agriculture': '#205493',
 	'U.S. Department of Labor': '#651D32',
-	'U.S. Department of State': '#BA0C2F',
-	MCC: '#0067B9',
-	PC: '#A7C6ED',
-	USDA: '#205493',
-	DOL: '#651D32',
-	DOS: '#BA0C2F'
+	'U.S. Department of State': '#BA0C2F'
 };
 
 const USD_FORMATTER = new Intl.NumberFormat('en-US', {

@@ -10,6 +10,7 @@ import './BeMapLearningOutcomesChart';
 import './BeMapLearningOutcomesTable';
 import './BeMapTabs';
 import './BeMapDonutChart';
+import './BeMapLearningOutcomesChartGrouped';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
@@ -67,7 +68,8 @@ export class BeMapApp extends StateProvider {
 				<be-map-country-dropdown
 					.countries=${this.state.countries}
 				></be-map-country-dropdown>
-				<be-map-donut-chart></be-map-donut-chart>
+
+				<be-map-learning-outcomes-chart-grouped></be-map-learning-outcomes-chart-grouped>
 			</main>
 		`;
 	}

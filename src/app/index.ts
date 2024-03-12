@@ -15,6 +15,7 @@ import {
 	CategoryScale,
 	Chart,
 	DoughnutController,
+	Legend,
 	LineController,
 	LineElement,
 	LinearScale,
@@ -34,7 +35,8 @@ Chart.register(
 	LineElement,
 	PointElement,
 	DoughnutController,
-	ArcElement
+	ArcElement,
+	Legend
 );
 
 const state = new State();
