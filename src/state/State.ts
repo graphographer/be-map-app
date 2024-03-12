@@ -1,7 +1,10 @@
 import { HighlightableMap } from 'highlightable-map';
-import { groupBy, mapKeys, mapValues, omitBy } from 'lodash-es';
+import { groupBy, mapValues, omitBy } from 'lodash-es';
 import { makeAutoObservable, observable } from 'mobx';
-import { nameToThreeAlphas } from '../data/countryNameTo3Alpha';
+import {
+	nameToThreeAlphas,
+	threeAlphasToName
+} from '../data/countryNameTo3Alpha';
 import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
 import { TEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
@@ -33,8 +36,45 @@ export class State {
 
 	outcomeIndexesToChart: boolean[] = [];
 	highlightOutcomeData: [number, number] | [] = [];
+	selectedFiscalYear: string = '2023';
 
-	overviewFiscalYear: number = 2023;
+	fiscalYears = [2019, 2020, 2021, 2022, 2023];
+
+	get yearlyDisbursementsByCountryAndAgency(): Record<
+		string,
+		Record<TAgency, Record<string, number>>
+	> {
+		const disbursementsByCountry = groupBy(
+			this.data.disbursement_by_agency,
+			'Country'
+		);
+
+		return mapValues(disbursementsByCountry, disbursements => {
+			const agencyDisbursements = {} as Record<TAgency, Record<string, number>>;
+
+			disbursements.forEach(disbursement => {
+				const { Agency, Disbursements } = disbursement;
+				agencyDisbursements[Agency] = Object.fromEntries(Disbursements);
+			});
+
+			return agencyDisbursements;
+		});
+	}
+
+	get agencyDisbursementsForSelectedCountryAndFY():
+		| Record<TAgency, number>
+		| undefined {
+		const { selectedCountry, selectedFiscalYear } = this;
+
+		if (!selectedCountry && !selectedFiscalYear) return;
+
+		return mapValues(
+			this.yearlyDisbursementsByCountryAndAgency[selectedCountry],
+			agencyDisbursements => {
+				return agencyDisbursements[selectedFiscalYear];
+			}
+		);
+	}
 
 	get totalYearlyDisbursements(): {
 		[k: string]: { [k: string]: number };
@@ -60,13 +100,13 @@ export class State {
 
 	get countryAgencyDisbursements() {
 		return omitBy(this.totalYearlyDisbursements, (_disbursement, country) => {
-			return !nameToThreeAlphas.has(country);
+			return !threeAlphasToName.has(country);
 		});
 	}
 
 	get regionalAgencyDisbursements() {
 		return omitBy(this.totalYearlyDisbursements, (_disbursement, country) => {
-			return nameToThreeAlphas.has(country);
+			return threeAlphasToName.has(country);
 		});
 	}
 
@@ -97,12 +137,7 @@ export class State {
 	}
 
 	get activitiesByCountry(): { [k: string]: TAgencyActivity[] } {
-		return mapKeys(
-			groupBy(this.data.agency_activity, 'Country'),
-			(_val, key) => {
-				return nameToThreeAlphas.get(key);
-			}
-		);
+		return groupBy(this.data.agency_activity, 'Country');
 	}
 
 	get filteredCountries() {

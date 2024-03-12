@@ -1,4 +1,5 @@
 import dsv from '@rollup/plugin-dsv';
+import { nameToThreeAlphas } from '../countryNameTo3Alpha';
 
 const parseMoney = /^(\-)?\$(\d{1,3}(,\d{3})*(\.\d+)?)$/;
 
@@ -25,6 +26,8 @@ export const disbursementByAgencyProcessor = dsv({
 		}
 
 		row.Disbursements = Disbursements;
+
+		row.Country = nameToThreeAlphas.get(row.Country) || row.Country;
 
 		return row;
 	}
