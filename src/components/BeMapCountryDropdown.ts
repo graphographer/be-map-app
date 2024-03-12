@@ -11,7 +11,7 @@ export class BeMapCountryDropdown extends StateProvider {
 
 	render() {
 		return html`
-			<select>
+			<select @input=${this.handleInput}>
 				<option value="" ?selected=${live(this.state.selectedCountry === '')}>
 					None selected
 				</option>
@@ -25,5 +25,9 @@ export class BeMapCountryDropdown extends StateProvider {
 				})}
 			</select>
 		`;
+	}
+
+	handleInput(e: InputEvent & { target: { value: string } }) {
+		this.state.selectedCountry = e.target!.value;
 	}
 }

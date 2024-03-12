@@ -9,10 +9,12 @@ import { State } from '../state/State';
 import learningOutcomes from '../data/learning_outcomes.csv';
 
 import {
+	ArcElement,
 	BarController,
 	BarElement,
 	CategoryScale,
 	Chart,
+	DoughnutController,
 	LineController,
 	LineElement,
 	LinearScale,
@@ -30,7 +32,9 @@ Chart.register(
 	Title,
 	LineController,
 	LineElement,
-	PointElement
+	PointElement,
+	DoughnutController,
+	ArcElement
 );
 
 const state = new State();

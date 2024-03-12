@@ -46,7 +46,7 @@ export class BeMap extends StateProvider {
 									return;
 								}
 
-								const amt = yearlyAmts[this.state.overviewFiscalYear];
+								const amt = yearlyAmts[this.state.selectedFiscalYear];
 								const countryCode = nameToThreeAlphas.get(country)!;
 								const el = this.highlightableMap.countryEls.get(countryCode);
 

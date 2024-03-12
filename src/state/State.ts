@@ -61,12 +61,11 @@ export class State {
 		});
 	}
 
-	get agencyDisbursementsForSelectedCountryAndFY():
-		| Record<TAgency, number>
-		| undefined {
+	get agencyDisbursementsForSelectedCountryAndFY(): Record<TAgency, number> {
 		const { selectedCountry, selectedFiscalYear } = this;
 
-		if (!selectedCountry && !selectedFiscalYear) return;
+		if (!selectedCountry && !selectedFiscalYear)
+			return {} as Record<TAgency, number>;
 
 		return mapValues(
 			this.yearlyDisbursementsByCountryAndAgency[selectedCountry],
@@ -134,6 +133,9 @@ export class State {
 
 	get countries() {
 		return Object.keys(this.agenciesInCountry);
+	}
+	get countriesFormatted() {
+		return this.countries.map(countryNameFormatter);
 	}
 
 	get activitiesByCountry(): { [k: string]: TAgencyActivity[] } {
