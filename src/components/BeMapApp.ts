@@ -13,6 +13,7 @@ import './BeMapDonutChart';
 import './BeMapLearningOutcomesChartGrouped';
 import './BeMapSingleCountry';
 import './tabs/BeMapAgencyPresence';
+import './tabs/BeMapActivityData';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
@@ -47,7 +48,7 @@ export class BeMapApp extends StateProvider {
 			{
 				route: 'activity',
 				title: 'Activity Data',
-				template: () => html`<h3>Activity Data</h3>`
+				template: () => html`<be-map-activity-data></be-map-activity-data>`
 			},
 			{
 				route: 'disbursement',
@@ -77,7 +78,7 @@ export class BeMapApp extends StateProvider {
 
 				<be-map-tabs
 					.config=${this.tabsConfig}
-					.activeTab=${'presence'}
+					.activeTab=${'activity'}
 				></be-map-tabs>
 			</main>
 		`;

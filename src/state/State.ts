@@ -178,6 +178,13 @@ export class State {
 		return groupBy(this.data.agency_activity, 'Country');
 	}
 
+	get activitiesForSelectedCountryByAgency() {
+		return groupBy(
+			this.activitiesByCountry[this.selectedCountry],
+			'Agency'
+		) as Record<TAgency, TAgencyActivity[]>;
+	}
+
 	get filteredCountries() {
 		const { educationLevels, agencies } = this.filter;
 
