@@ -9,8 +9,8 @@ import {
 	observable,
 	runInAction
 } from 'mobx';
-import { StateProvider } from './StateProvider';
-import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
+import { StateProvider } from '../StateProvider';
+import { countryNameFormatter } from '../../data/helpers/countryNameFormatter';
 
 @customElement('be-map-learning-outcomes-table')
 export class BeMapLearningOutcomesTable extends StateProvider {

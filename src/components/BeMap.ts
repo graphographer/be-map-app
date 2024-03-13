@@ -3,7 +3,7 @@ import 'highlightable-map/dist/HighlightableMapBundled.min.js';
 import { customElement } from 'lit/decorators.js';
 import { autorun } from 'mobx';
 import { StateProvider } from './StateProvider';
-import { html } from 'lit';
+import { css, html } from 'lit';
 import './BeMapCountryDropdown';
 import { nameToThreeAlphas } from '../data/countryNameTo3Alpha';
 
@@ -20,6 +20,15 @@ const HIGHLIGHT_COLORS: Record<number, string> = {
 @customElement('be-map')
 export class BeMap extends StateProvider {
 	highlightableMap: HighlightableMap;
+
+	static styles = [
+		...super.styles,
+		css`
+			highlightable-map {
+				height: 500px;
+			}
+		`
+	];
 
 	constructor() {
 		super();

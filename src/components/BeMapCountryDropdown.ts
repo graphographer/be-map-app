@@ -1,11 +1,24 @@
 import { customElement, property } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
-import { html } from 'lit';
+import { css, html } from 'lit';
 import { live } from 'lit/directives/live.js';
 import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
 
 @customElement('be-map-country-dropdown')
 export class BeMapCountryDropdown extends StateProvider {
+	static styles = [
+		...super.styles,
+		css`
+			select {
+				font-size: 36px;
+			}
+
+			select option {
+				font-size: initial;
+			}
+		`
+	];
+
 	@property({ type: Array })
 	countries: string[] = [];
 

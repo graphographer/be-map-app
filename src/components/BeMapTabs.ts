@@ -1,12 +1,21 @@
 import { customElement } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
-import { TemplateResult, html } from 'lit';
+import { TemplateResult, css, html } from 'lit';
 import { choose } from 'lit/directives/choose.js';
 import { action, makeObservable, observable } from 'mobx';
 import { classMap } from 'lit/directives/class-map.js';
 
 @customElement('be-map-tabs')
 export class BeMapTabs extends StateProvider {
+	static styles = [
+		...super.styles,
+		css`
+			nav {
+				margin-bottom: 2rem;
+			}
+		`
+	];
+
 	constructor() {
 		super();
 

@@ -5,18 +5,15 @@ import { live } from 'lit/directives/live.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import {
 	action,
+	autorun,
 	computed,
 	makeObservable,
 	observable,
-	reaction,
-	runInAction
+	reaction
 } from 'mobx';
-import { threeAlphasToName } from '../data/countryNameTo3Alpha';
-import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
-import { AGENCIES_LONG, TAgency } from '../types/TAgency';
-import { AGENCIES_SHORT, TAgencyShortDTO } from '../types/TAgencyShort';
-import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
-import { StateProvider } from './StateProvider';
+import { countryNameFormatter } from '../../data/helpers/countryNameFormatter';
+import { TAgency } from '../../types/TAgency';
+import { StateProvider } from '../StateProvider';
 
 const HIGHLIGHT_COLORS: Record<string, string> = {
 	USAID: '#002F6C',
@@ -43,16 +40,23 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 			.container {
 				position: relative;
 			}
-			.box {
-				display: inline-block;
-				height: 1rem;
-				width: 1rem;
-				/* border-radius: var(--standard-border-radius); */
-				border: 1px solid var(--border);
-				margin-bottom: -1px;
-			}
+
 			label:not(:last-child) {
 				margin-right: 1.2rem;
+			}
+
+			input[type='checkbox'] {
+				width: 3rem;
+				height: 3rem;
+				font-size: 3rem;
+			}
+
+			input[type='checkbox']:checked::after {
+				left: 0.185em;
+			}
+
+			form {
+				margin-bottom: 2rem;
 			}
 		`
 	];
@@ -60,25 +64,9 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 	ctx: HTMLCanvasElement;
 	chart!: Chart<'bar', { x: string; y: number }[]>;
 
-	get country() {
-		return this.state.selectedCountry;
-	}
-
-	get countryDisbursementsByAgency(): [TAgency, TDisbursementByAgency][] {
-		return this.state.data.disbursement_by_agency
-			.filter(
-				disbursement =>
-					disbursement.Country === threeAlphasToName.get(this.country)?.[0] &&
-					disbursement.Disbursements.some(([, amount]) => !!amount)
-			)
-			.map(disbursement => {
-				return [disbursement.Agency, disbursement];
-			});
-	}
-
 	get data(): ChartData<'bar', { x: string; y: number }[]> {
 		return {
-			datasets: this.countryDisbursementsByAgency
+			datasets: this.state.disbursementsForSelectedCountryByAgency
 				.filter(([agency]) => {
 					return this.agencyFilter.has(agency);
 				})
@@ -94,7 +82,13 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 		};
 	}
 
-	agencyFilter = new Set<string>(AGENCIES_LONG);
+	get agencies() {
+		return this.state.disbursementsForSelectedCountryByAgency.map(
+			([agency]) => agency
+		);
+	}
+
+	agencyFilter = new Set<TAgency>();
 
 	constructor() {
 		super();
@@ -104,53 +98,64 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 		this.ctx.height = 500;
 
 		makeObservable(this, {
-			country: computed,
 			toggleAgency: action,
 			agencyFilter: observable,
-			countryDisbursementsByAgency: computed,
+			agencies: computed,
 			data: computed
 		});
+
+		this.disposers.push(
+			autorun(() => {
+				this.agencyFilter = new Set(this.agencies);
+			})
+		);
+
+		// @ts-ignore
+		window.chart = this;
 	}
 
-	toggleAgency(agency: TAgencyShortDTO, include: boolean) {
+	toggleAgency(agency: TAgency, include: boolean) {
 		if (include) {
 			this.agencyFilter.add(agency);
 		} else {
 			this.agencyFilter.delete(agency);
 		}
-		this.agencyFilter = new Set(this.agencyFilter);
+		// this.agencyFilter = new Set(this.agencyFilter);
 	}
 
 	render() {
-		return html` ${this.agencyFilter.size > 1
+		return html` <h4>
+				Yearly Disbursements to ${this.state.selectedCountryFormatted} by Agency
+			</h4>
+
+			${this.agencies.length > 1
 				? html`<form
 						@change=${(e: InputEvent) => {
 							this.toggleAgency(
-								(e.target as HTMLInputElement)?.value as TAgencyShortDTO,
+								(e.target as HTMLInputElement)?.value as TAgency,
 								(e.target as HTMLInputElement).checked
 							);
 						}}
 				  >
-						Filter by disbursing agency
-						<br />
-						${[...this.agencyFilter].map(agency => {
-							return html`
-								<label>
-									<input
-										type="checkbox"
-										value="${agency}"
-										.checked=${live(this.agencyFilter.has(agency))}
-									/>
-									${agency}
-									<div
-										class="box"
-										style=${styleMap({
-											'background-color': HIGHLIGHT_COLORS[agency]
-										})}
-									></div>
-								</label>
-							`;
-						})}
+						<fieldset>
+							<legend><b>Toggle agency visibility</b></legend>
+
+							${this.agencies.map(agency => {
+								return html`
+									<label>
+										<input
+											style=${styleMap({
+												'background-color': HIGHLIGHT_COLORS[agency]
+											})}
+											type="checkbox"
+											value="${agency}"
+											.checked=${live(this.agencyFilter.has(agency))}
+										/>
+										${agency}
+									</label>
+								`;
+							})}
+						</fieldset>
 				  </form>`
 				: ''}
 
@@ -165,8 +170,8 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 				maintainAspectRatio: false,
 				scales: {
 					x: {
-						stacked: true,
-						title: { display: true, text: 'Fiscal Year' }
+						stacked: true
+						// title: { display: true, text: 'Fiscal Year' }
 					},
 					y: {
 						stacked: true,
@@ -175,8 +180,8 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 							callback(tickValue) {
 								return USD_FORMATTER.format(tickValue as number);
 							}
-						},
-						title: { display: true, text: 'Total Disbursement (USD)' }
+						}
+						// title: { display: true, text: 'Total Disbursement (USD)' }
 					}
 				},
 				plugins: {
@@ -191,24 +196,21 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 								return `$${ctx.formattedValue}`;
 							}
 						}
-					},
-					title: {
-						display: true,
-						text: getTitle(this.country)
 					}
+					// title: {
+					// 	display: true,
+					// 	text: getTitle(this.state.selectedCountry)
+					// }
 				}
 			}
 		});
 
 		this.disposers.push(
 			reaction(
-				() => this.country,
+				() => this.state.selectedCountry,
 				country => {
 					this.chart.options.plugins!.title!.text = getTitle(country);
 					this.chart.update('none');
-
-					// reset filters
-					runInAction(() => (this.agencyFilter = new Set(AGENCIES_SHORT)));
 				}
 			),
 			reaction(

@@ -1,8 +1,8 @@
 import { Chart } from 'chart.js';
 import { PropertyValueMap, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { makeObservable, reaction } from 'mobx';
-import { StateProvider } from './StateProvider';
+import { computed, makeObservable, reaction } from 'mobx';
+import { StateProvider } from '../StateProvider';
 
 const HIGHLIGHT_COLORS: Record<string, string> = {
 	USAID: '#002F6C',
@@ -23,6 +23,11 @@ export class BeMapDonutChart extends StateProvider {
 	static styles = [
 		...super.styles,
 		css`
+			:host {
+				display: block;
+				height: 100%;
+			}
+
 			.container {
 				position: relative;
 			}
@@ -39,7 +44,7 @@ export class BeMapDonutChart extends StateProvider {
 		this.ctx.width = 800;
 		this.ctx.height = 500;
 
-		makeObservable(this, {});
+		makeObservable(this, { data: computed });
 	}
 
 	get data() {
@@ -62,7 +67,7 @@ export class BeMapDonutChart extends StateProvider {
 
 	render() {
 		return html`<div class="container">${this.ctx}</div>
-			<table>
+			<table class="sr-only">
 				<caption>
 					Total Agency Disbursements for ${this.state.selectedCountryFormatted}
 					in Fiscal Year ${this.state.selectedFiscalYear}

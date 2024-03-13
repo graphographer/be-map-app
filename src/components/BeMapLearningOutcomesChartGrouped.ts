@@ -114,9 +114,6 @@ export class BeMapLearningOutomesChartGrouped extends StateProvider {
 								return `${title.dataset.label} Outcome (${title.label})`;
 							},
 							label: ctx => {
-								const { datasetIndex } = ctx;
-								const { Subject, 'Grade Level Measured': level } =
-									this.countryOutcomes[datasetIndex];
 								return `${ctx.formattedValue}%`;
 							}
 						}

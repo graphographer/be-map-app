@@ -10,7 +10,7 @@ export type TAgency =
 export const AGENCIES_LONG: TAgency[] = [
 	'USAID',
 	'Millenium Challenge Corporation',
-	'Peace Corps',
+	'The Peace Corps',
 	'U.S. Department of Agriculture',
 	'U.S. Department of Labor',
 	'U.S. Department of State'

@@ -1,20 +1,8 @@
-import '@material/web/icon/icon';
-import '@material/web/tabs/primary-tab';
-import '@material/web/tabs/tabs';
-import './BeMap';
-import './BeMapAgencyDisbursementChart';
-import './BeMapCountryActivities';
 import './BeMapCountryDropdown';
-import './BeMapFilters';
-import './BeMapLearningOutcomesChart';
-import './BeMapLearningOutcomesTable';
 import './BeMapTabs';
-import './BeMapDonutChart';
-import './BeMapLearningOutcomesChartGrouped';
-import './BeMapSingleCountry';
 import './tabs/BeMapAgencyPresence';
 import './tabs/BeMapActivityData';
-
+import './tabs/BeMapDisbursementData';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
@@ -53,7 +41,8 @@ export class BeMapApp extends StateProvider {
 			{
 				route: 'disbursement',
 				title: 'Disbursement Data',
-				template: () => html`<h3>Disbursement Data</h3>`
+				template: () =>
+					html`<be-map-disbursement-data></be-map-disbursement-data>`
 			},
 			{
 				route: 'output',
@@ -78,7 +67,7 @@ export class BeMapApp extends StateProvider {
 
 				<be-map-tabs
 					.config=${this.tabsConfig}
-					.activeTab=${'activity'}
+					.activeTab=${'disbursement'}
 				></be-map-tabs>
 			</main>
 		`;

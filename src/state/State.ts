@@ -185,6 +185,21 @@ export class State {
 		) as Record<TAgency, TAgencyActivity[]>;
 	}
 
+	get disbursementsForSelectedCountryByAgency(): [
+		TAgency,
+		TDisbursementByAgency
+	][] {
+		return this.data.disbursement_by_agency
+			.filter(
+				disbursement =>
+					disbursement.Country === this.selectedCountry &&
+					disbursement.Disbursements.some(([, amount]) => !!amount)
+			)
+			.map(disbursement => {
+				return [disbursement.Agency, disbursement];
+			});
+	}
+
 	get filteredCountries() {
 		const { educationLevels, agencies } = this.filter;
 

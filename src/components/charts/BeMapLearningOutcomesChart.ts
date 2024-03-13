@@ -1,6 +1,6 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { StateProvider } from './StateProvider';
+import { StateProvider } from '../StateProvider';
 import { Chart } from 'chart.js';
 import { autorun, reaction } from 'mobx';
 import { ScriptableLineSegmentContext } from 'chart.js';
