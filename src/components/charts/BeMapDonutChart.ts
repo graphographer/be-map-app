@@ -3,6 +3,7 @@ import { PropertyValueMap, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { computed, makeObservable, reaction } from 'mobx';
 import { StateProvider } from '../StateProvider';
+import { USD_FORMATTER } from '../helpers/USD_FORMATTER';
 
 const HIGHLIGHT_COLORS: Record<string, string> = {
 	USAID: '#002F6C',
@@ -12,11 +13,6 @@ const HIGHLIGHT_COLORS: Record<string, string> = {
 	'U.S. Department of Labor': '#651D32',
 	'U.S. Department of State': '#BA0C2F'
 };
-
-const USD_FORMATTER = new Intl.NumberFormat('en-US', {
-	style: 'currency',
-	currency: 'USD'
-});
 
 @customElement('be-map-donut-chart')
 export class BeMapDonutChart extends StateProvider {

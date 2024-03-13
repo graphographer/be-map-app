@@ -12,8 +12,9 @@ import {
 	reaction
 } from 'mobx';
 import { countryNameFormatter } from '../../data/helpers/countryNameFormatter';
-import { TAgency } from '../../types/TAgency';
+import { AGENCIES_LONG, TAgency } from '../../types/TAgency';
 import { StateProvider } from '../StateProvider';
+import { USD_FORMATTER } from '../helpers/USD_FORMATTER';
 
 const HIGHLIGHT_COLORS: Record<string, string> = {
 	USAID: '#002F6C',
@@ -23,11 +24,6 @@ const HIGHLIGHT_COLORS: Record<string, string> = {
 	'U.S. Department of Labor': '#651D32',
 	'U.S. Department of State': '#BA0C2F'
 };
-
-const USD_FORMATTER = new Intl.NumberFormat('en-US', {
-	style: 'currency',
-	currency: 'USD'
-});
 
 const getTitle = (country: string) =>
 	`Yearly Disbursements to ${countryNameFormatter(country)} (by Agency)`;
@@ -88,6 +84,18 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 		);
 	}
 
+	get years() {
+		return [
+			...new Set(
+				this.state.disbursementsForSelectedCountryByAgency
+					.map(([, disbursement]) =>
+						disbursement.Disbursements.map(([year]) => year)
+					)
+					.flat()
+			)
+		];
+	}
+
 	agencyFilter = new Set<TAgency>();
 
 	constructor() {
@@ -96,6 +104,9 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 		this.ctx = document.createElement('canvas');
 		this.ctx.width = 800;
 		this.ctx.height = 500;
+		this.ctx.role = 'img';
+		this.ctx.innerText =
+			'A data table alternative for this graphical chart is available below.';
 
 		makeObservable(this, {
 			toggleAgency: action,
@@ -124,7 +135,8 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 	}
 
 	render() {
-		return html` <h4>
+		return html`
+			<h4>
 				Yearly Disbursements to ${this.state.selectedCountryFormatted} by Agency
 			</h4>
 
@@ -159,7 +171,36 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 				  </form>`
 				: ''}
 
-			<div class="container">${this.ctx}</div>`;
+			<div class="container">${this.ctx}</div>
+
+			<table class="sr-only">
+				<thead>
+					<tr>
+						<th scope="col" rowspan="2">Agency</th>
+						<th scope="col" colspan=${AGENCIES_LONG.length}>
+							Disbursement for Fiscal Year
+						</th>
+					</tr>
+					<tr>
+						${this.years.map(year => {
+							return html`<th scope="col">${year}</th>`;
+						})}
+					</tr>
+				</thead>
+				<tbody>
+					${this.state.disbursementsForSelectedCountryByAgency.map(
+						([agency, disbursement]) => {
+							return html`<tr>
+								<th scope="row">${agency}</th>
+								${disbursement.Disbursements.map(([_year, amt]) => {
+									return html`<td>${USD_FORMATTER.format(amt)}</td>`;
+								})}
+							</tr>`;
+						}
+					)}
+				</tbody>
+			</table>
+		`;
 	}
 
 	firstUpdated() {
