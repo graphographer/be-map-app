@@ -313,25 +313,30 @@ table {
 	margin: 1.5rem 0;
 }
 
+table>thead,
+table>tbody {
+	border-bottom: 1px solid var(--border);
+}
+
 figure>table {
 	width: max-content;
 }
 
 td,
 th {
-	border: 1px solid var(--border);
+	// border: 1px solid var(--border);
 	text-align: start;
 	padding: 0.5rem;
 }
 
 th {
-	background-color: var(--accent-bg);
-	font-weight: bold;
+	// background-color: var(--accent-bg);
+	font-weight: normal;
 }
 
 tr:nth-child(even) {
 	/* Set every other cell slightly darker. Improves readability. */
-	background-color: var(--accent-bg);
+	// background-color: var(--accent-bg);
 }
 
 table caption {
@@ -705,4 +710,8 @@ sub {
 	overflow: hidden;
 	padding: 0;
 	position: absolute;
+}
+
+h3 {
+	color: var(--usaid-blue);
 }

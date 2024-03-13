@@ -61,6 +61,38 @@ export class State {
 		});
 	}
 
+	get agencyEducationSupportByCountry(): Record<
+		string,
+		Record<TAgency, TEducationLevel[]>
+	> {
+		return mapValues(
+			groupBy(this.data.agency_activity, 'Country'),
+			activities => {
+				const activitiesByAgency: Record<TAgency, TEducationLevel[]> =
+					mapValues(
+						groupBy(activities, 'Agency') as Record<TAgency, TAgencyActivity[]>,
+						agencyActivities => {
+							return [
+								...agencyActivities.reduce<Set<TEducationLevel>>(
+									(acc, activity) => {
+										activity.educationLevels.forEach(level => acc.add(level));
+										return acc;
+									},
+									new Set()
+								)
+							];
+						}
+					);
+
+				return activitiesByAgency;
+			}
+		);
+	}
+
+	get agencyEducationSupportForSelectedCountry() {
+		return this.agencyEducationSupportByCountry[this.selectedCountry];
+	}
+
 	get agencyDisbursementsForSelectedCountryAndFY(): Record<TAgency, number> {
 		const { selectedCountry, selectedFiscalYear } = this;
 
@@ -127,6 +159,10 @@ export class State {
 		}, {} as { [k: string]: TAgency[] });
 	}
 
+	get agenciesInSelectedCountry() {
+		return this.agenciesInCountry[this.selectedCountry];
+	}
+
 	get numberOfAgencies() {
 		return mapValues(this.agenciesInCountry, 'length');
 	}
@@ -176,7 +212,7 @@ export class State {
 		return filtered.map(([country]) => country);
 	}
 
-	selectedCountry: string = 'MOZ';
+	selectedCountry: string = 'KHM';
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);
 	}

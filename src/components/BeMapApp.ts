@@ -11,6 +11,8 @@ import './BeMapLearningOutcomesTable';
 import './BeMapTabs';
 import './BeMapDonutChart';
 import './BeMapLearningOutcomesChartGrouped';
+import './BeMapSingleCountry';
+import './tabs/BeMapAgencyPresence';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
@@ -28,35 +30,39 @@ export class BeMapApp extends StateProvider {
 			:host > * {
 				grid-column: 2;
 			}
+
+			highlightable-map {
+				height: 500px;
+			}
 		`
 	];
 
 	get tabsConfig() {
 		return [
 			{
-				route: 'overview',
-				title: 'Overview',
-				template: () => html`<h3>Overview</h3>`
+				route: 'presence',
+				title: 'Agency Presence',
+				template: () => html`<be-map-agency-presence></be-map-agency-presence>`
 			},
 			{
-				route: 'indicators',
-				title: 'Indicators',
-				template: () => html`<h3>Indicators</h3>`
+				route: 'activity',
+				title: 'Activity Data',
+				template: () => html`<h3>Activity Data</h3>`
 			},
 			{
-				route: 'outcomes',
-				title: 'Outcomes',
-				template: () => html`<h3>Outcomes</h3>`
+				route: 'disbursement',
+				title: 'Disbursement Data',
+				template: () => html`<h3>Disbursement Data</h3>`
 			},
 			{
-				route: 'disbursements',
-				title: 'Disbursements',
-				template: () => html`<h3>Disbursements</h3>`
+				route: 'output',
+				title: 'Ouput Indicators',
+				template: () => html`<h3>Ouput Indicators</h3>`
 			},
 			{
-				route: 'activities',
-				title: 'Activities',
-				template: () => html`<h3>Activities</h3>`
+				route: 'outcome',
+				title: 'Outcome Indicators',
+				template: () => html`<h3>Outcome Indicators</h3>`
 			}
 		];
 	}
@@ -69,8 +75,16 @@ export class BeMapApp extends StateProvider {
 					.countries=${this.state.countries}
 				></be-map-country-dropdown>
 
-				<be-map-learning-outcomes-chart-grouped></be-map-learning-outcomes-chart-grouped>
+				<be-map-tabs
+					.config=${this.tabsConfig}
+					.activeTab=${'presence'}
+				></be-map-tabs>
 			</main>
 		`;
 	}
 }
+
+// <section id="overview">
+// 	<be-map-single-country></be-map-single-country>
+// 	<be-map-donut-chart></be-map-donut-chart>
+// </section>;
