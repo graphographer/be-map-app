@@ -3,6 +3,7 @@ import './BeMapTabs';
 import './tabs/BeMapAgencyPresence';
 import './tabs/BeMapActivityData';
 import './tabs/BeMapDisbursementData';
+import './tabs/BeMapOutputIndicators';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
@@ -13,11 +14,13 @@ export class BeMapApp extends StateProvider {
 		...super.styles,
 		css`
 			:host {
-				display: grid;
-				grid-template-columns: 1fr min(75rem, 95%) 1fr;
+				display: block;
+				padding: 0 1rem;
 			}
-			:host > * {
-				grid-column: 2;
+
+			main {
+				margin: 0 auto;
+				max-width: 960px;
 			}
 
 			highlightable-map {
@@ -47,7 +50,11 @@ export class BeMapApp extends StateProvider {
 			{
 				route: 'output',
 				title: 'Ouput Indicators',
-				template: () => html`<h3>Ouput Indicators</h3>`
+				template: () =>
+					html`<be-map-output-indicators></be-map-output-indicators>`,
+				disabled: () => {
+					return !this.state.outputIndicatorsForSelectedCountry;
+				}
 			},
 			{
 				route: 'outcome',
@@ -65,10 +72,12 @@ export class BeMapApp extends StateProvider {
 					.countries=${this.state.countries}
 				></be-map-country-dropdown>
 
-				<be-map-tabs
-					.config=${this.tabsConfig}
-					.activeTab=${'disbursement'}
-				></be-map-tabs>
+				${this.state.selectedCountry
+					? html`<be-map-tabs
+							.config=${this.tabsConfig}
+							.activeTab=${'output'}
+					  ></be-map-tabs>`
+					: ''}
 			</main>
 		`;
 	}

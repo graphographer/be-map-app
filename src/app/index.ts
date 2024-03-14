@@ -4,6 +4,7 @@ import '../components/styles/light-dom.scss';
 import agencyActivity from '../data/agency_activity.csv';
 import agency_presence from '../data/agency_presence.csv';
 import disbursementByAgency from '../data/disbursement_by_agency.csv';
+import output_indicators from '../data/output_indicators.csv';
 import { provider } from '../state';
 import { State } from '../state/State';
 import learningOutcomes from '../data/learning_outcomes.csv';
@@ -44,6 +45,7 @@ state.data.agency_presence = agency_presence;
 state.data.agency_activity = agencyActivity;
 state.data.disbursement_by_agency = disbursementByAgency;
 state.data.learning_outcomes = learningOutcomes;
+state.data.output_indicators = output_indicators;
 provider.set(state);
 
 // @ts-ignore

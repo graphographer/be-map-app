@@ -12,6 +12,7 @@ import { TAgencyActivity } from '../types/TAgencyActivity';
 import { TAgencyPresence } from '../types/TAgencyPresence';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
 import { TLearningOutcome } from '../types/TLearningOutcome';
+import { TOutputIndicator } from '../types/TOutputIndicator';
 
 export class State {
 	constructor() {
@@ -22,6 +23,7 @@ export class State {
 		disbursement_by_agency: TDisbursementByAgency[];
 		agency_activity: TAgencyActivity[];
 		learning_outcomes: TLearningOutcome[];
+		output_indicators: TOutputIndicator[];
 	} = {} as State['data'];
 
 	highlightableMap!: HighlightableMap;
@@ -59,6 +61,17 @@ export class State {
 
 			return agencyDisbursements;
 		});
+	}
+
+	get outputIndicatorsByCountry() {
+		return Object.fromEntries(
+			this.data.output_indicators
+				.filter(output => output.indicators.find(({ value }) => value > 0))
+				.map(output => [output.Country, output])
+		);
+	}
+	get outputIndicatorsForSelectedCountry(): TOutputIndicator | undefined {
+		return this.outputIndicatorsByCountry[this.selectedCountry];
 	}
 
 	get agencyEducationSupportByCountry(): Record<

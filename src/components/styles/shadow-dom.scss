@@ -16,6 +16,7 @@ progress {
 }
 
 :host {
+	display: block;
 	/* Set the font globally */
 	font-family: var(--sans-font);
 	scroll-behavior: smooth;
@@ -54,7 +55,8 @@ h6 {
 }
 
 p {
-	margin: 1.5rem 0;
+	margin-top: 0;
+	margin-bottom: 1.25rem;
 }
 
 /* Prevent long strings from overflowing container */
@@ -124,11 +126,16 @@ label[type="button"] {
 input:disabled,
 textarea:disabled,
 select:disabled,
-button[disabled] {
+button[disabled],
+.tabs>button[disabled] {
 	cursor: not-allowed;
 	background-color: var(--disabled);
 	border-color: var(--disabled);
-	color: var(--text-light);
+	color: var(--dark-gray);
+}
+
+.tabs>a[disabled] {
+	border-bottom-color: var(--border);
 }
 
 input[type="range"] {
@@ -259,9 +266,14 @@ dialog {
 	margin-bottom: 1rem;
 }
 
+article {
+	background-color: var(--accent-bg);
+}
+
 article h2:first-child,
 section h2:first-child {
 	margin-top: 1rem;
+	margin-bottom: 0.5rem;
 }
 
 section {
@@ -334,10 +346,10 @@ th {
 	font-weight: normal;
 }
 
-tr:nth-child(even) {
-	/* Set every other cell slightly darker. Improves readability. */
-	// background-color: var(--accent-bg);
-}
+// tr:nth-child(even) {
+/* Set every other cell slightly darker. Improves readability. */
+// background-color: var(--accent-bg);
+// }
 
 table caption {
 	text-align: left;
@@ -658,38 +670,78 @@ sub {
 /* Chota Tab */
 .tabs {
 	display: flex;
+	overflow-x: auto;
+	padding: 4px;
 }
 
-.tabs a {
-	text-decoration: none;
+.tabs>button {
+	// text-decoration: none;
+	background-color: transparent;
+	border-width: 0;
+	font-family: inherit;
+	font-size: inherit;
+	font-style: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+	padding: 0;
+	border-radius: inherit;
+}
+
+.tabs>button:focus {
+	outline: inherit;
+}
+
+.tabs>button:hover:not([disabled]) {
+	background-color: inherit;
 }
 
 // .tabs>.dropdown>summary,
-.tabs>a {
+.tabs>button {
+	cursor: pointer;
 	padding: 1rem 2rem;
 	flex: 0 1 auto;
 	color: var(--text);
 	border-bottom: 2px solid var(--ultralight-blue);
 	text-align: center;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
 }
 
-.tabs>a[aria-current="page"],
-.tabs>a.active,
-.tabs>a:hover {
-	opacity: 1;
+.tabs>button:focus {
+	z-index: 1;
+	outline: none;
+	box-shadow: 0 -1px 4px rgba(var(--web-blue-rgb), 0.4),
+		-1px -1px 2px rgba(var(--web-blue-rgb), 0.8),
+		1px -1px 2px rgba(var(--web-blue-rgb), 0.8);
+}
+
+.tabs>button[aria-current="page"]:not([disabled]),
+.tabs>button.active:not([disabled]),
+.tabs>button:hover:not([disabled]) {
+	z-index: 1;
 	border-bottom: 2px solid var(--web-blue);
 }
 
-.tabs>a[aria-current="page"],
-.tabs>a.active {
+.tabs>button[aria-current="page"]:not([disabled]),
+.tabs>button.active:not([disabled]) {
+	z-index: 1;
+	box-shadow: 0 0 4px rgba(var(--web-blue-rgb), 1);
+}
+
+.tabs>button[aria-current="page"]:not([disabled]):focus,
+.tabs>button.active:not([disabled]):focus {
+	box-shadow: 0 0 4px rgba(var(--web-blue-rgb), 1),
+		inset 0 0 4px rgba(var(--web-blue-rgb), 1);
+}
+
+.tabs>button[aria-current="page"],
+.tabs>button.active,
+.tabs>button.active:hover {
 	background-color: var(--ultralight-blue);
-	// border-left: 2px solid var(--web-blue);
-	// border-top: 2px solid var(--web-blue);
-	// border-right: 2px solid var(--web-blue);
 	border-color: var(--web-blue);
 }
 
-.tabs.is-full a {
+.tabs.is-full>button {
 	flex: 1 1 auto;
 }
 
@@ -712,6 +764,8 @@ sub {
 	position: absolute;
 }
 
+h1,
+h2,
 h3,
 h4 {
 	color: var(--usaid-blue);

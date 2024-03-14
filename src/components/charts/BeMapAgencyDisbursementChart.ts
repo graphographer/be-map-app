@@ -20,9 +20,11 @@ const HIGHLIGHT_COLORS: Record<string, string> = {
 	USAID: '#002F6C',
 	'Millenium Challenge Corporation': '#0067B9',
 	'The Peace Corps': '#A7C6ED',
+	'Peace Corps': '#A7C6ED',
 	'U.S. Department of Agriculture': '#205493',
 	'U.S. Department of Labor': '#651D32',
-	'U.S. Department of State': '#BA0C2F'
+	'U.S. Department of State': '#BA0C2F',
+	'U.S. Agency for International Development': '#651d32'
 };
 
 const getTitle = (country: string) =>
@@ -35,6 +37,10 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 		css`
 			.container {
 				position: relative;
+			}
+
+			form label {
+				display: inline-block;
 			}
 
 			label:not(:last-child) {
@@ -212,6 +218,11 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 				scales: {
 					x: {
 						stacked: true
+						// ticks: {
+						// 	callback(year) {
+						// 		return `FY${year}`;
+						// 	}
+						// }
 						// title: { display: true, text: 'Fiscal Year' }
 					},
 					y: {
