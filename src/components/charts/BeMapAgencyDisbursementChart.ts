@@ -146,36 +146,34 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 				Yearly Disbursements to ${this.state.selectedCountryFormatted} by Agency
 			</h4>
 
-			${this.agencies.length > 1
-				? html`<form
-						@change=${(e: InputEvent) => {
-							this.toggleAgency(
-								(e.target as HTMLInputElement)?.value as TAgency,
-								(e.target as HTMLInputElement).checked
-							);
-						}}
-				  >
-						<fieldset>
-							<legend><b>Toggle agency visibility</b></legend>
+			<form
+				@change=${(e: InputEvent) => {
+					this.toggleAgency(
+						(e.target as HTMLInputElement)?.value as TAgency,
+						(e.target as HTMLInputElement).checked
+					);
+				}}
+			>
+				<fieldset>
+					<legend><b>Toggle agency visibility</b></legend>
 
-							${this.agencies.map(agency => {
-								return html`
-									<label>
-										<input
-											style=${styleMap({
-												'background-color': HIGHLIGHT_COLORS[agency]
-											})}
-											type="checkbox"
-											value="${agency}"
-											.checked=${live(this.agencyFilter.has(agency))}
-										/>
-										${agency}
-									</label>
-								`;
-							})}
-						</fieldset>
-				  </form>`
-				: ''}
+					${this.agencies.map(agency => {
+						return html`
+							<label>
+								<input
+									style=${styleMap({
+										'background-color': HIGHLIGHT_COLORS[agency]
+									})}
+									type="checkbox"
+									value="${agency}"
+									.checked=${live(this.agencyFilter.has(agency))}
+								/>
+								${agency}
+							</label>
+						`;
+					})}
+				</fieldset>
+			</form>
 
 			<div class="container">${this.ctx}</div>
 
@@ -248,6 +246,9 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 								return `$${ctx.formattedValue}`;
 							}
 						}
+					},
+					legend: {
+						display: false
 					}
 					// title: {
 					// 	display: true,

@@ -4,10 +4,10 @@ import '../components/styles/light-dom.scss';
 import agencyActivity from '../data/agency_activity.csv';
 import agency_presence from '../data/agency_presence.csv';
 import disbursementByAgency from '../data/disbursement_by_agency.csv';
+import learningOutcomes from '../data/learning_outcomes.csv';
 import output_indicators from '../data/output_indicators.csv';
 import { provider } from '../state';
 import { State } from '../state/State';
-import learningOutcomes from '../data/learning_outcomes.csv';
 
 import {
 	ArcElement,

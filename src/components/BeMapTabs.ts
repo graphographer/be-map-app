@@ -107,9 +107,11 @@ export class BeMapTabs extends StateProvider {
 		if (e.key === 'ArrowRight') {
 			const n = goodMod(i + 1, tabs.length);
 			tabs[n].focus();
+			tabs[n].scrollIntoView({ block: 'nearest' });
 		} else if (e.key === 'ArrowLeft') {
 			const n = goodMod(i - 1, tabs.length);
 			tabs[n].focus();
+			tabs[n].scrollIntoView({ block: 'nearest' });
 		}
 	}
 

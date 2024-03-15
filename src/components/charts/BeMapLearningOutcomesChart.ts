@@ -4,12 +4,25 @@ import { StateProvider } from '../StateProvider';
 import { Chart } from 'chart.js';
 import { autorun, reaction } from 'mobx';
 import { ScriptableLineSegmentContext } from 'chart.js';
+import { TLearningOutcome } from '../../types/TLearningOutcome';
+import {
+	LEVEL_COLORS,
+	SUBJECT_POINT_STYLES
+} from '../helpers/OUTCOME_INDICATOR_CONSTS';
 
-const SUBJECT_COLORS: { [k: string]: string } = {
-	Reading: 'orange',
-	Math: 'violet',
-	'Reading Disability': 'forestgreen'
-};
+function getLabel(outcome: TLearningOutcome) {
+	const { Subject, 'Grade Level Measured': level } = outcome;
+	const maybeInt = parseInt(level);
+
+	let parsedLevel: string;
+	if (isNaN(maybeInt)) {
+		parsedLevel = level;
+	} else {
+		parsedLevel = `Grade ${level}`;
+	}
+
+	return `${Subject}, ${parsedLevel}`;
+}
 
 @customElement('be-map-learning-outcomes-chart')
 export class BeMapLearningOutcomesChart extends StateProvider {
@@ -25,25 +38,24 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 	ctx: HTMLCanvasElement;
 	chart!: Chart<'line', { x: string; y: number }[]>;
 
-	get countryOutcomes() {
-		return this.state.data.learning_outcomes.filter(
-			outcome => outcome.Country === this.state.selectedCountry
-		);
-	}
-
 	get data() {
 		return {
-			datasets: this.countryOutcomes.map(outcome => {
+			datasets: this.state.outcomeIndicatorsForSelectedCountry!.map(outcome => {
 				return {
-					label: outcome.Subject,
-					borderColor: SUBJECT_COLORS[outcome.Subject],
-					backgroundColor: SUBJECT_COLORS[outcome.Subject],
-					tension: 0.3,
+					label: getLabel(outcome),
+					borderColor: LEVEL_COLORS[outcome['Grade Level Measured']],
+					backgroundColor: LEVEL_COLORS[outcome['Grade Level Measured']],
+					pointStyle: SUBJECT_POINT_STYLES[outcome.Subject],
+					pointHoverRadius: 12,
+					pointRadius: 10,
+					pointBorderColor: 'rgba(256, 256, 256, .8)',
+					pointBorderWidth: 2,
 					segment: {
 						borderDash(ctx: ScriptableLineSegmentContext) {
 							return ctx.p0.skip || ctx.p1.skip ? [6, 6] : undefined;
 						}
 					},
+
 					data: outcome.outcomes.map(([year, pct]) => ({
 						x: `FY${year}`,
 						y: pct
@@ -59,6 +71,9 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 		this.ctx = document.createElement('canvas');
 		this.ctx.width = 800;
 		this.ctx.height = 500;
+		this.ctx.role = 'img';
+		this.ctx.innerText =
+			'A data table version of this chart is available below.';
 
 		// @ts-ignore
 		window.chart = this;
@@ -96,23 +111,32 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 				plugins: {
 					tooltip: {
 						enabled: true,
+						usePointStyle: true,
 						callbacks: {
 							title(tooltipItems) {
 								const [title] = tooltipItems;
 								return `${title.dataset.label} Outcome (${title.label})`;
 							},
+							afterTitle: items => {
+								const [title] = items;
+								return `Baseline Year: ${
+									this.state.outcomeIndicatorsForSelectedCountry[
+										title.datasetIndex
+									]['Baseline Year']
+								}`;
+							},
 							label: ctx => {
-								const { datasetIndex } = ctx;
-								const { Subject, 'Grade Level Measured': level } =
-									this.countryOutcomes[datasetIndex];
-								return `${Subject}, grade level ${level}: ${ctx.formattedValue}%`;
+								return `${ctx.formattedValue}%`;
 							}
 						}
+					},
+					legend: {
+						labels: {
+							usePointStyle: true,
+							font: { family: '"Source Sans Pro", sans-serif', size: 17 },
+							padding: 24
+						}
 					}
-					// title: {
-					// 	display: true,
-					// 	text: getTitle(this.country)
-					// }
 				}
 			}
 		});

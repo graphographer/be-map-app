@@ -247,7 +247,24 @@ export class State {
 		return filtered.map(([country]) => country);
 	}
 
-	selectedCountry: string = 'KHM';
+	get outcomeIndicatorsForSelectedCountry(): TLearningOutcome[] {
+		return this.data.learning_outcomes.filter(
+			outcome =>
+				outcome.Country === this.selectedCountry &&
+				outcome.outcomes.some(([_year, val]) => !isNaN(val))
+		);
+	}
+
+	// get allLevelsMeasured() {
+	// 	const levels = this.data.learning_outcomes.reduce((acc, outcome) => {
+	// 		acc.add(outcome['Grade Level Measured']);
+	// 		return acc;
+	// 	}, new Set<string>());
+	// 	return [...levels];
+	// }
+
+	selectedCountry: string = 'GTM';
+
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);
 	}

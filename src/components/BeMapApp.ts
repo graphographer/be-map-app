@@ -4,6 +4,8 @@ import './tabs/BeMapAgencyPresence';
 import './tabs/BeMapActivityData';
 import './tabs/BeMapDisbursementData';
 import './tabs/BeMapOutputIndicators';
+import './tabs/BeMapOutcomeIndicators';
+
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
@@ -45,7 +47,10 @@ export class BeMapApp extends StateProvider {
 				route: 'disbursement',
 				title: 'Disbursement Data',
 				template: () =>
-					html`<be-map-disbursement-data></be-map-disbursement-data>`
+					html`<be-map-disbursement-data></be-map-disbursement-data>`,
+				disabled: () => {
+					return !this.state.disbursementsForSelectedCountryByAgency.length;
+				}
 			},
 			{
 				route: 'output',
@@ -59,7 +64,8 @@ export class BeMapApp extends StateProvider {
 			{
 				route: 'outcome',
 				title: 'Outcome Indicators',
-				template: () => html`<h3>Outcome Indicators</h3>`
+				template: () =>
+					html`<be-map-outcome-indicators></be-map-outcome-indicators>`
 			}
 		];
 	}
@@ -75,7 +81,7 @@ export class BeMapApp extends StateProvider {
 				${this.state.selectedCountry
 					? html`<be-map-tabs
 							.config=${this.tabsConfig}
-							.activeTab=${'output'}
+							.activeTab=${'outcome'}
 					  ></be-map-tabs>`
 					: ''}
 			</main>
