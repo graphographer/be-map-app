@@ -2,7 +2,7 @@ import { Chart } from 'chart.js';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { computed, makeObservable, reaction } from 'mobx';
-import { StateProvider } from './StateProvider';
+import { StateProvider } from '../StateProvider';
 
 const HIGHLIGHT_COLORS: string[] = [
 	'#002F6C',

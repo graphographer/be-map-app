@@ -5,6 +5,8 @@ import './tabs/BeMapActivityData';
 import './tabs/BeMapDisbursementData';
 import './tabs/BeMapOutputIndicators';
 import './tabs/BeMapOutcomeIndicators';
+import '../components/BeMapFilters';
+import '../components/BeMap';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
@@ -23,6 +25,13 @@ export class BeMapApp extends StateProvider {
 			main {
 				margin: 0 auto;
 				max-width: 960px;
+			}
+
+			be-map {
+				margin-bottom: 3rem;
+			}
+			be-map-filters {
+				margin-bottom: 3rem;
 			}
 
 			highlightable-map {
@@ -73,9 +82,12 @@ export class BeMapApp extends StateProvider {
 	render() {
 		return html`
 			<main>
-				<h4>BE Map Refresh</h4>
+				<be-map></be-map>
+
+				<be-map-filters></be-map-filters>
+
 				<be-map-country-dropdown
-					.countries=${this.state.countries}
+					.countries=${this.state.filteredCountries}
 				></be-map-country-dropdown>
 
 				${this.state.selectedCountry

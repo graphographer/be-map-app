@@ -81,7 +81,7 @@ export class BeMapLearningOutcomesTable extends StateProvider {
 												<td>${datum['Grade Level Measured']}</td>
 												<td>${datum['Baseline Year']}</td>
 												${datum.outcomes.map(([, outcome], j) => {
-													if (outcome) {
+													if (!isNaN(outcome)) {
 														return html`<td
 															class="cursor-default"
 															data-outcome=${i}

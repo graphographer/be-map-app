@@ -38,6 +38,10 @@ export class State {
 
 	outcomeIndexesToChart: boolean[] = [];
 	highlightOutcomeData: [number, number] | [] = [];
+
+	setSelectedFiscalYear(fy: string) {
+		this.selectedFiscalYear = fy;
+	}
 	selectedFiscalYear: string = '2023';
 
 	fiscalYears = [2019, 2020, 2021, 2022, 2023];

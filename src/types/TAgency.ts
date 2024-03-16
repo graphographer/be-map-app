@@ -8,9 +8,9 @@ export type TAgency =
 	| 'U.S. Department of State';
 
 export const AGENCIES_LONG: TAgency[] = [
-	'USAID',
 	'Millenium Challenge Corporation',
 	'The Peace Corps',
+	'USAID',
 	'U.S. Department of Agriculture',
 	'U.S. Department of Labor',
 	'U.S. Department of State'
