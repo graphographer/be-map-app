@@ -5,7 +5,7 @@ import {
 	TAgencyActivity,
 	TAgencyActivityDTO
 } from '../../types/TAgencyActivity';
-import { agencyShortToLong } from './agencyNameSwitcher';
+import { agencyShortToLong } from '../../components/helpers/agencyNameSwitcher';
 import { nameToThreeAlphas } from '../countryNameTo3Alpha';
 
 export const agencyActivityProcessor = dsv({

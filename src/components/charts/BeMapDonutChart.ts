@@ -4,6 +4,8 @@ import { customElement } from 'lit/decorators.js';
 import { computed, makeObservable, reaction } from 'mobx';
 import { StateProvider } from '../StateProvider';
 import { USD_FORMATTER } from '../helpers/USD_FORMATTER';
+import { AGENCIES_LONG_TO_SHORT, TAgency } from '../../types/TAgency';
+import { styleMap } from 'lit/directives/style-map.js';
 
 const HIGHLIGHT_COLORS: Record<string, string> = {
 	USAID: '#002F6C',
@@ -21,11 +23,40 @@ export class BeMapDonutChart extends StateProvider {
 		css`
 			:host {
 				display: block;
-				height: 100%;
 			}
 
 			.container {
 				position: relative;
+				height: 100%;
+				display: flex;
+			}
+
+			.flex {
+				display: flex;
+				height: 100%;
+				gap: 1rem;
+				align-items: center;
+			}
+			.grow {
+				flex-grow: 1;
+			}
+
+			table {
+				margin: 0;
+				width: 100%;
+			}
+			td {
+				padding: 0.2rem;
+			}
+			td:last-of-type {
+				text-align: end;
+			}
+
+			.box {
+				display: inline-block;
+				width: 1rem;
+				height: 1rem;
+				margin-right: 0.2rem;
 			}
 		`
 	];
@@ -37,8 +68,6 @@ export class BeMapDonutChart extends StateProvider {
 		super();
 
 		this.ctx = document.createElement('canvas');
-		this.ctx.width = 800;
-		this.ctx.height = 500;
 
 		makeObservable(this, { data: computed });
 	}
@@ -62,31 +91,50 @@ export class BeMapDonutChart extends StateProvider {
 	}
 
 	render() {
-		return html`<div class="container">${this.ctx}</div>
-			<table class="sr-only">
-				<caption>
-					Total Agency Disbursements for ${this.state.selectedCountryFormatted}
-					in Fiscal Year ${this.state.selectedFiscalYear}
-				</caption>
-				<thead>
-					<tr>
-						<td scope="col">Agency</td>
-						<td scope="col">Disbursement</td>
-					</tr>
-				</thead>
-				<tbody>
-					${Object.entries(
-						this.state.agencyDisbursementsForSelectedCountryAndFY
-					)
-						.filter(([, amt]) => !!amt)
-						.map(([agency, amt]) => {
-							return html`<tr>
-								<td>${agency}</td>
-								<td>${USD_FORMATTER.format(amt)}</td>
-							</tr>`;
-						})}
-				</tbody>
-			</table>`;
+		const entries = Object.entries(
+			this.state.agencyDisbursementsForSelectedCountryAndFY
+		).filter(([, amt]) => amt > 0);
+		const total = entries.reduce((acc, [, amt]) => {
+			acc += amt;
+			return acc;
+		}, 0);
+		const formatted = entries.map(([agency, amt]) => [
+			AGENCIES_LONG_TO_SHORT[agency as TAgency],
+			USD_FORMATTER.format(amt),
+			HIGHLIGHT_COLORS[agency]
+		]);
+
+		return html`<div class="flex">
+			<div class="container">${this.ctx}</div>
+			<div class="grow">
+				<table>
+					<tbody>
+						${formatted.map(
+							([agency, amt, bg]) => html`
+								<tr>
+									<td>
+										<div
+											class="box"
+											style=${styleMap({
+												'background-color': bg
+											})}
+										></div>
+										<b>${agency}:</b>
+									</td>
+									<td>${amt}</td>
+								</tr>
+							`
+						)}
+					</tbody>
+					<tfoot>
+						<tr>
+							<td><b>FY${this.state.selectedFiscalYear} Total:</b></td>
+							<td>${USD_FORMATTER.format(total)}</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>`;
 	}
 
 	protected firstUpdated(
@@ -97,6 +145,7 @@ export class BeMapDonutChart extends StateProvider {
 			data: this.data,
 			options: {
 				maintainAspectRatio: false,
+				responsive: true,
 				plugins: {
 					tooltip: {
 						enabled: true,
@@ -105,17 +154,23 @@ export class BeMapDonutChart extends StateProvider {
 								return USD_FORMATTER.format(ctx.parsed);
 							}
 						}
+					},
+					legend: {
+						display: false,
+						position: 'right'
 					}
 				}
 			}
 		});
+
+		this.chart.resize();
 
 		this.disposers.push(
 			reaction(
 				() => this.data,
 				data => {
 					this.chart.data = data;
-					this.chart.update();
+					this.chart.update('none');
 				}
 			)
 		);
@@ -126,3 +181,27 @@ export class BeMapDonutChart extends StateProvider {
 		this.chart.destroy();
 	}
 }
+
+// <table>
+// 	<caption>
+// 		Total Agency Disbursements for ${this.state.selectedCountryFormatted}
+// 		in Fiscal Year ${this.state.selectedFiscalYear}
+// 	</caption>
+// 	<thead>
+// 		<tr>
+// 			<td scope="col">Agency</td>
+// 			<td scope="col">Disbursement</td>
+// 		</tr>
+// 	</thead>
+// 	<tbody>
+// 		$
+// 		{Object.entries(this.state.agencyDisbursementsForSelectedCountryAndFY)
+// 			.filter(([, amt]) => !!amt)
+// 			.map(([agency, amt]) => {
+// 				return html`<tr>
+// 					<td>${agency}</td>
+// 					<td>${USD_FORMATTER.format(amt)}</td>
+// 				</tr>`;
+// 			})}
+// 	</tbody>
+// </table>;

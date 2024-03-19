@@ -10,53 +10,38 @@ export class BeMapFilters extends StateProvider {
 	static styles = [
 		...super.styles,
 		css`
-			:host {
-				display: flex;
-				gap: 1rem;
+			.container {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				column-gap: 1rem;
+			}
+
+			@media (max-width: 699px) {
+				.container {
+					display: block;
+				}
 			}
 
 			label {
-				display: block;
-			}
-			select {
-				width: 100%;
-			}
-			.container {
-				width: 100%;
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				gap: 1rem;
-			}
-			.container > div {
-				height: 100%;
+				display: inline-block;
 			}
 			details {
-				background-color: initial;
-			}
-
-			summary::marker {
-				content: '';
+				background-color: var(--bg);
 			}
 			summary {
 				font-weight: normal;
-				word-break: break-word;
-				display: flex;
-				justify-content: space-between;
+				padding: 0.5rem;
 			}
-
+			summary::marker {
+				content: '';
+			}
 			summary:after {
+				float: right;
 				transform: scaleY(0.5);
 				content: '\u25BC';
 			}
-
-			details[open] > summary:after {
+			details[open] summary:after {
 				content: '\u25B2';
-			}
-
-			@media screen and (max-width: 779px) {
-				.container {
-					grid-template-columns: 1fr;
-				}
 			}
 		`
 	];
@@ -92,16 +77,16 @@ export class BeMapFilters extends StateProvider {
 						>Filter for the following agencies:</span
 					>
 					<details
+						class="dropdown"
 						@change=${this.handleAgencyChange.bind(this)}
 						aria-describedby="filter-description"
 					>
 						<summary>
-							<span
+							<i
 								>${this.state.filter.agencies?.length
 									? this.state.filter.agencies.join(', ')
-									: 'No agencies selected'}</span
+									: 'No agencies selected'}</i
 							>
-							<span class="marker"></span>
 						</summary>
 						${AGENCIES_LONG.map(
 							agency =>
@@ -123,13 +108,16 @@ export class BeMapFilters extends StateProvider {
 						>Filter for the following education levels:</span
 					>
 					<details
+						class="dropdown"
 						aria-describedby="education-filter-description"
 						@change=${this.handleEducationChange.bind(this)}
 					>
 						<summary>
-							${this.state.filter.educationLevels?.length
-								? this.state.filter.educationLevels.join(', ')
-								: 'No education levels selected'}
+							<i>
+								${this.state.filter.educationLevels?.length
+									? this.state.filter.educationLevels.join(', ')
+									: 'No education levels selected'}</i
+							>
 						</summary>
 						${EDUCATION_LEVELS.map(
 							level =>
@@ -147,6 +135,21 @@ export class BeMapFilters extends StateProvider {
 					</details>
 				</div>
 			</div>
+			<p>
+				<i>
+					Filtered results appear in the dropdown list below. Results represent
+					agencies and programs active as of fiscal year 2023. Select a country
+					to see more detailed information.
+				</i>
+				<br />
+				<button class="link" @click=${this.clearFilters.bind(this)}>
+					Clear Filters
+				</button>
+			</p>
 		`;
+	}
+
+	clearFilters() {
+		this.state.filter = {};
 	}
 }

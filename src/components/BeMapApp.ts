@@ -7,6 +7,8 @@ import './tabs/BeMapOutputIndicators';
 import './tabs/BeMapOutcomeIndicators';
 import '../components/BeMapFilters';
 import '../components/BeMap';
+import 'highlightable-map/dist/HighlightableMapBundled.min.js';
+import './charts/BeMapDonutChart';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
@@ -27,15 +29,38 @@ export class BeMapApp extends StateProvider {
 				max-width: 960px;
 			}
 
-			be-map {
-				margin-bottom: 3rem;
-			}
-			be-map-filters {
-				margin-bottom: 3rem;
+			highlightable-map {
+				--bwm-background: transparent;
+				width: 100px;
+				height: 100px;
 			}
 
-			highlightable-map {
-				height: 500px;
+			.flex {
+				display: flex;
+				align-items: center;
+				column-gap: 1rem;
+				flex-wrap: wrap;
+			}
+
+			.flex > .grow {
+				flex-grow: 1;
+			}
+
+			#overview be-map-country-dropdown {
+				width: 15rem;
+			}
+			#overview highlightable-map {
+				width: 5rem;
+			}
+
+			#overview > * {
+				height: 150px;
+				flex: 1 1 50%;
+			}
+
+			#overview .break {
+				flex: 1 0 100%;
+				height: 0;
 			}
 		`
 	];
@@ -82,13 +107,34 @@ export class BeMapApp extends StateProvider {
 	render() {
 		return html`
 			<main>
-				<be-map></be-map>
+				<section>
+					<be-map></be-map>
+				</section>
 
-				<be-map-filters></be-map-filters>
+				<section>
+					<be-map-filters></be-map-filters>
+				</section>
 
-				<be-map-country-dropdown
-					.countries=${this.state.filteredCountries}
-				></be-map-country-dropdown>
+				<section id="overview" class="flex">
+					<div class="flex">
+						<be-map-country-dropdown
+							class="grow"
+							.countries=${this.state.filteredCountries}
+						></be-map-country-dropdown>
+						<highlightable-map
+							role="img"
+							alt="The shape of ${this.state.selectedCountryFormatted}"
+							tabindex="-1"
+							no-tooltip
+							no-control
+							autozoom
+							highlight="${this.state.selectedCountry}"
+							filter="${this.state.selectedCountry}"
+						></highlightable-map>
+					</div>
+					<div class="break"></div>
+					<be-map-donut-chart></be-map-donut-chart>
+				</section>
 
 				${this.state.selectedCountry
 					? html`<be-map-tabs

@@ -10,8 +10,10 @@ export class BeMapCountryDropdown extends StateProvider {
 		...super.styles,
 		css`
 			select {
+				width: 100%;
 				color: var(--web-blue);
-				font-size: 36px;
+				font-size: 32px;
+				word-break: break-word;
 			}
 
 			select option {

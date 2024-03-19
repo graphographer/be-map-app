@@ -259,15 +259,7 @@ export class State {
 		);
 	}
 
-	// get allLevelsMeasured() {
-	// 	const levels = this.data.learning_outcomes.reduce((acc, outcome) => {
-	// 		acc.add(outcome['Grade Level Measured']);
-	// 		return acc;
-	// 	}, new Set<string>());
-	// 	return [...levels];
-	// }
-
-	selectedCountry: string = 'GTM';
+	selectedCountry: string = '';
 
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);

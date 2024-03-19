@@ -279,7 +279,7 @@ section h2:first-child {
 section {
 	// border-top: 1px solid var(--border);
 	// border-bottom: 1px solid var(--border);
-	padding: 2rem 0;
+	// padding: 2rem 0;
 	margin: 3rem 0;
 }
 
@@ -357,12 +357,22 @@ table caption {
 	margin-bottom: 0.5rem;
 }
 
+button.link {
+	display: inline;
+	background: none !important;
+	border: none;
+	padding: 0 !important;
+	color: var(--accent-text);
+	text-decoration: underline;
+	cursor: pointer;
+}
+
 /* Format forms */
 textarea,
 select,
 input,
-button,
-.button {
+button:not(.link),
+.button:not(.link) {
 	font-size: inherit;
 	font-family: inherit;
 	padding: 0.5rem;
@@ -464,14 +474,14 @@ input[type="radio"]:checked::after {
 }
 
 /* Makes input fields wider on smaller screens */
-@media only screen and (max-width: 720px) {
+// @media only screen and (max-width: 720px) {
 
-	textarea,
-	select,
-	input {
-		width: 100%;
-	}
-}
+// 	textarea,
+// 	select,
+// 	input {
+// 		width: 100%;
+// 	}
+// }
 
 /* Set a height for color input */
 input[type="color"] {
@@ -754,14 +764,16 @@ sub {
 }
 
 .sr-only {
-	clip: rect(1px, 1px, 1px, 1px);
-	clip-path: inset(50%);
-	height: 1px;
+	display: block;
+	position: absolute;
 	width: 1px;
+	height: 1px;
+	padding: 0;
 	margin: -1px;
 	overflow: hidden;
-	padding: 0;
-	position: absolute;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
 }
 
 h1,

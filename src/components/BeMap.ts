@@ -1,11 +1,12 @@
 import type { HighlightableMap } from 'highlightable-map';
 import 'highlightable-map/dist/HighlightableMapBundled.min.js';
-import { css, html } from 'lit';
+import { css, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { live } from 'lit/directives/live.js';
 import { autorun } from 'mobx';
 import './BeMapCountryDropdown';
 import { StateProvider } from './StateProvider';
-import { live } from 'lit/directives/live.js';
+import { diagonalTpl } from './templates/diagonals';
 
 const HIGHLIGHT_COLORS: Record<number, string> = {
 	4: '#002F6C',
@@ -17,6 +18,9 @@ const HIGHLIGHT_COLORS: Record<number, string> = {
 	'-1': '#651D32'
 };
 
+const COLOR_FILTER =
+	'invert(71%) sepia(47%) saturate(346%) hue-rotate(185deg) brightness(84%) contrast(80%)';
+
 @customElement('be-map')
 export class BeMap extends StateProvider {
 	highlightableMap: HighlightableMap;
@@ -25,22 +29,23 @@ export class BeMap extends StateProvider {
 		...super.styles,
 		css`
 			highlightable-map {
-				height: 500px;
+				height: 400px;
 			}
 
 			.legend,
 			.legend > div {
 				font-size: 1rem;
 				display: flex;
-				gap: 1rem;
+				gap: 0.8rem;
 				align-items: center;
 			}
 			.legend {
 				flex-wrap: wrap;
 			}
 
-			.legend > * {
-				flex: 1 1 auto;
+			.legend > *,
+			.legend > * > * {
+				flex: 0 1 auto;
 			}
 
 			.legend select {
@@ -52,6 +57,10 @@ export class BeMap extends StateProvider {
 				width: 2em;
 				height: 2em;
 			}
+
+			.filter {
+				filter: ${unsafeCSS(COLOR_FILTER)};
+			}
 		`
 	];
 
@@ -61,33 +70,44 @@ export class BeMap extends StateProvider {
 		this.highlightableMap = document.createElement(
 			'highlightable-map'
 		) as HighlightableMap;
+
 		this.highlightableMap.setAttribute('tooltip', '');
 		this.highlightableMap.setAttribute('zoom', '2.1676183562414115');
 		this.highlightableMap.setAttribute(
 			'center',
 			'7.515335519810181,12.495023725753168'
 		);
-		// this.highlightableMap.setAttribute('autozoom', '');
 		this.highlightableMap.addEventListener('click-country', (e: any) => {
-			this.state.setCountry(e.detail.feature.properties.ADM0_A3_US);
+			if (
+				this.state.countries.includes(e.detail.feature.properties.ADM0_A3_US)
+			) {
+				this.state.setCountry(e.detail.feature.properties.ADM0_A3_US);
+			}
 		});
 
 		this.highlightableMap.addEventListener(
 			'hm-rendered',
 			() => {
+				// add diagonal pattern svg to shadow root
+				this.highlightableMap.shadowRoot?.prepend(diagonalTpl());
+
 				this.disposers.push(
-					// autorun(() => this.state.filteredCountries),
 					autorun(() => {
 						const toHighlight: string[] = [];
 						Object.entries(this.state.totalYearlyDisbursements).forEach(
 							([country, yearlyAmts]) => {
 								const el = this.highlightableMap.countryEls.get(country);
+								// reset color filter
+								el?.style.removeProperty('filter');
 
 								let fill: string;
-								if (this.state.filteredCountries.includes(country)) {
+								if (this.state.countries.includes(country)) {
 									const amt = yearlyAmts[this.state.selectedFiscalYear];
 
-									if (amt < 1e6) {
+									if (amt === 0) {
+										fill = 'url(#diagonal)';
+										el?.style.setProperty('filter', COLOR_FILTER);
+									} else if (amt < 1e6) {
 										fill = HIGHLIGHT_COLORS[1];
 									} else if (amt < 5e6) {
 										fill = HIGHLIGHT_COLORS[2];
@@ -116,7 +136,8 @@ export class BeMap extends StateProvider {
 	}
 
 	render() {
-		return html`${this.hm}
+		return html`
+			${diagonalTpl()} ${this.hm}
 			<div class="legend">
 				<b>Disbursement Ranges</b>
 				<div>
@@ -148,6 +169,18 @@ export class BeMap extends StateProvider {
 					<span>> $15m</span>
 				</div>
 				<div>
+					<svg height="2rem" width="2rem" class="filter">
+						<rect
+							style="fill: url(#diagonal);"
+							x="0"
+							y="0"
+							height="2rem"
+							width="2rem"
+						></rect>
+					</svg>
+					<span>No Data</span>
+				</div>
+				<div>
 					<label for="fy-select"><b>Fiscal Year</b></label>
 					<select id="fy-select" @change=${this.handleFyChange.bind(this)}>
 						${this.state.fiscalYears.map(
@@ -163,7 +196,8 @@ export class BeMap extends StateProvider {
 						)}
 					</select>
 				</div>
-			</div> `;
+			</div>
+		`;
 	}
 
 	handleFyChange(e: InputEvent & { target: HTMLSelectElement }) {
