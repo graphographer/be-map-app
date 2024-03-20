@@ -201,7 +201,7 @@ export class BeMap extends StateProvider {
 							width="2rem"
 						></rect>
 					</svg>
-					<span>No Data</span>
+					<span>No Disbursement Reported</span>
 				</div>
 			</div>
 			${diagonalTpl()}
