@@ -1,13 +1,12 @@
+import { Chart } from 'chart.js';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { StateProvider } from '../StateProvider';
-import { Chart } from 'chart.js';
 import { autorun, reaction } from 'mobx';
-import { ScriptableLineSegmentContext } from 'chart.js';
 import { TLearningOutcome } from '../../types/TLearningOutcome';
+import { StateProvider } from '../StateProvider';
 import {
-	SUBJECT_COLORS,
-	LEVEL_POINT_STYLES
+	LEVEL_POINT_STYLES,
+	SUBJECT_COLORS
 } from '../helpers/OUTCOME_INDICATOR_CONSTS';
 
 function getLabel(outcome: TLearningOutcome) {
