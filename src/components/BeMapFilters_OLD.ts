@@ -1,10 +1,10 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
-import { TEducationLevel } from '../types/EEducationLevel';
+import { EDUCATION_LEVELS, TEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
-import { AGENCIES_SHORT, AGENCIES_SHORT_TO_LONG } from '../types/TAgencyShort';
 import { StateProvider } from './StateProvider';
+import { AGENCIES_SHORT, AGENCIES_SHORT_TO_LONG } from '../types/TAgencyShort';
 
 @customElement('be-map-filters')
 export class BeMapFilters extends StateProvider {
@@ -77,44 +77,81 @@ export class BeMapFilters extends StateProvider {
 
 	render() {
 		return html`
-			<h4 id="agency-filter-description">Filter By Agency</h4>
+			<h4>Filter By Agency</h4>
 			<div class="container">
-				<details
-					class="dropdown"
-					@change=${this.handleAgencyChange.bind(this)}
-					aria-describedby="agency-filter-description"
-				>
-					<summary>
-						<i
-							>${this.state.filter.agencies?.length
-								? this.state.filter.agencies.join(', ')
-								: 'No agencies selected'}</i
-						>
-					</summary>
-					${AGENCIES_SHORT.map(
-						agency =>
-							html`<label>
-								<input
-									type="checkbox"
-									value=${agency}
-									.checked=${live(
-										!!this.state.filter.agencies?.includes(agency)
-									)}
-								/>
-								${AGENCIES_SHORT_TO_LONG[agency]}
-							</label> `
-					)}
-				</details>
+				<div>
+					<span id="agency-filter-description"
+						>Filter for the following agencies:</span
+					>
+					<details
+						class="dropdown"
+						@change=${this.handleAgencyChange.bind(this)}
+						aria-describedby="agency-filter-description"
+					>
+						<summary>
+							<i
+								>${this.state.filter.agencies?.length
+									? this.state.filter.agencies.join(', ')
+									: 'No agencies selected'}</i
+							>
+						</summary>
+						${AGENCIES_SHORT.map(
+							agency =>
+								html`<label>
+									<input
+										type="checkbox"
+										value=${agency}
+										.checked=${live(
+											!!this.state.filter.agencies?.includes(agency)
+										)}
+									/>
+									${AGENCIES_SHORT_TO_LONG[agency]}
+								</label> `
+						)}
+					</details>
+				</div>
+				<div>
+					<span id="education-filter-description"
+						>Filter for the following education levels:</span
+					>
+					<details
+						class="dropdown"
+						aria-describedby="education-filter-description"
+						@change=${this.handleEducationChange.bind(this)}
+					>
+						<summary>
+							<i>
+								${this.state.filter.educationLevels?.length
+									? this.state.filter.educationLevels.join(', ')
+									: 'No education levels selected'}</i
+							>
+						</summary>
+						${EDUCATION_LEVELS.map(
+							level =>
+								html`<label>
+									<input
+										type="checkbox"
+										value=${level}
+										.checked=${live(
+											!!this.state.filter.educationLevels?.includes(level)
+										)}
+									/>
+									${level}
+								</label> `
+						)}
+					</details>
+				</div>
 			</div>
 			<p>
 				<em>
 					Filtered results appear in the dropdown list below. Results represent
-					agencies active in the countries as of fiscal year 2023. Select a
-					country to see more detailed information.
+					agencies and programs active as of fiscal year 2023. Selected
+					education levels are not necessarily supported by all of the selected
+					agencies. Select a country to see more detailed information.
 				</em>
 				<br />
 				<button class="link" @click=${this.clearFilters.bind(this)}>
-					Reset Filters
+					Clear Filters
 				</button>
 			</p>
 		`;
