@@ -9,6 +9,9 @@ export class BeMapAgencyPresence extends StateProvider {
 	static styles = [
 		...super.styles,
 		css`
+			:host {
+				overflow-x: auto;
+			}
 			table {
 				width: 100%;
 			}
@@ -44,47 +47,51 @@ export class BeMapAgencyPresence extends StateProvider {
 	];
 
 	render() {
-		return html`
-			<table>
-				<caption>
-					<h3>USG BE Support by Education Level(s) and Agency</h3>
-				</caption>
-				<thead>
-					<tr>
-						<th scope="col">
-							<span class="sr-only">Education Support Type</span>
-						</th>
-						${BeMapAgencyPresence.agencies.map(([short]) => {
-							return html`<th scope="col">${short}</th> `;
-						})}
-					</tr>
-				</thead>
-				<tbody>
-					${BeMapAgencyPresence.educationLevels.map(level => {
-						return html`<tr>
-							<th scope="row">${level}</th>
-							${BeMapAgencyPresence.agencies.map(([_short, long]) => {
-								return html`
-									<td>
-										${this.state.agencyEducationSupportForSelectedCountry[
-											long
-										]?.includes(level)
-											? html`<div class="checked">
-													<span class="sr-only">&check;</span>
-											  </div>`
-											: ''}
-									</td>
-								`;
+		if (this.state.agencyEducationSupportForSelectedCountry) {
+			return html`
+				<table>
+					<caption>
+						<h5>USG BE Support by Education Level(s) and Agency</h5>
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">
+								<span class="sr-only">Education Support Type</span>
+							</th>
+							${BeMapAgencyPresence.agencies.map(([short]) => {
+								return html`<th scope="col">${short}</th> `;
 							})}
-						</tr>`;
-					})}
-				</tbody>
-			</table>
+						</tr>
+					</thead>
+					<tbody>
+						${BeMapAgencyPresence.educationLevels.map(level => {
+							return html`<tr>
+								<th scope="row">${level}</th>
+								${BeMapAgencyPresence.agencies.map(([_short, long]) => {
+									return html`
+										<td>
+											${this.state.agencyEducationSupportForSelectedCountry[
+												long
+											]?.includes(level)
+												? html`<div class="checked">
+														<span class="sr-only">&check;</span>
+												  </div>`
+												: ''}
+										</td>
+									`;
+								})}
+							</tr>`;
+						})}
+					</tbody>
+				</table>
 
-			<p>
-				<b>Supporting Agencies:</b>
-				${this.state.agenciesInSelectedCountry.join(', ')}
-			</p>
-		`;
+				<p>
+					<b>Supporting Agencies:</b>
+					${this.state.agenciesInSelectedCountry.join(', ')}
+				</p>
+			`;
+		} else {
+			return html`<em>No data available.</em>`;
+		}
 	}
 }

@@ -1,11 +1,10 @@
 import dsv from '@rollup/plugin-dsv';
 import { nameToThreeAlphas } from '../countryNameTo3Alpha';
-import { TLearningOutcome } from '../../types/TLearningOutcome';
 
 export const learningOutcomesProcessor = dsv({
 	include: 'src/data/learning_outcomes.csv',
 	processRow(_row) {
-		const row = { ..._row } as unknown as TLearningOutcome;
+		const row = { ..._row } as any;
 
 		const outcomes: [number, number][] = [];
 		row.outcomes = outcomes;

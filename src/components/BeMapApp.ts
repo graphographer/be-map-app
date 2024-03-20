@@ -29,38 +29,35 @@ export class BeMapApp extends StateProvider {
 				max-width: 960px;
 			}
 
+			#results-heading {
+				margin-bottom: -2rem;
+			}
+
 			highlightable-map {
 				--bwm-background: transparent;
 				width: 100px;
 				height: 100px;
 			}
 
+			be-map-donut-chart {
+				height: 150px;
+				margin-bottom: 3rem;
+			}
+
+			be-map-tabs {
+				min-height: 40rem;
+			}
+
 			.flex {
 				display: flex;
 				align-items: center;
 				column-gap: 1rem;
-				flex-wrap: wrap;
+				height: 150px;
+				margin-bottom: -2rem;
 			}
 
 			.flex > .grow {
 				flex-grow: 1;
-			}
-
-			#overview be-map-country-dropdown {
-				width: 15rem;
-			}
-			#overview highlightable-map {
-				width: 5rem;
-			}
-
-			#overview > * {
-				height: 150px;
-				flex: 1 1 50%;
-			}
-
-			#overview .break {
-				flex: 1 0 100%;
-				height: 0;
 			}
 		`
 	];
@@ -81,19 +78,19 @@ export class BeMapApp extends StateProvider {
 				route: 'disbursement',
 				title: 'Disbursement Data',
 				template: () =>
-					html`<be-map-disbursement-data></be-map-disbursement-data>`,
-				disabled: () => {
-					return !this.state.disbursementsForSelectedCountryByAgency.length;
-				}
+					html`<be-map-disbursement-data></be-map-disbursement-data>`
+				// disabled: () => {
+				// 	return !this.state.disbursementsForSelectedCountryByAgency.length;
+				// }
 			},
 			{
 				route: 'output',
 				title: 'Ouput Indicators',
 				template: () =>
-					html`<be-map-output-indicators></be-map-output-indicators>`,
-				disabled: () => {
-					return !this.state.outputIndicatorsForSelectedCountry;
-				}
+					html`<be-map-output-indicators></be-map-output-indicators>`
+				// disabled: () => {
+				// 	return !this.state.outputIndicatorsForSelectedCountry;
+				// }
 			},
 			{
 				route: 'outcome',
@@ -115,39 +112,44 @@ export class BeMapApp extends StateProvider {
 					<be-map-filters></be-map-filters>
 				</section>
 
-				<section id="overview" class="flex">
+				<section id="overview">
+					<h4 id="results-heading">Filter Results</h4>
 					<div class="flex">
 						<be-map-country-dropdown
 							class="grow"
+							aria-describedby="results-heading"
 							.countries=${this.state.filteredCountries}
 						></be-map-country-dropdown>
-						<highlightable-map
-							role="img"
-							alt="The shape of ${this.state.selectedCountryFormatted}"
-							tabindex="-1"
-							no-tooltip
-							no-control
-							autozoom
-							highlight="${this.state.selectedCountry}"
-							filter="${this.state.selectedCountry}"
-						></highlightable-map>
-					</div>
-					<div class="break"></div>
-					<be-map-donut-chart></be-map-donut-chart>
-				</section>
 
-				${this.state.selectedCountry
-					? html`<be-map-tabs
-							.config=${this.tabsConfig}
-							.activeTab=${'outcome'}
-					  ></be-map-tabs>`
-					: ''}
+						${this.state.selectedCountry
+							? html`
+									<highlightable-map
+										role="img"
+										alt="The shape of ${this.state.selectedCountryFormatted}"
+										tabindex="-1"
+										no-tooltip
+										no-control
+										autozoom
+										highlight="${this.state.selectedCountry}"
+										filter="${this.state.selectedCountry}"
+									></highlightable-map>
+							  `
+							: ''}
+					</div>
+
+					${this.state.agencyDisbursementsForSelectedCountryAndLatestFY
+						? html` <h4>${this.state.selectedCountryFormatted}: Overview</h4>
+								<be-map-donut-chart></be-map-donut-chart>`
+						: ''}
+					${this.state.selectedCountry
+						? html` <h4>${this.state.selectedCountryFormatted}: Details</h4>
+								<be-map-tabs
+									.config=${this.tabsConfig}
+									.activeTab=${'presence'}
+								></be-map-tabs>`
+						: ''}
+				</section>
 			</main>
 		`;
 	}
 }
-
-// <section id="overview">
-// 	<be-map-single-country></be-map-single-country>
-// 	<be-map-donut-chart></be-map-donut-chart>
-// </section>;

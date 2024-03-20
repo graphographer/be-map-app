@@ -1,6 +1,6 @@
 import { HighlightableMap } from 'highlightable-map';
 import { groupBy, mapValues, omitBy } from 'lodash-es';
-import { makeAutoObservable, observable } from 'mobx';
+import { makeAutoObservable, observable, reaction } from 'mobx';
 import {
 	nameToThreeAlphas,
 	threeAlphasToName
@@ -17,6 +17,12 @@ import { TOutputIndicator } from '../types/TOutputIndicator';
 export class State {
 	constructor() {
 		makeAutoObservable(this, { data: false, filter: observable.ref });
+		reaction(
+			() => this.filter,
+			() => {
+				this.selectedCountry = '';
+			}
+		);
 	}
 	data: {
 		agency_presence: TAgencyPresence[];
@@ -110,18 +116,30 @@ export class State {
 		return this.agencyEducationSupportByCountry[this.selectedCountry];
 	}
 
-	get agencyDisbursementsForSelectedCountryAndFY(): Record<TAgency, number> {
-		const { selectedCountry, selectedFiscalYear } = this;
+	get latestFY() {
+		return this.fiscalYears[this.fiscalYears.length - 1];
+	}
 
-		if (!selectedCountry && !selectedFiscalYear)
-			return {} as Record<TAgency, number>;
+	get agencyDisbursementsForSelectedCountryAndLatestFY():
+		| Record<TAgency, number>
+		| undefined {
+		const { selectedCountry, latestFY } = this;
 
-		return mapValues(
+		if (!selectedCountry) return undefined;
+
+		const latestDisbursements = mapValues(
 			this.yearlyDisbursementsByCountryAndAgency[selectedCountry],
 			agencyDisbursements => {
-				return agencyDisbursements[selectedFiscalYear];
+				return agencyDisbursements[latestFY];
 			}
 		);
+
+		if (
+			!Object.values(latestDisbursements).find(disbursement => disbursement > 0)
+		)
+			return undefined;
+
+		return latestDisbursements;
 	}
 
 	get totalYearlyDisbursements(): {
@@ -259,7 +277,7 @@ export class State {
 		);
 	}
 
-	selectedCountry: string = '';
+	selectedCountry: string = 'COL';
 
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);

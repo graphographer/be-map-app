@@ -38,7 +38,7 @@ export class BeMapDonutChart extends StateProvider {
 				align-items: center;
 			}
 			.grow {
-				flex-grow: 1;
+				flex-grow: 0.2;
 			}
 
 			table {
@@ -73,17 +73,20 @@ export class BeMapDonutChart extends StateProvider {
 	}
 
 	get data() {
+		if (!this.state.agencyDisbursementsForSelectedCountryAndLatestFY) {
+			return;
+		}
 		return {
 			labels: Object.keys(
-				this.state.agencyDisbursementsForSelectedCountryAndFY
+				this.state.agencyDisbursementsForSelectedCountryAndLatestFY
 			),
 			datasets: [
 				{
 					data: Object.values(
-						this.state.agencyDisbursementsForSelectedCountryAndFY
+						this.state.agencyDisbursementsForSelectedCountryAndLatestFY
 					),
 					backgroundColor: Object.keys(
-						this.state.agencyDisbursementsForSelectedCountryAndFY
+						this.state.agencyDisbursementsForSelectedCountryAndLatestFY
 					).map(agency => HIGHLIGHT_COLORS[agency])
 				}
 			]
@@ -91,8 +94,10 @@ export class BeMapDonutChart extends StateProvider {
 	}
 
 	render() {
+		if (!this.state.agencyDisbursementsForSelectedCountryAndLatestFY) return '';
+
 		const entries = Object.entries(
-			this.state.agencyDisbursementsForSelectedCountryAndFY
+			this.state.agencyDisbursementsForSelectedCountryAndLatestFY
 		).filter(([, amt]) => amt > 0);
 		const total = entries.reduce((acc, [, amt]) => {
 			acc += amt;
@@ -140,6 +145,8 @@ export class BeMapDonutChart extends StateProvider {
 	protected firstUpdated(
 		_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
 	): void {
+		if (!this.data) return;
+
 		this.chart = new Chart<'doughnut'>(this.ctx, {
 			type: 'doughnut',
 			data: this.data,
@@ -169,6 +176,8 @@ export class BeMapDonutChart extends StateProvider {
 			reaction(
 				() => this.data,
 				data => {
+					if (!data) return;
+
 					this.chart.data = data;
 					this.chart.update('none');
 				}

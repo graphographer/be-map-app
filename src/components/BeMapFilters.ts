@@ -22,6 +22,10 @@ export class BeMapFilters extends StateProvider {
 				}
 			}
 
+			h4 {
+				margin-bottom: 0.5rem;
+			}
+
 			label {
 				display: inline-block;
 			}
@@ -31,6 +35,7 @@ export class BeMapFilters extends StateProvider {
 			summary {
 				font-weight: normal;
 				padding: 0.5rem;
+				word-wrap: break-word;
 			}
 			summary::marker {
 				content: '';
@@ -71,6 +76,7 @@ export class BeMapFilters extends StateProvider {
 
 	render() {
 		return html`
+			<h4>Filters</h4>
 			<div class="container">
 				<div>
 					<span id="agency-filter-description"
@@ -136,11 +142,11 @@ export class BeMapFilters extends StateProvider {
 				</div>
 			</div>
 			<p>
-				<i>
+				<em>
 					Filtered results appear in the dropdown list below. Results represent
 					agencies and programs active as of fiscal year 2023. Select a country
 					to see more detailed information.
-				</i>
+				</em>
 				<br />
 				<button class="link" @click=${this.clearFilters.bind(this)}>
 					Clear Filters

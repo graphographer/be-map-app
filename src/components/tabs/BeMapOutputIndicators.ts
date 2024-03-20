@@ -27,14 +27,16 @@ export class BeMapOutputIndicators extends StateProvider {
 
 	render() {
 		return html`<div class="container">
-			${this.state.outputIndicatorsForSelectedCountry?.indicators
-				.filter(({ value }) => value > 0)
-				.map(output => {
-					return html`<article>
-						<h2>${output.value}</h2>
-						<p>${output.title}</p>
-					</article>`;
-				})}
+			${this.state.outputIndicatorsForSelectedCountry
+				? this.state.outputIndicatorsForSelectedCountry.indicators
+						.filter(({ value }) => value > 0)
+						.map(output => {
+							return html`<article>
+								<h2>${output.value}</h2>
+								<p>${output.title}</p>
+							</article>`;
+						})
+				: ''}
 		</div>`;
 	}
 }

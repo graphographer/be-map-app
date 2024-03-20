@@ -2,7 +2,7 @@ import dsv from '@rollup/plugin-dsv';
 
 export const agencyPresenceProcessor = dsv({
 	include: 'src/data/agency_presence.csv',
-	processRow(row: any, id) {
+	processRow(row: any) {
 		for (const key in row) {
 			const val = row[key];
 			if (val === 'TRUE') {

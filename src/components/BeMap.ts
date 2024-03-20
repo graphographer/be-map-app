@@ -19,7 +19,7 @@ const HIGHLIGHT_COLORS: Record<number, string> = {
 };
 
 const COLOR_FILTER =
-	'invert(71%) sepia(47%) saturate(346%) hue-rotate(185deg) brightness(84%) contrast(80%)';
+	'invert(71%) sepia(47%) saturate(346%) hue-rotate(185deg) brightness(150%) contrast(80%)';
 
 @customElement('be-map')
 export class BeMap extends StateProvider {
@@ -30,6 +30,13 @@ export class BeMap extends StateProvider {
 		css`
 			highlightable-map {
 				height: 400px;
+			}
+
+			#fy-wrapper {
+				margin-bottom: 0;
+			}
+			#fy-select {
+				display: inline-block;
 			}
 
 			.legend,
@@ -77,13 +84,13 @@ export class BeMap extends StateProvider {
 			'center',
 			'7.515335519810181,12.495023725753168'
 		);
-		this.highlightableMap.addEventListener('click-country', (e: any) => {
-			if (
-				this.state.countries.includes(e.detail.feature.properties.ADM0_A3_US)
-			) {
-				this.state.setCountry(e.detail.feature.properties.ADM0_A3_US);
-			}
-		});
+		// this.highlightableMap.addEventListener('click-country', (e: any) => {
+		// 	if (
+		// 		this.state.countries.includes(e.detail.feature.properties.ADM0_A3_US)
+		// 	) {
+		// 		this.state.setCountry(e.detail.feature.properties.ADM0_A3_US);
+		// 	}
+		// });
 
 		this.highlightableMap.addEventListener(
 			'hm-rendered',
@@ -137,10 +144,26 @@ export class BeMap extends StateProvider {
 
 	render() {
 		return html`
-			${diagonalTpl()} ${this.hm}
+			<h4 id="fy-wrapper">
+				Disbursement Ranges for Fiscal Year
+				<select id="fy-select" @change=${this.handleFyChange.bind(this)}>
+					${this.state.fiscalYears.map(
+						fy =>
+							html`<option
+								value="${fy}"
+								?selected=${live(
+									this.state.selectedFiscalYear === fy.toString()
+								)}
+							>
+								${fy}
+							</option>`
+					)}
+				</select>
+			</h4>
+			${this.hm}
 			<div class="legend">
-				<b>Disbursement Ranges</b>
-				<div>
+				<b id="key">Key:</b>
+				<div aria-describedby="key">
 					<div
 						class="box"
 						style="background-color:${HIGHLIGHT_COLORS['1']}"
@@ -180,23 +203,8 @@ export class BeMap extends StateProvider {
 					</svg>
 					<span>No Data</span>
 				</div>
-				<div>
-					<label for="fy-select"><b>Fiscal Year</b></label>
-					<select id="fy-select" @change=${this.handleFyChange.bind(this)}>
-						${this.state.fiscalYears.map(
-							fy =>
-								html`<option
-									value="${fy}"
-									?selected=${live(
-										this.state.selectedFiscalYear === fy.toString()
-									)}
-								>
-									${fy}
-								</option>`
-						)}
-					</select>
-				</div>
 			</div>
+			${diagonalTpl()}
 		`;
 	}
 
@@ -205,7 +213,7 @@ export class BeMap extends StateProvider {
 	}
 
 	get hm() {
-		this.highlightableMap.selected = [this.state.selectedCountry];
+		// this.highlightableMap.selected = [this.state.selectedCountry];
 		return this.highlightableMap;
 	}
 }

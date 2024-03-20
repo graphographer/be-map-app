@@ -10,7 +10,7 @@ export class BeMapActivityData extends StateProvider {
 			${Object.entries(this.state.activitiesForSelectedCountryByAgency).map(
 				([agency, activities]) => {
 					return html`
-						<h4>${agency}</h4>
+						<h5>${agency}</h5>
 
 						${activities.map(activity => {
 							const {

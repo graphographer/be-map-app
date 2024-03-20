@@ -1,5 +1,5 @@
 import { ECountry } from './ECountry';
-import { TAgency } from './EAgency';
+import { TAgency } from './TAgency';
 
 export type TAgencyPresence = {
 	Agency: TAgency;
