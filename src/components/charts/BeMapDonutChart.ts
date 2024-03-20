@@ -6,15 +6,7 @@ import { StateProvider } from '../StateProvider';
 import { USD_FORMATTER } from '../helpers/USD_FORMATTER';
 import { AGENCIES_LONG_TO_SHORT, TAgency } from '../../types/TAgency';
 import { styleMap } from 'lit/directives/style-map.js';
-
-const HIGHLIGHT_COLORS: Record<string, string> = {
-	USAID: '#002F6C',
-	'Millenium Challenge Corporation': '#0067B9',
-	'The Peace Corps': '#A7C6ED',
-	'U.S. Department of Agriculture': '#205493',
-	'U.S. Department of Labor': '#651D32',
-	'U.S. Department of State': '#BA0C2F'
-};
+import { HIGHLIGHT_COLORS } from './BeMapAgencyDisbursementChart';
 
 @customElement('be-map-donut-chart')
 export class BeMapDonutChart extends StateProvider {

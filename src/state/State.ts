@@ -203,7 +203,12 @@ export class State {
 	}
 
 	get countries() {
-		return Object.keys(this.agenciesInCountry);
+		const countries = new Set(
+			this.data.disbursement_by_agency
+				.filter(({ Disbursements }) => Disbursements.find(([, amt]) => amt > 0))
+				.map(({ Country }) => Country)
+		);
+		return [...countries];
 	}
 	get countriesFormatted() {
 		return this.countries.map(countryNameFormatter);
