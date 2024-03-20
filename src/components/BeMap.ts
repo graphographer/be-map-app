@@ -84,13 +84,13 @@ export class BeMap extends StateProvider {
 			'center',
 			'7.515335519810181,12.495023725753168'
 		);
-		// this.highlightableMap.addEventListener('click-country', (e: any) => {
-		// 	if (
-		// 		this.state.countries.includes(e.detail.feature.properties.ADM0_A3_US)
-		// 	) {
-		// 		this.state.setCountry(e.detail.feature.properties.ADM0_A3_US);
-		// 	}
-		// });
+		this.highlightableMap.addEventListener('click-country', (e: any) => {
+			if (
+				this.state.countries.includes(e.detail.feature.properties.ADM0_A3_US)
+			) {
+				this.state.setCountry(e.detail.feature.properties.ADM0_A3_US);
+			}
+		});
 
 		this.highlightableMap.addEventListener(
 			'hm-rendered',
@@ -213,7 +213,7 @@ export class BeMap extends StateProvider {
 	}
 
 	get hm() {
-		// this.highlightableMap.selected = [this.state.selectedCountry];
+		this.highlightableMap.selected = [this.state.selectedCountry];
 		return this.highlightableMap;
 	}
 }
