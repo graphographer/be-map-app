@@ -1,5 +1,5 @@
 import { HighlightableMap } from 'highlightable-map';
-import { groupBy, mapValues, omitBy } from 'lodash-es';
+import { groupBy, mapValues, omitBy, sortBy } from 'lodash-es';
 import { makeAutoObservable, observable, reaction } from 'mobx';
 import {
 	nameToThreeAlphas,
@@ -227,7 +227,9 @@ export class State {
 				.filter(({ Disbursements }) => Disbursements.find(([, amt]) => amt > 0))
 				.map(({ Country }) => Country)
 		);
-		return [...countries];
+		return sortBy([...countries], countryCode => {
+			return threeAlphasToName.get(countryCode)?.[0];
+		});
 	}
 	get countriesFormatted() {
 		return this.countries.map(countryNameFormatter);
@@ -260,28 +262,27 @@ export class State {
 	}
 
 	get filteredCountries() {
-		const { educationLevels: filterEducationLevels, agencies: filterAgencies } =
-			this.filter;
+		const { agencies: filterAgencies } = this.filter;
 
-		if (!filterEducationLevels?.length && !filterAgencies?.length)
-			return this.countries;
+		// if (!filterEducationLevels?.length && !filterAgencies?.length)
+		if (!filterAgencies?.length) return this.countries;
 
 		let filtered = [...Object.entries(this.agenciesAndLevelsByCountry)];
 
-		if (filterEducationLevels?.length) {
-			filtered = filtered.filter(([, { educationLevels }]) => {
-				return filterEducationLevels.every(level =>
-					educationLevels.includes(level)
-				);
-			});
-		}
+		// if (filterEducationLevels?.length) {
+		// 	filtered = filtered.filter(([, { educationLevels }]) => {
+		// 		return filterEducationLevels.every(level =>
+		// 			educationLevels.includes(level)
+		// 		);
+		// 	});
+		// }
 		if (filterAgencies?.length) {
 			filtered = filtered.filter(([, { agencies }]) => {
 				return filterAgencies.every(agency => agencies.includes(agency));
 			});
 		}
 
-		return filtered.map(([country]) => country);
+		return filtered.map(([country]) => country).sort();
 	}
 
 	get outcomeIndicatorsForSelectedCountry(): TLearningOutcome[] {
@@ -292,7 +293,7 @@ export class State {
 		);
 	}
 
-	selectedCountry: string = 'COL';
+	selectedCountry: string = 'NGA';
 
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);
