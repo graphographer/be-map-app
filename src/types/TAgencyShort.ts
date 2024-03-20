@@ -8,7 +8,7 @@ export type TAgencyShortDTO =
 
 export const AGENCIES_SHORT = ['USAID', 'MCC', 'PC', 'USDA', 'DOL', 'DOS'];
 
-export const AGENCIES_SHORT_TO_LONG = {
+export const AGENCIES_SHORT_TO_LONG: Record<string, string> = {
 	USAID: 'USAID',
 	MCC: 'Millenium Challenge Corporation',
 	PC: 'The Peace Corps',

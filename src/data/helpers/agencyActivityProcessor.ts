@@ -15,6 +15,7 @@ export const agencyActivityProcessor = dsv({
 		const row = { ..._row } as unknown as TAgencyActivity;
 
 		row.Agency = agencyShortToLong(dto.Agency);
+		row.agency_short = dto.Agency === 'Peace Corps' ? 'PC' : dto.Agency;
 		row.Country = nameToThreeAlphas.get(row.Country) || row.Country;
 
 		const educationLevels: TEducationLevel[] = Object.entries(

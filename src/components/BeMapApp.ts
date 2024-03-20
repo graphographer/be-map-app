@@ -113,7 +113,12 @@ export class BeMapApp extends StateProvider {
 				</section>
 
 				<section id="overview">
-					<h4 id="results-heading">Filter Results</h4>
+					<h4 id="results-heading">
+						Filter Results (${this.state.filteredCountries.length}
+						${this.state.filteredCountries.length === 1
+							? 'Country'
+							: 'Countries'})
+					</h4>
 					<div class="flex">
 						<be-map-country-dropdown
 							class="grow"

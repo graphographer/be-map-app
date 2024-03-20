@@ -22,6 +22,7 @@ export type TAgencyActivityDTO = {
 
 export type TAgencyActivity = {
 	Agency: TAgency;
+	agency_short: string;
 	Country: string;
 	'Activity Name': string;
 	'Start Year': number | string;

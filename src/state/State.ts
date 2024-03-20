@@ -13,6 +13,7 @@ import { TAgencyPresence } from '../types/TAgencyPresence';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
 import { TLearningOutcome } from '../types/TLearningOutcome';
 import { TOutputIndicator } from '../types/TOutputIndicator';
+import { TAgencyShortDTO } from '../types/TAgencyShort';
 
 export class State {
 	constructor() {
@@ -36,7 +37,7 @@ export class State {
 
 	filter: {
 		educationLevels?: TEducationLevel[];
-		agencies?: TAgency[];
+		agencies?: string[];
 	} = {
 		agencies: undefined,
 		educationLevels: undefined
@@ -194,6 +195,25 @@ export class State {
 		}, {} as { [k: string]: TAgency[] });
 	}
 
+	get agenciesAndLevelsByCountry(): {
+		[k: string]: { agencies: string[]; educationLevels: TEducationLevel[] };
+	} {
+		const byCountry = groupBy(this.data.agency_activity, 'Country');
+
+		return mapValues(byCountry, activities => {
+			const educationLevels = [
+				...new Set(activities.flatMap(({ educationLevels }) => educationLevels))
+			];
+			const agencies = [
+				...new Set(activities.map(({ agency_short }) => agency_short))
+			];
+			return {
+				educationLevels,
+				agencies
+			};
+		});
+	}
+
 	get agenciesInSelectedCountry() {
 		return this.agenciesInCountry[this.selectedCountry];
 	}
@@ -241,33 +261,24 @@ export class State {
 	}
 
 	get filteredCountries() {
-		const { educationLevels, agencies } = this.filter;
+		const { educationLevels: filterEducationLevels, agencies: filterAgencies } =
+			this.filter;
 
-		if (!educationLevels?.length && !agencies?.length) return this.countries;
+		if (!filterEducationLevels?.length && !filterAgencies?.length)
+			return this.countries;
 
-		let filtered = [...Object.entries(this.activitiesByCountry)];
+		let filtered = [...Object.entries(this.agenciesAndLevelsByCountry)];
 
-		if (educationLevels?.length) {
-			filtered = filtered.filter(([, activities]) => {
-				const allEducationLevels = activities.reduce<TEducationLevel[]>(
-					(acc, { educationLevels }) => {
-						acc.push(...educationLevels);
-						return acc;
-					},
-					[]
-				);
-				return educationLevels.every(level =>
-					allEducationLevels.includes(level)
+		if (filterEducationLevels?.length) {
+			filtered = filtered.filter(([, { educationLevels }]) => {
+				return filterEducationLevels.every(level =>
+					educationLevels.includes(level)
 				);
 			});
 		}
-		if (agencies?.length) {
-			filtered = filtered.filter(([, activities]) => {
-				const allAgencies = activities.reduce<TAgency[]>((acc, { Agency }) => {
-					acc.push(Agency);
-					return acc;
-				}, []);
-				return agencies.some(agency => allAgencies.includes(agency));
+		if (filterAgencies?.length) {
+			filtered = filtered.filter(([, { agencies }]) => {
+				return filterAgencies.every(agency => agencies.includes(agency));
 			});
 		}
 

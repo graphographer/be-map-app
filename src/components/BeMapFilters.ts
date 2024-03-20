@@ -2,8 +2,9 @@ import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
 import { EDUCATION_LEVELS, TEducationLevel } from '../types/EEducationLevel';
-import { AGENCIES_LONG, TAgency } from '../types/TAgency';
+import { TAgency } from '../types/TAgency';
 import { StateProvider } from './StateProvider';
+import { AGENCIES_SHORT, AGENCIES_SHORT_TO_LONG } from '../types/TAgencyShort';
 
 @customElement('be-map-filters')
 export class BeMapFilters extends StateProvider {
@@ -94,7 +95,7 @@ export class BeMapFilters extends StateProvider {
 									: 'No agencies selected'}</i
 							>
 						</summary>
-						${AGENCIES_LONG.map(
+						${AGENCIES_SHORT.map(
 							agency =>
 								html`<label>
 									<input
@@ -104,7 +105,7 @@ export class BeMapFilters extends StateProvider {
 											!!this.state.filter.agencies?.includes(agency)
 										)}
 									/>
-									${agency}
+									${AGENCIES_SHORT_TO_LONG[agency]}
 								</label> `
 						)}
 					</details>
@@ -144,8 +145,9 @@ export class BeMapFilters extends StateProvider {
 			<p>
 				<em>
 					Filtered results appear in the dropdown list below. Results represent
-					agencies and programs active as of fiscal year 2023. Select a country
-					to see more detailed information.
+					agencies and programs active as of fiscal year 2023. Selected
+					education levels are not necessarily supported by all of the selected
+					agencies. Select a country to see more detailed information.
 				</em>
 				<br />
 				<button class="link" @click=${this.clearFilters.bind(this)}>
