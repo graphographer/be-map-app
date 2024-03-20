@@ -11,7 +11,7 @@
 	"dependencies": {
 		"@adobe/lit-mobx": "^2.2.2",
 		"chart.js": "^4.4.2",
-		"highlightable-map": "file:../highlightable-map",
+		"highlightable-map": "github:graphographer/highlightable-map",
 		"lit": "^3.1.2",
 		"lodash-es": "^4.17.21",
 		"mobx": "^6.12.0",
