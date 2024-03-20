@@ -8,6 +8,7 @@ import { learningOutcomesProcessor } from './src/data/helpers/learningOutcomesPr
 import { outputIndicatorsProcessor } from './src/data/helpers/outputIndicatorsProcessor';
 
 export default defineConfig({
+	base: '',
 	plugins: [
 		agencyPresenceProcessor,
 		agencyActivityProcessor,
