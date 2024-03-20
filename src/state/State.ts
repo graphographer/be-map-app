@@ -13,7 +13,6 @@ import { TAgencyPresence } from '../types/TAgencyPresence';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
 import { TLearningOutcome } from '../types/TLearningOutcome';
 import { TOutputIndicator } from '../types/TOutputIndicator';
-import { TAgencyShortDTO } from '../types/TAgencyShort';
 
 export class State {
 	constructor() {
