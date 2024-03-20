@@ -20,6 +20,10 @@ export const learningOutcomesProcessor = dsv({
 						row[key] = year;
 					}
 					break;
+				case 'Grade Level Measured':
+				case 'Subject':
+					row[key] = row[key].trim();
+					break;
 			}
 
 			if (key.startsWith('FY')) {

@@ -6,8 +6,8 @@ import { autorun, reaction } from 'mobx';
 import { ScriptableLineSegmentContext } from 'chart.js';
 import { TLearningOutcome } from '../../types/TLearningOutcome';
 import {
-	LEVEL_COLORS,
-	SUBJECT_POINT_STYLES
+	SUBJECT_COLORS,
+	LEVEL_POINT_STYLES
 } from '../helpers/OUTCOME_INDICATOR_CONSTS';
 
 function getLabel(outcome: TLearningOutcome) {
@@ -43,18 +43,18 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 			datasets: this.state.outcomeIndicatorsForSelectedCountry!.map(outcome => {
 				return {
 					label: getLabel(outcome),
-					borderColor: LEVEL_COLORS[outcome['Grade Level Measured']],
-					backgroundColor: LEVEL_COLORS[outcome['Grade Level Measured']],
-					pointStyle: SUBJECT_POINT_STYLES[outcome.Subject],
+					borderColor: SUBJECT_COLORS[outcome.Subject],
+					backgroundColor: SUBJECT_COLORS[outcome.Subject],
+					pointStyle: LEVEL_POINT_STYLES[outcome['Grade Level Measured']],
 					pointHoverRadius: 12,
 					pointRadius: 10,
-					pointBorderColor: 'rgba(256, 256, 256, .8)',
-					pointBorderWidth: 2,
-					segment: {
-						borderDash(ctx: ScriptableLineSegmentContext) {
-							return ctx.p0.skip || ctx.p1.skip ? [6, 6] : undefined;
-						}
-					},
+					// pointBorderColor: 'white',
+					pointBorderWidth: 3,
+					// segment: {
+					// 	borderDash(ctx: ScriptableLineSegmentContext) {
+					// 		return ctx.p0.skip || ctx.p1.skip ? [6, 6] : undefined;
+					// 	}
+					// },
 
 					data: outcome.outcomes.map(([year, pct]) => ({
 						x: `FY${year}`,
