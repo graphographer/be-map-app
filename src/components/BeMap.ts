@@ -8,13 +8,14 @@ import './BeMapCountryDropdown';
 import { StateProvider } from './StateProvider';
 import { diagonalTpl } from './templates/diagonals';
 
-const HIGHLIGHT_COLORS: Record<number, string> = {
+const HIGHLIGHT_COLORS: Record<string, string> = {
 	4: '#002F6C',
 	3: 'hsl(221, 30%, 45%)',
 	2: 'hsl(219, 40%, 70%)',
 	// 2: '#8BA3CB',
 	1: 'hsl(211, 40%, 90%)',
 	0: '#CFCDC9',
+	NONE: '#8C8985',
 	'-1': '#651D32'
 };
 
@@ -112,8 +113,9 @@ export class BeMap extends StateProvider {
 									const amt = yearlyAmts[this.state.selectedFiscalYear];
 
 									if (amt === 0) {
-										fill = 'url(#diagonal)';
-										el?.style.setProperty('filter', COLOR_FILTER);
+										// fill = 'url(#diagonal)';
+										// el?.style.setProperty('filter', COLOR_FILTER);
+										fill = HIGHLIGHT_COLORS.NONE;
 									} else if (amt < 1e6) {
 										fill = HIGHLIGHT_COLORS[1];
 									} else if (amt < 5e6) {
@@ -192,19 +194,13 @@ export class BeMap extends StateProvider {
 					<span>> $15m</span>
 				</div>
 				<div>
-					<svg height="2rem" width="2rem" class="filter">
-						<rect
-							style="fill: url(#diagonal);"
-							x="0"
-							y="0"
-							height="2rem"
-							width="2rem"
-						></rect>
-					</svg>
+					<div
+						class="box"
+						style="background-color:${HIGHLIGHT_COLORS.NONE}"
+					></div>
 					<span>No Disbursement Reported</span>
 				</div>
 			</div>
-			${diagonalTpl()}
 		`;
 	}
 
