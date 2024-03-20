@@ -6,7 +6,7 @@ import { PropertyValueMap, html } from 'lit';
 export class BeMapActivityData extends StateProvider {
 	render() {
 		return html`
-			<p>Click on the title for more information about each activity.</p>
+			<p>Click on the title for more information about each program.</p>
 			${Object.entries(this.state.activitiesForSelectedCountryByAgency).map(
 				([agency, activities]) => {
 					return html`
@@ -19,6 +19,7 @@ export class BeMapActivityData extends StateProvider {
 								'End Year': end,
 								Implementer,
 								Description,
+								educationLevels,
 								'Link to Website': link
 							} = activity;
 
@@ -26,13 +27,17 @@ export class BeMapActivityData extends StateProvider {
 
 							return html` <details>
 								<summary>${name}</summary>
-								${start && end && Implementer
-									? html`<p>
-											${dates}
-											<br />
-											${Implementer}
-									  </p>`
-									: ''}
+								<p>
+									${start && end ? html`<b>Years Active:</b> ${dates}` : ''}
+									${Implementer
+										? html`${dates.trim() ? html`<br />` : ''}
+												<b>Implementer:</b> ${Implementer}`
+										: ''}
+									${educationLevels.length
+										? html`${Implementer.trim() ? html`<br />` : ''}
+												<b>Education Levels:</b> ${educationLevels.join(', ')}`
+										: ''}
+								</p>
 								<p>${Description}</p>
 								${link
 									? html`<p>

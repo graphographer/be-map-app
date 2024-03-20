@@ -71,7 +71,7 @@ export class BeMapApp extends StateProvider {
 			},
 			{
 				route: 'activity',
-				title: 'Activity Data',
+				title: 'Program Data',
 				template: () => html`<be-map-activity-data></be-map-activity-data>`
 			},
 			{
