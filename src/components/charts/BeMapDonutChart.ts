@@ -133,7 +133,7 @@ export class BeMapDonutChart extends StateProvider {
 					</tbody>
 					<tfoot>
 						<tr>
-							<td><b>FY${this.state.selectedFiscalYear} Total:</b></td>
+							<td><b>FY${this.state.latestFY} Total:</b></td>
 							<td>${USD_FORMATTER.format(total)}</td>
 						</tr>
 					</tfoot>
@@ -155,7 +155,7 @@ export class BeMapDonutChart extends StateProvider {
 				responsive: true,
 				plugins: {
 					tooltip: {
-						enabled: true,
+						enabled: false,
 						callbacks: {
 							label(ctx) {
 								return USD_FORMATTER.format(ctx.parsed);
@@ -190,27 +190,3 @@ export class BeMapDonutChart extends StateProvider {
 		this.chart.destroy();
 	}
 }
-
-// <table>
-// 	<caption>
-// 		Total Agency Disbursements for ${this.state.selectedCountryFormatted}
-// 		in Fiscal Year ${this.state.selectedFiscalYear}
-// 	</caption>
-// 	<thead>
-// 		<tr>
-// 			<td scope="col">Agency</td>
-// 			<td scope="col">Disbursement</td>
-// 		</tr>
-// 	</thead>
-// 	<tbody>
-// 		$
-// 		{Object.entries(this.state.agencyDisbursementsForSelectedCountryAndFY)
-// 			.filter(([, amt]) => !!amt)
-// 			.map(([agency, amt]) => {
-// 				return html`<tr>
-// 					<td>${agency}</td>
-// 					<td>${USD_FORMATTER.format(amt)}</td>
-// 				</tr>`;
-// 			})}
-// 	</tbody>
-// </table>;
