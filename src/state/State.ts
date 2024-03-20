@@ -202,7 +202,7 @@ export class State {
 		return mapValues(this.agenciesInCountry, 'length');
 	}
 
-	get countries() {
+	get countries(): string[] {
 		const countries = new Set(
 			this.data.disbursement_by_agency
 				.filter(({ Disbursements }) => Disbursements.find(([, amt]) => amt > 0))
