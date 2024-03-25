@@ -231,7 +231,8 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 							callback(tickValue) {
 								return USD_FORMATTER.format(tickValue as number);
 							}
-						}
+						},
+						min: 0
 						// title: { display: true, text: 'Total Disbursement (USD)' }
 					}
 				},
