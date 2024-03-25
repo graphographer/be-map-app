@@ -49,6 +49,7 @@ export class BeMap extends StateProvider {
 			}
 			.legend {
 				flex-wrap: wrap;
+				margin-bottom: 0.75rem;
 			}
 
 			.legend > *,
@@ -147,20 +148,7 @@ export class BeMap extends StateProvider {
 	render() {
 		return html`
 			<h4 id="fy-wrapper">
-				Disbursement Ranges for Fiscal Year
-				<select id="fy-select" @change=${this.handleFyChange.bind(this)}>
-					${this.state.fiscalYears.map(
-						fy =>
-							html`<option
-								value="${fy}"
-								?selected=${live(
-									this.state.selectedFiscalYear === fy.toString()
-								)}
-							>
-								${fy}
-							</option>`
-					)}
-				</select>
+				Disbursement Ranges for Fiscal Year ${this.state.selectedFiscalYear}
 			</h4>
 			${this.hm}
 			<div class="legend">
@@ -200,6 +188,22 @@ export class BeMap extends StateProvider {
 					></div>
 					<span>No Disbursement Reported</span>
 				</div>
+			</div>
+			<div class="legend">
+				<label for="fy-select"> <b>Select Fiscal Year:</b></label>
+				<select id="fy-select" @change=${this.handleFyChange.bind(this)}>
+					${this.state.fiscalYears.map(
+						fy =>
+							html`<option
+								value="${fy}"
+								?selected=${live(
+									this.state.selectedFiscalYear === fy.toString()
+								)}
+							>
+								${fy}
+							</option>`
+					)}
+				</select>
 			</div>
 		`;
 	}
