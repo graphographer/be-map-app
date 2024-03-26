@@ -8,36 +8,67 @@ export class BeMapOutputIndicators extends StateProvider {
 	static styles = [
 		...super.styles,
 		css`
-			.container {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 1.5rem;
-			}
-			.container > article {
-				margin-bottom: 0;
-				flex: 0 1 33%;
+			table {
+				width: 100%;
 			}
 
-			@media screen and (max-width: 779px) {
-				.container {
-					grid-template-columns: repeat(2, 1fr);
-				}
+			table > tbody {
+				border-bottom: none;
+			}
+			tbody td {
+				padding: 1.5rem 2rem;
+			}
+			tbody td:nth-child(1) {
+				text-align: right;
+			}
+			tbody tr:nth-child(odd) {
+				background-color: var(--ultralight-blue);
+			}
+
+			tbody td:first-child {
+				border-top-left-radius: 3px;
+				border-bottom-left-radius: 3px;
+			}
+			tbody td:last-child {
+				border-top-right-radius: 3px;
+				border-bottom-right-radius: 3px;
+			}
+			tr h4 {
+				margin: 0;
 			}
 		`
 	];
 
 	render() {
-		return html`<div class="container">
+		return html`
 			${this.state.outputIndicatorsForSelectedCountry
-				? this.state.outputIndicatorsForSelectedCountry.indicators
-						.filter(({ value }) => value > 0)
-						.map(output => {
-							return html`<article>
-								<h2>${US_NUMBER_FORMATTER.format(output.value)}</h2>
-								<p>${output.title}</p>
-							</article>`;
-						})
-				: ''}
-		</div>`;
+				? html`<table>			
+							<tbody>
+								${this.state.outputIndicatorsForSelectedCountry.indicators
+									.filter(({ value }) => value > 0)
+									.map(output => {
+										return html`<tr scope="row">
+											<td>
+												<h4>${US_NUMBER_FORMATTER.format(output.value)}</h4>
+											</td>
+											<td>${output.title}</td>
+										</tr>`;
+									})}
+							</tbody>
+						</table>
+				  </div>`
+				: html`<em>No data available.</em>`}
+		`;
 	}
 }
+
+// ${this.state.outputIndicatorsForSelectedCountry
+// 		? this.state.outputIndicatorsForSelectedCountry.indicators
+// 					.filter(({ value }) => value > 0)
+// 					.map(output => {
+// 						return html`<article>
+// 							<h2>${US_NUMBER_FORMATTER.format(output.value)}</h2>
+// 							<p>${output.title}</p>
+// 						</article>`;
+// 					})
+// 			: ''}
