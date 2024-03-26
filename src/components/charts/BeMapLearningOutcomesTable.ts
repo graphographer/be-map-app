@@ -72,11 +72,11 @@ export class BeMapLearningOutcomesTable extends StateProvider {
 									${this.years.map(year => html`<td>${year}</td>`)}
 								</tr>
 							</thead>
-							<tbody @change=${this.handleRenderToggle.bind(this)}>
+							<tbody>
 								${this.state.outcomeIndicatorsForSelectedCountry.map(
 									(datum, i) => {
 										return html`
-											<tr>
+											<tr data-dataset-index=${i}>
 												<td>${datum.Subject}</td>
 												<td>${datum['Grade Level Measured']}</td>
 												<td>${datum['Baseline Year']}</td>
@@ -104,26 +104,17 @@ export class BeMapLearningOutcomesTable extends StateProvider {
 			: html`<em>No data is available.</em>`;
 	}
 
-	private handleRenderToggle(e: InputEvent) {
-		const { currentTarget } = e;
-
-		(currentTarget as HTMLElement)?.querySelectorAll('input').forEach(el => {
-			const { checked, value } = el;
-			const i = parseInt(value);
-			this.state.outcomeIndexesToChart[i] = checked;
-		});
-	}
 	handleMouseover(e: MouseEvent) {
-		const { target } = e;
+		const yearIndex = (e.composedPath() as HTMLElement[]).find(
+			el => el instanceof HTMLTableCellElement
+		)?.dataset.yearIndex;
+		const datasetIndex = (e.composedPath() as HTMLElement[]).find(
+			el => el instanceof HTMLTableRowElement
+		)?.dataset.datasetIndex;
 
-		const { outcome, yearIndex } = (target as HTMLElement)?.dataset;
-		if (outcome && yearIndex) {
-			this.state.highlightOutcomeData = [
-				parseInt(outcome),
-				parseInt(yearIndex)
-			];
-		} else {
-			this.state.highlightOutcomeData = [];
-		}
+		this.state.highlightOutcomeData = {
+			datasetIndex: datasetIndex ? parseInt(datasetIndex) : undefined,
+			yearIndex: yearIndex ? parseInt(yearIndex) : undefined
+		};
 	}
 }

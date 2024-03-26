@@ -8,6 +8,7 @@ import {
 	LEVEL_POINT_STYLES,
 	SUBJECT_COLORS
 } from '../helpers/OUTCOME_INDICATOR_CONSTS';
+import { noop } from 'lodash-es';
 
 function getLabel(outcome: TLearningOutcome) {
 	const { Subject, 'Grade Level Measured': level } = outcome;
@@ -47,14 +48,7 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 					pointStyle: LEVEL_POINT_STYLES[outcome['Grade Level Measured']],
 					pointHoverRadius: 12,
 					pointRadius: 10,
-					// pointBorderColor: 'white',
 					pointBorderWidth: 3,
-					// segment: {
-					// 	borderDash(ctx: ScriptableLineSegmentContext) {
-					// 		return ctx.p0.skip || ctx.p1.skip ? [6, 6] : undefined;
-					// 	}
-					// },
-
 					data: outcome.outcomes.map(([year, pct]) => ({
 						x: `FY${year}`,
 						y: pct
@@ -73,9 +67,6 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 		this.ctx.role = 'img';
 		this.ctx.innerText =
 			'A data table version of this chart is available below.';
-
-		// @ts-ignore
-		window.chart = this;
 	}
 
 	render() {
@@ -92,19 +83,15 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 				scales: {
 					x: {
 						stacked: true
-						// title: { display: true, text: 'Fiscal Year' }
 					},
 					y: {
 						min: 0,
 						max: 100,
-						// stacked: true,
-						// display: true
 						ticks: {
 							callback(tickValue) {
 								return `${tickValue}%`;
 							}
 						}
-						// title: { display: true, text: 'Total Disbursement (USD)' }
 					}
 				},
 				plugins: {
@@ -134,7 +121,8 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 							usePointStyle: true,
 							font: { family: '"Source Sans Pro", sans-serif', size: 17 },
 							padding: 24
-						}
+						},
+						onClick: noop
 					}
 				}
 			}
@@ -149,20 +137,28 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 				}
 			),
 			autorun(() => {
-				this.state.outcomeIndexesToChart.forEach((val, i) => {
-					this.chart.setDatasetVisibility(i, val);
-					this.chart.update();
-				});
-			}),
-			autorun(() => {
-				if (this.state.highlightOutcomeData.length) {
-					const [index, point] = this.state.highlightOutcomeData;
-					this.showTooltip(index, point);
+				const { datasetIndex, yearIndex } = this.state.highlightOutcomeData;
+
+				this.ctx.dispatchEvent(
+					new MouseEvent('mouseout', { bubbles: true, composed: true })
+				);
+
+				if (datasetIndex !== undefined && yearIndex !== undefined) {
+					this.showTooltip(datasetIndex, yearIndex);
+				}
+
+				if (datasetIndex !== undefined) {
+					// highlight dataset
+					this.chart.data.datasets.forEach((_dataset, i) => {
+						this.chart.setDatasetVisibility(i, datasetIndex === i);
+					});
 				} else {
-					this.ctx.dispatchEvent(
-						new MouseEvent('mouseout', { bubbles: true, composed: true })
+					this.chart.data.datasets.forEach((_dataset, i) =>
+						this.chart.setDatasetVisibility(i, true)
 					);
 				}
+
+				this.chart.update('none');
 			})
 		);
 	}

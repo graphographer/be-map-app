@@ -42,8 +42,7 @@ export class State {
 		educationLevels: undefined
 	};
 
-	outcomeIndexesToChart: boolean[] = [];
-	highlightOutcomeData: [number, number] | [] = [];
+	highlightOutcomeData: { datasetIndex?: number; yearIndex?: number } = {};
 
 	setSelectedFiscalYear(fy: string) {
 		this.selectedFiscalYear = fy;
