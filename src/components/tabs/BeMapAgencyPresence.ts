@@ -51,7 +51,10 @@ export class BeMapAgencyPresence extends StateProvider {
 			return html`
 				<table>
 					<caption>
-						<h5>USG BE Support by Education Level(s) and Agency</h5>
+						<h4>
+							USG BE Support by Education Level(s) and Agency for Fiscal Year
+							${this.state.latestFY}
+						</h4>
 					</caption>
 					<thead>
 						<tr>

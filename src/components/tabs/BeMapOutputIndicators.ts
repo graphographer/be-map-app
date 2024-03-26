@@ -42,7 +42,10 @@ export class BeMapOutputIndicators extends StateProvider {
 	render() {
 		return html`
 			${this.state.outputIndicatorsForSelectedCountry
-				? html`<table>			
+				? html`<table>
+							<caption><h4>Output Indicators for Fiscal Year ${
+								this.state.latestFY
+							}</h4></caption>	
 							<tbody>
 								${this.state.outputIndicatorsForSelectedCountry.indicators
 									.filter(({ value }) => value > 0)
