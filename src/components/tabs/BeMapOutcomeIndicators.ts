@@ -19,9 +19,10 @@ export class BeMapOutcomeIndicators extends StateProvider {
 		return html` 
 			${
 				this.state.outcomeIndicatorsForSelectedCountry.length
-					? html` <h4></h4>
+					? html`<h4>
 								Percentage of Learners Targeted for USG Assistance who Attain
 								Minimum Grade-Level Proficiency, as Reported by USAID Missions
+								(USAID Program Data)
 							</h4>
 							<be-map-learning-outcomes-chart></be-map-learning-outcomes-chart>
 							<be-map-learning-outcomes-table></be-map-learning-outcomes-table>`
