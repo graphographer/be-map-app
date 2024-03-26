@@ -13,7 +13,7 @@ export const outputIndicatorsProcessor = dsv({
 				continue;
 			}
 
-			const number = parseInt(row[key]);
+			const number = parseInt(row[key].replace(/\,/g, ''));
 			const value = Number.isNaN(number) ? 0 : number;
 
 			indicators.push({ title: key, value });

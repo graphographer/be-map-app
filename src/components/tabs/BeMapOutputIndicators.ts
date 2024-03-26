@@ -1,6 +1,7 @@
 import { customElement } from 'lit/decorators.js';
 import { StateProvider } from '../StateProvider';
 import { css, html } from 'lit';
+import { US_NUMBER_FORMATTER } from '../helpers/US_NUMBER_FORMATTER';
 
 @customElement('be-map-output-indicators')
 export class BeMapOutputIndicators extends StateProvider {
@@ -32,7 +33,7 @@ export class BeMapOutputIndicators extends StateProvider {
 						.filter(({ value }) => value > 0)
 						.map(output => {
 							return html`<article>
-								<h2>${output.value}</h2>
+								<h2>${US_NUMBER_FORMATTER.format(output.value)}</h2>
 								<p>${output.title}</p>
 							</article>`;
 						})
