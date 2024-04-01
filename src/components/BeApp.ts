@@ -85,7 +85,7 @@ export class BeApp extends StateProvider {
 			},
 			{
 				route: 'output',
-				title: 'Ouput Indicators',
+				title: 'Results',
 				template: () =>
 					html`<be-map-output-indicators></be-map-output-indicators>`
 				// disabled: () => {
@@ -94,7 +94,7 @@ export class BeApp extends StateProvider {
 			},
 			{
 				route: 'outcome',
-				title: 'Outcome Indicators',
+				title: 'Learning Outcomes',
 				template: () =>
 					html`<be-map-outcome-indicators></be-map-outcome-indicators>`
 			}

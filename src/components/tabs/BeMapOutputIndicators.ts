@@ -1,112 +1,294 @@
-import { TemplateResult, css, html } from 'lit';
+import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import {
-	INDICATOR_LAYOUT,
-	TOutputIndicatorLayout
+	EIndicatorDemographic,
+	EIndicatorEducationLevel,
+	EIndicatorHeader
 } from '../../types/TOutputIndicator';
 import { StateProvider } from '../StateProvider';
 import { US_NUMBER_FORMATTER } from '../helpers/US_NUMBER_FORMATTER';
 
-function renderListItems(
-	outputs: { [k: string]: number },
-	layout:
-		| string
-		| TOutputIndicatorLayout
-		| TOutputIndicatorLayout[]
-		| (string | TOutputIndicatorLayout | TOutputIndicatorLayout[])[],
-	path: string
-): TemplateResult {
-	if (typeof layout === 'string') {
-		return html`<li>
-			${layout}:
-			${US_NUMBER_FORMATTER.format(
-				outputs[`${path ? `${path}:` : ''}${layout}`]
-			)}
-		</li>`;
-	}
+const LEARNERS_REACHED_LEVELS: EIndicatorEducationLevel[] = [
+	EIndicatorEducationLevel.PrePrimary,
+	EIndicatorEducationLevel.PrimarySecondary,
+	EIndicatorEducationLevel.TertiaryVocationOther
+];
 
-	if (layout.every(child => typeof child === 'string')) {
-		return html`${layout.map(
-			child =>
-				html`<li>
-					${child}:
-					${US_NUMBER_FORMATTER.format(
-						outputs[`${path ? `${path}:` : ''}${child}`]
-					)}
-				</li>`
-		)}`;
-	}
-
-	if (layout.length === 2) {
-		const [parent, children] = layout;
-
-		return html`<li>
-			${parent}
-			<ul>
-				${renderListItems(
-					outputs,
-					children as TOutputIndicatorLayout[],
-					`${path ? `${path}:` : ''}${parent}`
-				)}
-			</ul>
-		</li>`;
-	}
-
-	return html`${layout.map(child =>
-		renderListItems(outputs, child as TOutputIndicatorLayout[], path)
-	)}`;
-}
+const LEARNERS_REACHED_DEMOS: (EIndicatorDemographic | string)[] = [
+	EIndicatorDemographic.Males,
+	EIndicatorDemographic.Females,
+	EIndicatorDemographic.Disabilities,
+	EIndicatorDemographic.AtRisk,
+	'Total'
+];
 
 @customElement('be-map-output-indicators')
 export class BeMapOutputIndicators extends StateProvider {
 	static styles = [
 		...super.styles,
 		css`
-			table {
-				width: 100%;
+			ul {
+				margin-top: 0;
+				list-style: none;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
 			}
 
-			table > tbody {
-				border-bottom: none;
+			.border-bottom {
+				border-bottom: 1px solid var(--border);
 			}
-			tbody td {
-				padding: 1.5rem 2rem;
-			}
-			tbody td:nth-child(1) {
-				text-align: right;
-			}
-			tbody tr:nth-child(odd) {
-				background-color: var(--ultralight-blue);
+			ul > li {
+				display: flex;
+				flex-direction: row;
 			}
 
-			tbody td:first-child {
-				border-top-left-radius: 3px;
-				border-bottom-left-radius: 3px;
+			ul > li:not(ul ul li:first-child) {
+				border-top: 1px solid var(--border);
+				padding-top: 0.5rem;
 			}
-			tbody td:last-child {
-				border-top-right-radius: 3px;
-				border-bottom-right-radius: 3px;
+			ul > li:not(:last-child) {
+				padding-bottom: 0.5rem;
 			}
-			tr h4 {
-				margin: 0;
+
+			li > :first-child {
+				flex-basis: 33.333333%;
+				flex-shrink: 2;
+			}
+			.space-between {
+				justify-content: space-between;
+			}
+			.flex-grow {
+				flex-grow: 1;
+			}
+
+			li > span + span {
+				align-content: flex-end;
+				font-weight: bold;
+				color: var(--usaid-blue);
+			}
+
+			@media (max-width: 699px) {
+				ul > li {
+					flex-direction: column;
+				}
+				ul ul {
+					margin-top: 0.5rem;
+					padding-left: 2rem;
+				}
+
+				li.space-between {
+					flex-direction: row;
+				}
+
+				li > :first-child {
+					flex-basis: 75%;
+				}
 			}
 		`
 	];
 
 	render() {
 		return html`
-			${this.state.outputIndicatorsForSelectedCountry
-				? html`${INDICATOR_LAYOUT.map(([section, data]) => {
-						return html`<h4>${section}</h4>
-							<ul>
-								${renderListItems(
-									this.state.outputIndicatorsForSelectedCountry!,
-									data,
-									''
-								)}
-							</ul>`;
-				  })}`
+			${this.state.outputIndicatorsForSelectedCountryStructural
+				? html`
+						<h5>Learners Reached</h5>
+						<ul>
+							<li>
+								<span> ${EIndicatorHeader.Intervention} </span>
+								<ul class="flex-grow">
+									${LEARNERS_REACHED_LEVELS.filter(
+										level => !!this.state.learnersReached[level]
+									).map(level => {
+										return html`<li>
+											<span>${level}</span>
+											<ul class="flex-grow">
+												${LEARNERS_REACHED_DEMOS.map(demo => {
+													return html`<li class="space-between">
+														<span class="flex-grow">${demo}:</span>
+														<span
+															>${US_NUMBER_FORMATTER.format(
+																// @ts-ignore
+																this.state.learnersReached[level][demo]
+															)}</span
+														>
+													</li>`;
+												})}
+											</ul>
+										</li>`;
+									})}
+									<li class="space-between flex-grow">
+										<span>Total All Ages:</span>
+										<span
+											>${US_NUMBER_FORMATTER.format(
+												this.state.learnersReached.TotalAll as number
+											)}</span
+										>
+									</li>
+								</ul>
+							</li>
+						</ul>
+
+						<h5>Learning Inputs</h5>
+						<ul>
+							${Object.values(
+								this.state.outputIndicatorsForSelectedCountryStructural[
+									EIndicatorHeader.Health
+								]
+							).find(val => val > 0)
+								? html`<li>
+										<span>${EIndicatorHeader.Health}</span>
+										<ul class="flex-grow">
+											<li>
+												<div></div>
+												<ul class="flex-grow">
+													${[
+														EIndicatorDemographic.Males,
+														EIndicatorDemographic.Females,
+														'Total'
+													].map(demo => {
+														return html`<li class="space-between flex-grow">
+															<span>${demo}:</span>
+															<span
+																>${US_NUMBER_FORMATTER.format(
+																	// @ts-ignore
+																	this.state
+																		.outputIndicatorsForSelectedCountryStructural[
+																		EIndicatorHeader.Health
+																	][demo]
+																)}</span
+															>
+														</li>`;
+													})}
+												</ul>
+											</li>
+										</ul>
+								  </li>`
+								: ''}
+							${this.state.outputIndicatorsForSelectedCountryStructural[
+								EIndicatorHeader.GovAssitance
+							]
+								? html`
+										<li class="space-between flex-grow">
+											<span>${EIndicatorHeader.GovAssitance}</span>
+											<span
+												>${US_NUMBER_FORMATTER.format(
+													this.state
+														.outputIndicatorsForSelectedCountryStructural[
+														EIndicatorHeader.GovAssitance
+													]
+												)}</span
+											>
+										</li>
+								  `
+								: ''}
+							${Object.values(
+								this.state.outputIndicatorsForSelectedCountryStructural[
+									EIndicatorHeader.ProDev
+								]
+							).find(val => val > 0)
+								? html`<li>
+										<span>${EIndicatorHeader.ProDev}</span>
+										<ul class="flex-grow">
+											<li>
+												<div></div>
+												<ul class="flex-grow">
+													${[
+														EIndicatorDemographic.Males,
+														EIndicatorDemographic.Females,
+														'Total'
+													].map(demo => {
+														return html`<li class="space-between flex-grow">
+															<span>${demo}:</span>
+															<span
+																>${US_NUMBER_FORMATTER.format(
+																	// @ts-ignore
+																	this.state
+																		.outputIndicatorsForSelectedCountryStructural[
+																		EIndicatorHeader.ProDev
+																	][demo]
+																)}</span
+															>
+														</li>`;
+													})}
+												</ul>
+											</li>
+										</ul>
+								  </li>`
+								: ''}
+							${this.state.outputIndicatorsForSelectedCountryStructural[
+								EIndicatorHeader.FacilitiesRepaired
+							]
+								? html`
+										<li class="space-between flex-grow">
+											<span>${EIndicatorHeader.FacilitiesRepaired}:</span>
+											<span
+												>${US_NUMBER_FORMATTER.format(
+													this.state
+														.outputIndicatorsForSelectedCountryStructural[
+														EIndicatorHeader.FacilitiesRepaired
+													]
+												)}</span
+											>
+										</li>
+								  `
+								: ''}
+							${this.state.outputIndicatorsForSelectedCountryStructural[
+								EIndicatorHeader.LearningMaterials
+							]
+								? html`
+										<li class="space-between flex-grow">
+											<span>${EIndicatorHeader.LearningMaterials}:</span>
+											<span
+												>${US_NUMBER_FORMATTER.format(
+													this.state
+														.outputIndicatorsForSelectedCountryStructural[
+														EIndicatorHeader.LearningMaterials
+													]
+												)}</span
+											>
+										</li>
+								  `
+								: ''}
+						</ul>
+
+						${this.learnerOutcomes}
+				  `
 				: html`<em>No data available.</em>`}
 		`;
+	}
+
+	get learnerOutcomes() {
+		const {
+			[EIndicatorHeader.IncreasedAccess]: increasedAccess,
+			[EIndicatorHeader.NewEmployment]: newEmployment,
+			[EIndicatorHeader.SoftSkills]: softSkills
+		} = this.state.outputIndicatorsForSelectedCountryStructural;
+
+		if (!increasedAccess && !newEmployment && !softSkills) {
+			return '';
+		}
+
+		return html`<h5>Learner Outcomes</h5>
+			<ul>
+				${increasedAccess
+					? html`<li class="space-between flex-grow">
+							<span>${[EIndicatorHeader.IncreasedAccess]}:</span>
+							<span>${US_NUMBER_FORMATTER.format(increasedAccess)}</span>
+					  </li>`
+					: ''}
+				${newEmployment
+					? html`<li class="space-between flex-grow">
+							<span>${[EIndicatorHeader.NewEmployment]}:</span>
+							<span>${US_NUMBER_FORMATTER.format(newEmployment)}</span>
+					  </li>`
+					: ''}
+				${softSkills
+					? html`<li class="space-between flex-grow">
+							<span>${[EIndicatorHeader.SoftSkills]}:</span>
+							<span>${US_NUMBER_FORMATTER.format(softSkills)}</span>
+					  </li>`
+					: ''}
+			</ul>`;
 	}
 }

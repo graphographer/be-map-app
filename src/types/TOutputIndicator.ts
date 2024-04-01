@@ -1,5 +1,3 @@
-import { isArray } from 'lodash-es';
-
 export type TOutputIndicatorDTO = {
 	Country: string;
 	'Number of individuals (children, youth, and adults) who received education interventions in formal and non-formal settings': number;
@@ -15,7 +13,7 @@ export type TOutputIndicatorDTO = {
 
 export type TIndicatorsV1 = { title: string; value: number }[];
 
-enum EIndicatorHeader {
+export enum EIndicatorHeader {
 	Intervention = 'Number of individuals (children, youth, and adults) who received education interventions in formal and non-formal settings',
 	Health = 'Number of children and youth who received health and nutrition services',
 	GovAssitance = 'Number of schools that received U.S. Government assistance',
@@ -27,20 +25,20 @@ enum EIndicatorHeader {
 	SoftSkills = 'Number of individuals supported by WFD programming with improved soft skills'
 }
 
-enum EDemographic {
+export enum EIndicatorDemographic {
 	Males = 'Males',
 	Females = 'Females',
 	Disabilities = 'Individuals with Disabilities',
 	AtRisk = 'Individuals at Risk'
 }
 
-enum EIndicatorEducationLevel {
+export enum EIndicatorEducationLevel {
 	PrePrimary = 'Pre-Primary',
 	PrimarySecondary = 'Primary and Secondary',
 	TertiaryVocationOther = 'Tertiary, Vocational, and Other Workforce'
 }
 
-enum EIndicatorSectionHeader {
+export enum EIndicatorSectionHeader {
 	Reached = 'Learners Reached',
 	Inputs = 'Learning Inputs',
 	Outcomes = 'Learner Outcomes'
@@ -90,30 +88,30 @@ export const INDICATOR_LAYOUT: TOutputIndicatorLayout[] = [
 				[
 					EIndicatorEducationLevel.PrePrimary,
 					[
-						EDemographic.Males,
-						EDemographic.Females,
-						EDemographic.Disabilities,
-						EDemographic.AtRisk,
+						EIndicatorDemographic.Males,
+						EIndicatorDemographic.Females,
+						EIndicatorDemographic.Disabilities,
+						EIndicatorDemographic.AtRisk,
 						'Total'
 					]
 				],
 				[
 					EIndicatorEducationLevel.PrimarySecondary,
 					[
-						EDemographic.Males,
-						EDemographic.Females,
-						EDemographic.Disabilities,
-						EDemographic.AtRisk,
+						EIndicatorDemographic.Males,
+						EIndicatorDemographic.Females,
+						EIndicatorDemographic.Disabilities,
+						EIndicatorDemographic.AtRisk,
 						'Total'
 					]
 				],
 				[
 					EIndicatorEducationLevel.TertiaryVocationOther,
 					[
-						EDemographic.Males,
-						EDemographic.Females,
-						EDemographic.Disabilities,
-						EDemographic.AtRisk,
+						EIndicatorDemographic.Males,
+						EIndicatorDemographic.Females,
+						EIndicatorDemographic.Disabilities,
+						EIndicatorDemographic.AtRisk,
 						'Total'
 					]
 				],
@@ -126,12 +124,12 @@ export const INDICATOR_LAYOUT: TOutputIndicatorLayout[] = [
 		[
 			[
 				EIndicatorHeader.Health,
-				[EDemographic.Males, EDemographic.Females, 'Total']
+				[EIndicatorDemographic.Males, EIndicatorDemographic.Females, 'Total']
 			],
 			EIndicatorHeader.GovAssitance,
 			[
 				EIndicatorHeader.ProDev,
-				[EDemographic.Males, EDemographic.Females, 'Total']
+				[EIndicatorDemographic.Males, EIndicatorDemographic.Females, 'Total']
 			],
 			EIndicatorHeader.FacilitiesRepaired,
 			EIndicatorHeader.LearningMaterials
@@ -150,37 +148,37 @@ export const INDICATOR_LAYOUT: TOutputIndicatorLayout[] = [
 export type TIndicatorsV2 = {
 	[EIndicatorHeader.Intervention]: {
 		[EIndicatorEducationLevel.PrePrimary]: {
-			[EDemographic.Males]: number;
-			[EDemographic.Females]: number;
-			[EDemographic.Disabilities]: number;
-			[EDemographic.AtRisk]: number;
+			[EIndicatorDemographic.Males]: number;
+			[EIndicatorDemographic.Females]: number;
+			[EIndicatorDemographic.Disabilities]: number;
+			[EIndicatorDemographic.AtRisk]: number;
 			Total: number;
 		};
 		[EIndicatorEducationLevel.PrimarySecondary]: {
-			[EDemographic.Males]: number;
-			[EDemographic.Females]: number;
-			[EDemographic.Disabilities]: number;
-			[EDemographic.AtRisk]: number;
+			[EIndicatorDemographic.Males]: number;
+			[EIndicatorDemographic.Females]: number;
+			[EIndicatorDemographic.Disabilities]: number;
+			[EIndicatorDemographic.AtRisk]: number;
 			Total: number;
 		};
 		[EIndicatorEducationLevel.TertiaryVocationOther]: {
-			[EDemographic.Males]: number;
-			[EDemographic.Females]: number;
-			[EDemographic.Disabilities]: number;
-			[EDemographic.AtRisk]: number;
+			[EIndicatorDemographic.Males]: number;
+			[EIndicatorDemographic.Females]: number;
+			[EIndicatorDemographic.Disabilities]: number;
+			[EIndicatorDemographic.AtRisk]: number;
 			Total: number;
 		};
 		'Total - All': number;
 	};
 	[EIndicatorHeader.Health]: {
-		[EDemographic.Males]: number;
-		[EDemographic.Females]: number;
+		[EIndicatorDemographic.Males]: number;
+		[EIndicatorDemographic.Females]: number;
 		Total: number;
 	};
 	[EIndicatorHeader.GovAssitance]: number;
 	[EIndicatorHeader.ProDev]: {
-		[EDemographic.Males]: number;
-		[EDemographic.Females]: number;
+		[EIndicatorDemographic.Males]: number;
+		[EIndicatorDemographic.Females]: number;
 		Total: number;
 	};
 	[EIndicatorHeader.FacilitiesRepaired]: number;
@@ -193,4 +191,55 @@ export type TIndicatorsV2 = {
 export type TOutputIndicator = {
 	Country: string;
 	outputIndicators: { [k: string]: number };
+};
+
+export type TOutputIndicatorStructural = {
+	[EIndicatorHeader.Intervention]: {
+		[EIndicatorEducationLevel.PrePrimary]: {
+			[EIndicatorDemographic.Males]: number;
+			[EIndicatorDemographic.Females]: number;
+			[EIndicatorDemographic.Disabilities]: number;
+			[EIndicatorDemographic.AtRisk]: number;
+			Total: number;
+		};
+		[EIndicatorEducationLevel.PrimarySecondary]: {
+			[EIndicatorDemographic.Males]: number;
+			[EIndicatorDemographic.Females]: number;
+			[EIndicatorDemographic.Disabilities]: number;
+			[EIndicatorDemographic.AtRisk]: number;
+			Total: number;
+		};
+		[EIndicatorEducationLevel.TertiaryVocationOther]: {
+			[EIndicatorDemographic.Males]: number;
+			[EIndicatorDemographic.Females]: number;
+			[EIndicatorDemographic.Disabilities]: number;
+			[EIndicatorDemographic.AtRisk]: number;
+			Total: number;
+		};
+		'Total - All': number;
+	};
+
+	[EIndicatorHeader.Health]: {
+		[EIndicatorDemographic.Males]: number;
+		[EIndicatorDemographic.Females]: number;
+		Total: number;
+	};
+
+	[EIndicatorHeader.GovAssitance]: number;
+
+	[EIndicatorHeader.ProDev]: {
+		[EIndicatorDemographic.Males]: number;
+		[EIndicatorDemographic.Females]: number;
+		Total: number;
+	};
+
+	[EIndicatorHeader.FacilitiesRepaired]: number;
+
+	[EIndicatorHeader.LearningMaterials]: number;
+
+	[EIndicatorHeader.IncreasedAccess]: number;
+
+	[EIndicatorHeader.NewEmployment]: number;
+
+	[EIndicatorHeader.SoftSkills]: number;
 };

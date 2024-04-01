@@ -33,11 +33,14 @@ export class BeMap extends StateProvider {
 				height: 400px;
 			}
 
-			#fy-wrapper {
-				margin-bottom: 0;
-			}
 			#fy-select {
 				display: inline-block;
+			}
+
+			#key {
+				display: block;
+				font-size: 1rem;
+				margin-bottom: 0.5rem;
 			}
 
 			.legend,
@@ -147,12 +150,11 @@ export class BeMap extends StateProvider {
 
 	render() {
 		return html`
-			<h4 id="fy-wrapper">
-				Disbursement Ranges for Fiscal Year ${this.state.selectedFiscalYear}
-			</h4>
 			${this.hm}
+			<b id="key"
+				>Disbursement Ranges for Fiscal Year ${this.state.selectedFiscalYear}</b
+			>
 			<div class="legend">
-				<b id="key">Key:</b>
 				<div aria-describedby="key">
 					<div
 						class="box"

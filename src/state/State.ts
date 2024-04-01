@@ -1,5 +1,14 @@
 import { HighlightableMap } from 'highlightable-map';
-import { groupBy, isEmpty, mapValues, omitBy, set, sortBy } from 'lodash-es';
+import {
+	groupBy,
+	isEmpty,
+	mapValues,
+	omitBy,
+	pick,
+	pickBy,
+	set,
+	sortBy
+} from 'lodash-es';
 import { makeAutoObservable, observable, reaction } from 'mobx';
 import {
 	nameToThreeAlphas,
@@ -12,7 +21,12 @@ import { TAgencyActivity } from '../types/TAgencyActivity';
 import { TAgencyPresence } from '../types/TAgencyPresence';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
 import { TLearningOutcome } from '../types/TLearningOutcome';
-import { TOutputIndicator } from '../types/TOutputIndicator';
+import {
+	EIndicatorEducationLevel,
+	EIndicatorHeader,
+	TOutputIndicator,
+	TOutputIndicatorStructural
+} from '../types/TOutputIndicator';
 
 function filterEmptyObject(obj: any) {
 	return isEmpty(obj);
@@ -89,8 +103,9 @@ export class State {
 		return this.outputIndicatorsByCountry[this.selectedCountry]
 			.outputIndicators;
 	}
-	get outputIndicatorsForSelectedCountryStructural() {
-		const outputIndicatorsByCountryStructural = {};
+	get outputIndicatorsForSelectedCountryStructural(): TOutputIndicatorStructural {
+		const outputIndicatorsByCountryStructural =
+			{} as TOutputIndicatorStructural;
 
 		for (const key in this.outputIndicatorsForSelectedCountry) {
 			const path = key.split(':');
@@ -99,6 +114,23 @@ export class State {
 		}
 
 		return outputIndicatorsByCountryStructural;
+	}
+	get learnersReached() {
+		const interventions = pickBy(
+			this.outputIndicatorsForSelectedCountryStructural[
+				EIndicatorHeader.Intervention
+			],
+			demos => {
+				return Object.values(demos).find(val => val > 0);
+			}
+		);
+
+		interventions.TotalAll =
+			this.outputIndicatorsForSelectedCountryStructural[
+				EIndicatorHeader.Intervention
+			]['Total - All'];
+
+		return interventions;
 	}
 
 	get agencyEducationSupportByCountry(): Record<
@@ -310,7 +342,7 @@ export class State {
 		);
 	}
 
-	selectedCountry: string = 'NGA';
+	selectedCountry: string = 'MWI';
 
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);
