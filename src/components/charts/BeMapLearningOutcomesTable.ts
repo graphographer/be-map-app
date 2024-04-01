@@ -57,7 +57,9 @@ export class BeMapLearningOutcomesTable extends StateProvider {
 					<div class="container" @mouseover=${this.handleMouseover.bind(this)}>
 						<table>
 							<caption>
-								Learning Outcomes for ${this.state.selectedCountryFormatted}
+								<h5>
+									Learning Outcomes for ${this.state.selectedCountryFormatted}
+								</h5>
 							</caption>
 							<thead>
 								<tr>

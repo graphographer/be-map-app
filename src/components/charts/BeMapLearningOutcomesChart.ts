@@ -122,6 +122,7 @@ export class BeMapLearningOutcomesChart extends StateProvider {
 							font: { family: '"Source Sans Pro", sans-serif', size: 17 },
 							padding: 24
 						},
+						position: 'bottom',
 						onClick: noop
 					}
 				}
