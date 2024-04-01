@@ -1,5 +1,5 @@
 import { HighlightableMap } from 'highlightable-map';
-import { groupBy, mapValues, omitBy, sortBy } from 'lodash-es';
+import { groupBy, isEmpty, mapValues, omitBy, set, sortBy } from 'lodash-es';
 import { makeAutoObservable, observable, reaction } from 'mobx';
 import {
 	nameToThreeAlphas,
@@ -13,6 +13,10 @@ import { TAgencyPresence } from '../types/TAgencyPresence';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
 import { TLearningOutcome } from '../types/TLearningOutcome';
 import { TOutputIndicator } from '../types/TOutputIndicator';
+
+function filterEmptyObject(obj: any) {
+	return isEmpty(obj);
+}
 
 export class State {
 	constructor() {
@@ -75,12 +79,26 @@ export class State {
 	get outputIndicatorsByCountry() {
 		return Object.fromEntries(
 			this.data.output_indicators
-				.filter(output => output.indicators.find(({ value }) => value > 0))
+				// .filter(output => output.indicators.find(({ value }) => value > 0))
 				.map(output => [output.Country, output])
 		);
 	}
-	get outputIndicatorsForSelectedCountry(): TOutputIndicator | undefined {
-		return this.outputIndicatorsByCountry[this.selectedCountry];
+	get outputIndicatorsForSelectedCountry():
+		| { [k: string]: number }
+		| undefined {
+		return this.outputIndicatorsByCountry[this.selectedCountry]
+			.outputIndicators;
+	}
+	get outputIndicatorsForSelectedCountryStructural() {
+		const outputIndicatorsByCountryStructural = {};
+
+		for (const key in this.outputIndicatorsForSelectedCountry) {
+			const path = key.split(':');
+			const val = this.outputIndicatorsForSelectedCountry[key];
+			set(outputIndicatorsByCountryStructural, path, val);
+		}
+
+		return outputIndicatorsByCountryStructural;
 	}
 
 	get agencyEducationSupportByCountry(): Record<

@@ -5,8 +5,8 @@ import './tabs/BeMapActivityData';
 import './tabs/BeMapDisbursementData';
 import './tabs/BeMapOutputIndicators';
 import './tabs/BeMapOutcomeIndicators';
-import '../components/BeMapFilters';
-import '../components/BeMap';
+import './BeMapFilters';
+import './BeMap';
 import 'highlightable-map/dist/HighlightableMapBundled.min.js';
 import './charts/BeMapDonutChart';
 
@@ -14,8 +14,8 @@ import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
 
-@customElement('be-map-app')
-export class BeMapApp extends StateProvider {
+@customElement('be-app')
+export class BeApp extends StateProvider {
 	static styles = [
 		...super.styles,
 		css`
@@ -150,7 +150,7 @@ export class BeMapApp extends StateProvider {
 						? html` <h4>${this.state.selectedCountryFormatted}: Details</h4>
 								<be-map-tabs
 									.config=${this.tabsConfig}
-									.activeTab=${'presence'}
+									.activeTab=${'output'}
 								></be-map-tabs>`
 						: ''}
 				</section>

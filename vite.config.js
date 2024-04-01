@@ -6,6 +6,7 @@ import { agencyPresenceProcessor } from './src/data/helpers/agencyPresenceProces
 import { disbursementByAgencyProcessor } from './src/data/helpers/disbursementByAgencyProcessor';
 import { learningOutcomesProcessor } from './src/data/helpers/learningOutcomesProcessor';
 import { outputIndicatorsProcessor } from './src/data/helpers/outputIndicatorsProcessor';
+import { outputIndicatorsProcessorV2 } from './src/data/helpers/outputIndicatorsProcessorV2';
 
 export default defineConfig({
 	base: '',
@@ -14,6 +15,7 @@ export default defineConfig({
 		agencyActivityProcessor,
 		disbursementByAgencyProcessor,
 		learningOutcomesProcessor,
-		outputIndicatorsProcessor
+		outputIndicatorsProcessor,
+		outputIndicatorsProcessorV2
 	]
 });
