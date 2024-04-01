@@ -1,14 +1,5 @@
 import { HighlightableMap } from 'highlightable-map';
-import {
-	groupBy,
-	isEmpty,
-	mapValues,
-	omitBy,
-	pick,
-	pickBy,
-	set,
-	sortBy
-} from 'lodash-es';
+import { groupBy, mapValues, omitBy, pickBy, set, sortBy } from 'lodash-es';
 import { makeAutoObservable, observable, reaction } from 'mobx';
 import {
 	nameToThreeAlphas,
@@ -22,15 +13,10 @@ import { TAgencyPresence } from '../types/TAgencyPresence';
 import { TDisbursementByAgency } from '../types/TDisbursementByAgency';
 import { TLearningOutcome } from '../types/TLearningOutcome';
 import {
-	EIndicatorEducationLevel,
 	EIndicatorHeader,
 	TOutputIndicator,
 	TOutputIndicatorStructural
 } from '../types/TOutputIndicator';
-
-function filterEmptyObject(obj: any) {
-	return isEmpty(obj);
-}
 
 export class State {
 	constructor() {
