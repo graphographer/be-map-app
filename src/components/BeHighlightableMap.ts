@@ -1,5 +1,4 @@
 import { HighlightableMap } from 'highlightable-map';
-import { PropertyValueMap } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 @customElement('highlightable-map')
