@@ -1,15 +1,14 @@
 import type { HighlightableMap } from 'highlightable-map';
 import 'highlightable-map/dist/HighlightableMapBundled.min.js';
+import { Marker, icon, marker } from 'leaflet';
 import { css, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
 import { autorun, reaction } from 'mobx';
-import './BeMapCountryDropdown';
-import { StateProvider } from './StateProvider';
-import { marker, icon, Marker } from 'leaflet';
 import bluePin from '../images/blue_pin.png';
 import redPin from '../images/red_pin.png';
-import { nameToThreeAlphas } from '../data/countryNameTo3Alpha';
+import './BeMapCountryDropdown';
+import { StateProvider } from './StateProvider';
 
 const blueMarker = icon({
 	iconUrl: bluePin,
@@ -162,7 +161,7 @@ export class BeMap extends StateProvider {
 					reaction(
 						() => this.state.selectedCountry,
 						selectedCountry => {
-							console.log(selectedCountry, regionalMarkers);
+							// console.log(selectedCountry, regionalMarkers);
 							if (selectedMarker) {
 								selectedMarker.setIcon(blueMarker);
 							}
