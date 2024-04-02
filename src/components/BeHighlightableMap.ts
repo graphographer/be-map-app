@@ -4,10 +4,8 @@ import { customElement } from 'lit/decorators.js';
 
 @customElement('highlightable-map')
 export class BeHighlightableMap extends HighlightableMap {
-	protected firstUpdated(
-		_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
-	): void {
-		super.firstUpdated(new Map());
+	constructor() {
+		super();
 
 		Promise.all([
 			import('highlightable-map/src/geoJson.json'),
