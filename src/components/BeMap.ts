@@ -1,12 +1,12 @@
-import type { HighlightableMap } from 'highlightable-map';
-import 'highlightable-map/dist/HighlightableMapBundled.min.js';
-import { Marker, icon, marker, DomEvent } from 'leaflet';
+import { Marker, icon, marker } from 'leaflet';
+import leafletCss from 'leaflet/dist/leaflet.css?inline';
 import { css, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
 import { autorun, reaction } from 'mobx';
 import bluePin from '../images/blue_pin.png';
 import redPin from '../images/red_pin.png';
+import { BeHighlightableMap } from './BeHighlightableMap';
 import './BeMapCountryDropdown';
 import { StateProvider } from './StateProvider';
 
@@ -14,14 +14,12 @@ const blueMarker = icon({
 	iconUrl: bluePin,
 	iconSize: [36, 36],
 	iconAnchor: [18, 36]
-	// popupAnchor: [0, -27]
 });
 
 const redMarker = icon({
 	iconUrl: redPin,
 	iconSize: [36, 36],
 	iconAnchor: [18, 36]
-	// popupAnchor: [0, -27]
 });
 
 const REGIONS: [string, [number, number]][] = [
@@ -49,9 +47,10 @@ const COLOR_FILTER =
 
 @customElement('be-map')
 export class BeMap extends StateProvider {
-	highlightableMap: HighlightableMap;
+	highlightableMap: BeHighlightableMap;
 
 	static styles = [
+		unsafeCSS(leafletCss),
 		...super.styles,
 		css`
 			highlightable-map {
@@ -106,7 +105,7 @@ export class BeMap extends StateProvider {
 
 		this.highlightableMap = document.createElement(
 			'highlightable-map'
-		) as HighlightableMap;
+		) as BeHighlightableMap;
 
 		this.highlightableMap.setAttribute('tooltip', '');
 		this.highlightableMap.setAttribute('zoom', '2.1676183562414115');
@@ -120,6 +119,16 @@ export class BeMap extends StateProvider {
 			) {
 				this.state.setCountry(e.detail.feature.properties.ADM0_A3_US);
 			}
+		});
+
+		Promise.all([
+			import('highlightable-map/src/geoJson.json'),
+			import('leaflet/dist/leaflet.css?inline')
+		]).then(([{ default: geoJson }, { default: css }]) => {
+			this.highlightableMap.setGeoJson(geoJson);
+			const stylesheet = new CSSStyleSheet();
+			stylesheet.replaceSync(css);
+			this.highlightableMap.setCss(stylesheet);
 		});
 
 		let selectedMarker: Marker<any>;

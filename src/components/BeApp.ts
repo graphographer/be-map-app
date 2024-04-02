@@ -1,14 +1,14 @@
-import './BeMapCountryDropdown';
-import './BeMapTabs';
-import './tabs/BeMapAgencyPresence';
-import './tabs/BeMapActivityData';
-import './tabs/BeMapDisbursementData';
-import './tabs/BeMapOutputIndicators';
-import './tabs/BeMapOutcomeIndicators';
-import './BeMapFilters';
+import './BeHighlightableMap';
 import './BeMap';
-import 'highlightable-map/dist/HighlightableMapBundled.min.js';
+import './BeMapCountryDropdown';
+import './BeMapFilters';
+import './BeMapTabs';
 import './charts/BeMapDonutChart';
+import './tabs/BeMapActivityData';
+import './tabs/BeMapAgencyPresence';
+import './tabs/BeMapDisbursementData';
+import './tabs/BeMapOutcomeIndicators';
+import './tabs/BeMapOutputIndicators';
 
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
