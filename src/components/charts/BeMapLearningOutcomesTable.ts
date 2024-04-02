@@ -26,8 +26,11 @@ export class BeMapLearningOutcomesTable extends StateProvider {
 			td:not(:nth-child(1)) {
 				text-align: center;
 			}
-			td[data-outcome]:hover {
-				background-color: var(--usaid-red-tint);
+			tr[data-dataset-index]:hover td {
+				background-color: var(--ultralight-blue);
+			}
+			tr[data-dataset-index]:hover td[data-outcome]:hover {
+				background-color: var(--light-blue);
 			}
 		`
 	];
