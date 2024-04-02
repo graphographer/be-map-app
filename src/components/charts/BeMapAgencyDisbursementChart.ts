@@ -272,7 +272,7 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 				() => this.data,
 				data => {
 					this.chart.data = data;
-					this.chart.update('none');
+					this.chart.update();
 				}
 			)
 		);
