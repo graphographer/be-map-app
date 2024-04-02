@@ -94,6 +94,7 @@ export class BeMapOutputIndicators extends StateProvider {
 		}
 
 		return html`
+			<p><em>Disaggregated data is provided where/when available.</em></p>
 			${this.learnersReached} ${this.learnerInputs} ${this.learnerOutcomes}
 		`;
 	}

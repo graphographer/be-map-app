@@ -161,7 +161,7 @@ export class BeApp extends StateProvider {
 									</h4>
 									<be-map-tabs
 										.config=${this.tabsConfig}
-										.activeTab=${'activity'}
+										.activeTab=${'presence'}
 									></be-map-tabs>`
 							: ''}
 					</section>
