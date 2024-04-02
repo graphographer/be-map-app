@@ -68,7 +68,7 @@ export class BeMapOutputIndicators extends StateProvider {
 				color: var(--usaid-blue);
 			}
 
-			@media (max-width: 699px) {
+			@media only screen and (max-width: 720px) {
 				ul > li {
 					flex-direction: column;
 				}
@@ -89,173 +89,201 @@ export class BeMapOutputIndicators extends StateProvider {
 	];
 
 	render() {
+		if (!this.state.selectedCountryHasOutputIndicators) {
+			return html`<em>No data available.</em>`;
+		}
+
 		return html`
-			${this.state.outputIndicatorsForSelectedCountryStructural
-				? html`
-						<h5>Learners Reached</h5>
-						<ul>
-							<li>
-								<span> ${EIndicatorHeader.Intervention} </span>
+			${this.learnersReached} ${this.learnerInputs} ${this.learnerOutcomes}
+		`;
+	}
+
+	get learnersReached() {
+		if (!this.state.learnersReached) {
+			return '';
+		}
+
+		return html`<h5>Learners Reached</h5>
+			<ul>
+				<li>
+					<span>${EIndicatorHeader.Intervention}</span>
+					<ul class="flex-grow">
+						${LEARNERS_REACHED_LEVELS.filter(
+							level => !!this.state.learnersReached![level]
+						).map(level => {
+							return html`<li>
+								<span>${level}</span>
 								<ul class="flex-grow">
-									${LEARNERS_REACHED_LEVELS.filter(
-										level => !!this.state.learnersReached[level]
-									).map(level => {
-										return html`<li>
-											<span>${level}</span>
-											<ul class="flex-grow">
-												${LEARNERS_REACHED_DEMOS.map(demo => {
-													return html`<li class="space-between">
-														<span class="flex-grow">${demo}:</span>
-														<span
-															>${US_NUMBER_FORMATTER.format(
-																// @ts-ignore
-																this.state.learnersReached[level][demo]
-															)}</span
-														>
-													</li>`;
-												})}
-											</ul>
+									${LEARNERS_REACHED_DEMOS.map(demo => {
+										return html`<li class="space-between">
+											<span class="flex-grow">${demo}:</span>
+											<span
+												>${US_NUMBER_FORMATTER.format(
+													// @ts-ignore
+													this.state.learnersReached[level][demo]
+												)}</span
+											>
 										</li>`;
 									})}
-									<li class="space-between flex-grow">
-										<span>Total All Ages:</span>
-										<span
-											>${US_NUMBER_FORMATTER.format(
-												this.state.learnersReached.TotalAll as number
-											)}</span
-										>
-									</li>
 								</ul>
+							</li>`;
+						})}
+						<li class="space-between flex-grow">
+							<span>Total All Ages:</span>
+							<span
+								>${US_NUMBER_FORMATTER.format(
+									this.state.learnersReached.TotalAll as number
+								)}</span
+							>
+						</li>
+					</ul>
+				</li>
+			</ul>`;
+	}
+
+	get learnerInputs() {
+		const hasHealth = Object.values(
+			this.state.outputIndicatorsForSelectedCountryStructural[
+				EIndicatorHeader.Health
+			]
+		).find(val => val > 0);
+
+		const hasGovAssistance =
+			this.state.outputIndicatorsForSelectedCountryStructural[
+				EIndicatorHeader.GovAssitance
+			];
+
+		const hasProDev = Object.values(
+			this.state.outputIndicatorsForSelectedCountryStructural[
+				EIndicatorHeader.ProDev
+			]
+		).find(val => val > 0);
+
+		const hasFacilitiesRepaired =
+			this.state.outputIndicatorsForSelectedCountryStructural[
+				EIndicatorHeader.FacilitiesRepaired
+			];
+
+		const hasLearningMaterials =
+			this.state.outputIndicatorsForSelectedCountryStructural[
+				EIndicatorHeader.LearningMaterials
+			];
+
+		if (
+			!hasHealth &&
+			!hasGovAssistance &&
+			!hasProDev &&
+			!hasFacilitiesRepaired &&
+			!hasLearningMaterials
+		) {
+			return '';
+		}
+
+		return html`<h5>Learning Inputs</h5>
+			<ul>
+				${hasHealth
+					? html`<li>
+							<span>${EIndicatorHeader.Health}</span>
+							<ul class="flex-grow">
+								<li>
+									<div></div>
+									<ul class="flex-grow">
+										${[
+											EIndicatorDemographic.Males,
+											EIndicatorDemographic.Females,
+											'Total'
+										].map(demo => {
+											return html`<li class="space-between flex-grow">
+												<span>${demo}:</span>
+												<span
+													>${US_NUMBER_FORMATTER.format(
+														// @ts-ignore
+														this.state
+															.outputIndicatorsForSelectedCountryStructural[
+															EIndicatorHeader.Health
+														][demo]
+													)}</span
+												>
+											</li>`;
+										})}
+									</ul>
+								</li>
+							</ul>
+					  </li>`
+					: ''}
+				${hasGovAssistance
+					? html`
+							<li class="space-between flex-grow">
+								<span>${EIndicatorHeader.GovAssitance}</span>
+								<span
+									>${US_NUMBER_FORMATTER.format(
+										this.state.outputIndicatorsForSelectedCountryStructural[
+											EIndicatorHeader.GovAssitance
+										]
+									)}</span
+								>
 							</li>
-						</ul>
-
-						<h5>Learning Inputs</h5>
-						<ul>
-							${Object.values(
-								this.state.outputIndicatorsForSelectedCountryStructural[
-									EIndicatorHeader.Health
-								]
-							).find(val => val > 0)
-								? html`<li>
-										<span>${EIndicatorHeader.Health}</span>
-										<ul class="flex-grow">
-											<li>
-												<div></div>
-												<ul class="flex-grow">
-													${[
-														EIndicatorDemographic.Males,
-														EIndicatorDemographic.Females,
-														'Total'
-													].map(demo => {
-														return html`<li class="space-between flex-grow">
-															<span>${demo}:</span>
-															<span
-																>${US_NUMBER_FORMATTER.format(
-																	// @ts-ignore
-																	this.state
-																		.outputIndicatorsForSelectedCountryStructural[
-																		EIndicatorHeader.Health
-																	][demo]
-																)}</span
-															>
-														</li>`;
-													})}
-												</ul>
-											</li>
-										</ul>
-								  </li>`
-								: ''}
-							${this.state.outputIndicatorsForSelectedCountryStructural[
-								EIndicatorHeader.GovAssitance
-							]
-								? html`
-										<li class="space-between flex-grow">
-											<span>${EIndicatorHeader.GovAssitance}</span>
-											<span
-												>${US_NUMBER_FORMATTER.format(
-													this.state
-														.outputIndicatorsForSelectedCountryStructural[
-														EIndicatorHeader.GovAssitance
-													]
-												)}</span
-											>
-										</li>
-								  `
-								: ''}
-							${Object.values(
-								this.state.outputIndicatorsForSelectedCountryStructural[
-									EIndicatorHeader.ProDev
-								]
-							).find(val => val > 0)
-								? html`<li>
-										<span>${EIndicatorHeader.ProDev}</span>
-										<ul class="flex-grow">
-											<li>
-												<div></div>
-												<ul class="flex-grow">
-													${[
-														EIndicatorDemographic.Males,
-														EIndicatorDemographic.Females,
-														'Total'
-													].map(demo => {
-														return html`<li class="space-between flex-grow">
-															<span>${demo}:</span>
-															<span
-																>${US_NUMBER_FORMATTER.format(
-																	// @ts-ignore
-																	this.state
-																		.outputIndicatorsForSelectedCountryStructural[
-																		EIndicatorHeader.ProDev
-																	][demo]
-																)}</span
-															>
-														</li>`;
-													})}
-												</ul>
-											</li>
-										</ul>
-								  </li>`
-								: ''}
-							${this.state.outputIndicatorsForSelectedCountryStructural[
-								EIndicatorHeader.FacilitiesRepaired
-							]
-								? html`
-										<li class="space-between flex-grow">
-											<span>${EIndicatorHeader.FacilitiesRepaired}:</span>
-											<span
-												>${US_NUMBER_FORMATTER.format(
-													this.state
-														.outputIndicatorsForSelectedCountryStructural[
-														EIndicatorHeader.FacilitiesRepaired
-													]
-												)}</span
-											>
-										</li>
-								  `
-								: ''}
-							${this.state.outputIndicatorsForSelectedCountryStructural[
-								EIndicatorHeader.LearningMaterials
-							]
-								? html`
-										<li class="space-between flex-grow">
-											<span>${EIndicatorHeader.LearningMaterials}:</span>
-											<span
-												>${US_NUMBER_FORMATTER.format(
-													this.state
-														.outputIndicatorsForSelectedCountryStructural[
-														EIndicatorHeader.LearningMaterials
-													]
-												)}</span
-											>
-										</li>
-								  `
-								: ''}
-						</ul>
-
-						${this.learnerOutcomes}
-				  `
-				: html`<em>No data available.</em>`}
-		`;
+					  `
+					: ''}
+				${hasProDev
+					? html`<li>
+							<span>${EIndicatorHeader.ProDev}</span>
+							<ul class="flex-grow">
+								<li>
+									<div></div>
+									<ul class="flex-grow">
+										${[
+											EIndicatorDemographic.Males,
+											EIndicatorDemographic.Females,
+											'Total'
+										].map(demo => {
+											return html`<li class="space-between flex-grow">
+												<span>${demo}:</span>
+												<span
+													>${US_NUMBER_FORMATTER.format(
+														// @ts-ignore
+														this.state
+															.outputIndicatorsForSelectedCountryStructural[
+															EIndicatorHeader.ProDev
+														][demo]
+													)}</span
+												>
+											</li>`;
+										})}
+									</ul>
+								</li>
+							</ul>
+					  </li>`
+					: ''}
+				${hasFacilitiesRepaired
+					? html`
+							<li class="space-between flex-grow">
+								<span>${EIndicatorHeader.FacilitiesRepaired}:</span>
+								<span
+									>${US_NUMBER_FORMATTER.format(
+										this.state.outputIndicatorsForSelectedCountryStructural[
+											EIndicatorHeader.FacilitiesRepaired
+										]
+									)}</span
+								>
+							</li>
+					  `
+					: ''}
+				${hasLearningMaterials
+					? html`
+							<li class="space-between flex-grow">
+								<span>${EIndicatorHeader.LearningMaterials}:</span>
+								<span
+									>${US_NUMBER_FORMATTER.format(
+										this.state.outputIndicatorsForSelectedCountryStructural[
+											EIndicatorHeader.LearningMaterials
+										]
+									)}</span
+								>
+							</li>
+					  `
+					: ''}
+			</ul>`;
 	}
 
 	get learnerOutcomes() {

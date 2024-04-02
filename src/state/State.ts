@@ -1,5 +1,13 @@
 import { HighlightableMap } from 'highlightable-map';
-import { groupBy, mapValues, omitBy, pickBy, set, sortBy } from 'lodash-es';
+import {
+	groupBy,
+	isEmpty,
+	mapValues,
+	omitBy,
+	pickBy,
+	set,
+	sortBy
+} from 'lodash-es';
 import { makeAutoObservable, observable, reaction } from 'mobx';
 import {
 	nameToThreeAlphas,
@@ -101,6 +109,14 @@ export class State {
 
 		return outputIndicatorsByCountryStructural;
 	}
+	get selectedCountryHasOutputIndicators() {
+		return (
+			this.outputIndicatorsForSelectedCountry &&
+			Object.values(this.outputIndicatorsForSelectedCountry).find(
+				val => val > 0
+			)
+		);
+	}
 	get learnersReached() {
 		const interventions = pickBy(
 			this.outputIndicatorsForSelectedCountryStructural[
@@ -110,6 +126,10 @@ export class State {
 				return Object.values(demos).find(val => val > 0);
 			}
 		);
+
+		if (isEmpty(interventions)) {
+			return;
+		}
 
 		interventions.TotalAll =
 			this.outputIndicatorsForSelectedCountryStructural[
@@ -328,7 +348,7 @@ export class State {
 		);
 	}
 
-	selectedCountry: string = 'MWI';
+	selectedCountry: string = 'LBY';
 
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);
