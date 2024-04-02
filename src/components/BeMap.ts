@@ -227,21 +227,21 @@ export class BeMap extends StateProvider {
 						class="box"
 						style="background-color:${HIGHLIGHT_COLORS['1']}"
 					></div>
-					<span>$0-$1m</span>
+					<span>$0&ndash;$1m</span>
 				</div>
 				<div>
 					<div
 						class="box"
 						style="background-color:${HIGHLIGHT_COLORS['2']}"
 					></div>
-					<span>$1m-$5m</span>
+					<span>$1m&ndash;$5m</span>
 				</div>
 				<div>
 					<div
 						class="box"
 						style="background-color:${HIGHLIGHT_COLORS['3']}"
 					></div>
-					<span>$5m-$15m</span>
+					<span>$5m&ndash;$15m</span>
 				</div>
 				<div>
 					<div

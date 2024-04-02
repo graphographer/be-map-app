@@ -17,10 +17,6 @@ export class BeMapAgencyPresence extends StateProvider {
 				margin-top: 0;
 			}
 
-			h4 {
-				margin-top: 0;
-			}
-
 			thead th {
 				text-align: center;
 			}

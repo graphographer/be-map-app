@@ -24,6 +24,7 @@ export class BeMapFilters extends StateProvider {
 			}
 
 			h4 {
+				margin-top: 0;
 				margin-bottom: 0.5rem;
 			}
 

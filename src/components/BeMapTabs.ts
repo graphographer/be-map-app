@@ -14,8 +14,8 @@ export class BeMapTabs extends StateProvider {
 	static styles = [
 		...super.styles,
 		css`
-			nav {
-				margin-bottom: 2rem;
+			.content {
+				padding: 0.75rem 0.75rem 2rem;
 			}
 		`
 	];
