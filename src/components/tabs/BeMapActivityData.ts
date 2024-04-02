@@ -9,7 +9,10 @@ export class BeMapActivityData extends StateProvider {
 		return isEmpty(this.state.activitiesForSelectedCountryByAgency)
 			? html`<em>No data available.</em>`
 			: html`
-					<p>Click on the title for more information about each program.</p>
+					<h4>USG Program Data for Fiscal Year ${this.state.latestFY}</h4>
+					<p>
+						<em>Click on the title for more information about each program.</em>
+					</p>
 					${Object.entries(this.state.activitiesForSelectedCountryByAgency).map(
 						([agency, activities]) => {
 							return html`

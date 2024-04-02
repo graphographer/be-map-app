@@ -79,18 +79,12 @@ export class BeApp extends StateProvider {
 				title: 'Disbursement Data',
 				template: () =>
 					html`<be-map-disbursement-data></be-map-disbursement-data>`
-				// disabled: () => {
-				// 	return !this.state.disbursementsForSelectedCountryByAgency.length;
-				// }
 			},
 			{
 				route: 'output',
 				title: 'Results',
 				template: () =>
 					html`<be-map-output-indicators></be-map-output-indicators>`
-				// disabled: () => {
-				// 	return !this.state.outputIndicatorsForSelectedCountry;
-				// }
 			},
 			{
 				route: 'outcome',
@@ -150,7 +144,7 @@ export class BeApp extends StateProvider {
 						? html` <h4>${this.state.selectedCountryFormatted}: Details</h4>
 								<be-map-tabs
 									.config=${this.tabsConfig}
-									.activeTab=${'output'}
+									.activeTab=${'activity'}
 								></be-map-tabs>`
 						: ''}
 				</section>
