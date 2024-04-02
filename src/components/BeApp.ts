@@ -140,7 +140,6 @@ export class BeApp extends StateProvider {
 											role="img"
 											alt="The shape of ${this.state.selectedCountryFormatted}"
 											tabindex="-1"
-											no-tooltip
 											no-control
 											autozoom
 											highlight="${this.state.selectedCountry}"
@@ -169,5 +168,10 @@ export class BeApp extends StateProvider {
 				</div>
 			</main>
 		`;
+	}
+
+	protected async scheduleUpdate() {
+		await document.fonts.ready;
+		super.scheduleUpdate();
 	}
 }

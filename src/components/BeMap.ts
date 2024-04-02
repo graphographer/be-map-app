@@ -1,6 +1,6 @@
 import type { HighlightableMap } from 'highlightable-map';
 import 'highlightable-map/dist/HighlightableMapBundled.min.js';
-import { Marker, icon, marker } from 'leaflet';
+import { Marker, icon, marker, DomEvent } from 'leaflet';
 import { css, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
@@ -13,15 +13,15 @@ import { StateProvider } from './StateProvider';
 const blueMarker = icon({
 	iconUrl: bluePin,
 	iconSize: [36, 36],
-	iconAnchor: [18, 36],
-	popupAnchor: [0, -27]
+	iconAnchor: [18, 36]
+	// popupAnchor: [0, -27]
 });
 
 const redMarker = icon({
 	iconUrl: redPin,
 	iconSize: [36, 36],
-	iconAnchor: [18, 36],
-	popupAnchor: [0, -27]
+	iconAnchor: [18, 36]
+	// popupAnchor: [0, -27]
 });
 
 const REGIONS: [string, [number, number]][] = [
@@ -124,38 +124,37 @@ export class BeMap extends StateProvider {
 
 		let selectedMarker: Marker<any>;
 
-		const regionalMarkers = new Map(
-			REGIONS.map(([region, latLng]) => {
-				return [
-					region,
-					marker(latLng, {
-						icon: blueMarker,
-						alt: region,
-						title: region
-					})
-						.on('click', e => {
-							console.log(e);
-
-							const {
-								sourceTarget: {
-									options: { title }
-								}
-							} = e;
-
-							if (title) {
-								this.state.selectedCountry = title;
-							}
-						})
-						.addTo(this.highlightableMap.leafletMap)
-				];
-			})
-		);
-
 		this.highlightableMap.addEventListener(
 			'hm-rendered',
 			() => {
 				// add diagonal pattern svg to shadow root
 				// this.highlightableMap.shadowRoot?.prepend(diagonalTpl());
+
+				const regionalMarkers = new Map(
+					REGIONS.map(([region, latLng]) => {
+						return [
+							region,
+							marker(latLng, {
+								icon: blueMarker,
+								alt: region,
+								title: region
+							}).addTo(this.highlightableMap.leafletMap)
+						];
+					})
+				);
+				regionalMarkers.forEach(marker => {
+					marker.on('click', e => {
+						const {
+							sourceTarget: {
+								options: { title }
+							}
+						} = e;
+
+						if (title) {
+							this.state.selectedCountry = title;
+						}
+					});
+				});
 
 				this.disposers.push(
 					reaction(
