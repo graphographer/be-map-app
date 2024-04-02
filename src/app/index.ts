@@ -60,7 +60,7 @@ render(
 			crossorigin="anonymous"
 		/>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro"
+			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i"
 			rel="stylesheet"
 		/>
 	`,

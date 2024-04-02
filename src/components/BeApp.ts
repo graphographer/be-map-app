@@ -102,6 +102,8 @@ export class BeApp extends StateProvider {
 					<be-map></be-map>
 				</section>
 
+				<hr />
+
 				<section>
 					<be-map-filters></be-map-filters>
 				</section>
