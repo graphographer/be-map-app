@@ -1,6 +1,5 @@
 import { HighlightableMap } from 'highlightable-map';
 import { Marker, icon, marker } from 'leaflet';
-import leafletCss from 'leaflet/dist/leaflet.css?inline';
 import { css, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
@@ -50,7 +49,6 @@ export class BeMap extends StateProvider {
 	highlightableMap: HighlightableMap;
 
 	static styles = [
-		unsafeCSS(leafletCss),
 		...super.styles,
 		css`
 			highlightable-map {
