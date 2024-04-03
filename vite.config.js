@@ -7,6 +7,7 @@ import { disbursementByAgencyProcessor } from './src/data/helpers/disbursementBy
 import { learningOutcomesProcessor } from './src/data/helpers/learningOutcomesProcessor';
 import { outputIndicatorsProcessor } from './src/data/helpers/outputIndicatorsProcessor';
 import { outputIndicatorsProcessorV2 } from './src/data/helpers/outputIndicatorsProcessorV2';
+import minifyHTML from 'rollup-plugin-minify-html-literals';
 
 export default defineConfig({
 	base: '',
@@ -17,5 +18,10 @@ export default defineConfig({
 		learningOutcomesProcessor,
 		outputIndicatorsProcessor,
 		outputIndicatorsProcessorV2
-	]
+	],
+	build: {
+		rollupOptions: {
+			plugins: [minifyHTML.default()]
+		}
+	}
 });
