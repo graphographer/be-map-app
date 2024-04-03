@@ -28,19 +28,15 @@ export class BeApp extends StateProvider {
 				max-width: 960px;
 			}
 
-			#results-heading {
-				margin-bottom: -2rem;
-			}
-
 			highlightable-map {
 				--bwm-background: transparent;
-				width: 100px;
-				height: 100px;
+				width: 150px;
+				height: 150px;
+				margin: 0;
 			}
 
 			be-map-donut-chart {
 				height: 150px;
-				margin-bottom: 3rem;
 			}
 
 			be-map-tabs {
@@ -57,19 +53,31 @@ export class BeApp extends StateProvider {
 			.flex {
 				display: flex;
 				align-items: center;
+				justify-items: center;
 				column-gap: 1rem;
-				height: 150px;
-				margin-bottom: -2rem;
+				max-height: 200px;
+				margin: 2rem 0 3rem;
 			}
 
-			.flex > .grow {
-				flex-grow: 1;
+			.flex > * {
+				flex: 1 0 auto;
 			}
 
-			.lower {
+			.filter {
 				border-radius: var(--standard-border-radius);
 				padding: 2rem;
 				background-color: var(--light-gray);
+				margin-bottom: 2rem;
+			}
+
+			.filter > section {
+				margin-bottom: 0;
+			}
+
+			@media only screen and (max-width: 720px) {
+				.flex > .shrink {
+					display: none;
+				}
 			}
 		`
 	];
@@ -114,57 +122,58 @@ export class BeApp extends StateProvider {
 					<be-map></be-map>
 				</section>
 
-				<div class="lower">
+				<div class="filter">
 					<section>
 						<be-map-filters></be-map-filters>
-					</section>
-
-					<section id="overview">
 						<h4 id="results-heading">
 							Filter Results (${this.state.filteredCountries.length}
 							${this.state.filteredCountries.length === 1
 								? 'Country'
 								: 'Countries'})
 						</h4>
-						<div class="flex">
-							<be-map-country-dropdown
-								class="grow"
-								aria-describedby="results-heading"
-								.countries=${this.state.filteredCountries}
-							></be-map-country-dropdown>
+						<be-map-country-dropdown
+							aria-describedby="results-heading"
+							.countries=${this.state.filteredCountries}
+						></be-map-country-dropdown>
+					</section>
+				</div>
 
-							${this.state.selectedCountry
-								? html`
-										<highlightable-map
-											role="img"
-											alt="The shape of ${this.state.selectedCountryFormatted}"
-											tabindex="-1"
-											no-control
-											autozoom
-											highlight="${this.state.selectedCountry}"
-											filter="${this.state.selectedCountry}"
-										></highlightable-map>
-								  `
-								: ''}
-						</div>
+				<section id="overview">
+					<h2>${this.state.selectedCountryFormatted}</h2>
 
+					<div class="flex">
 						${this.state.agencyDisbursementsForSelectedCountryAndLatestFY
 							? html` <h4 class="sr-only">
 										${this.state.selectedCountryFormatted}: Overview
 									</h4>
-									<be-map-donut-chart></be-map-donut-chart>`
+									<be-map-donut-chart class="grow"></be-map-donut-chart>`
 							: ''}
 						${this.state.selectedCountry
-							? html` <h4 class="sr-only">
-										${this.state.selectedCountryFormatted}: Details
-									</h4>
-									<be-map-tabs
-										.config=${this.tabsConfig}
-										.activeTab=${'presence'}
-									></be-map-tabs>`
+							? html`
+									<highlightable-map
+										class="shrink"
+										role="img"
+										alt="The shape of ${this.state.selectedCountryFormatted}"
+										tabindex="-1"
+										no-control
+										autozoom
+										highlight="${this.state.selectedCountry}"
+										filter="${this.state.selectedCountry}"
+									></highlightable-map>
+							  `
 							: ''}
-					</section>
-				</div>
+					</div>
+
+					${this.state.selectedCountry
+						? html` <h4 class="sr-only">
+									${this.state.selectedCountryFormatted}: Details
+								</h4>
+								<be-map-tabs
+									.config=${this.tabsConfig}
+									.activeTab=${'presence'}
+								></be-map-tabs>`
+						: ''}
+				</section>
 			</main>
 		`;
 	}

@@ -30,7 +30,14 @@ export class BeMapDonutChart extends StateProvider {
 				align-items: center;
 			}
 			.grow {
-				flex-grow: 0.2;
+				flex-grow: 1;
+				max-width: 250px;
+			}
+
+			@media (max-width: 720px) {
+				.grow {
+					max-width: 100%;
+				}
 			}
 
 			table {

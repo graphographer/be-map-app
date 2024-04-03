@@ -33,6 +33,7 @@ export class BeMapFilters extends StateProvider {
 			}
 			details {
 				background-color: var(--bg);
+				padding: 0.5rem 1rem 0.3rem;
 			}
 			summary {
 				font-weight: normal;
@@ -86,11 +87,9 @@ export class BeMapFilters extends StateProvider {
 					aria-describedby="agency-filter-description"
 				>
 					<summary>
-						<i
-							>${this.state.filter.agencies?.length
-								? this.state.filter.agencies.join(', ')
-								: 'No agencies selected'}</i
-						>
+						${this.state.filter.agencies?.length
+							? this.state.filter.agencies.join(', ')
+							: 'No agencies selected'}
 					</summary>
 					${AGENCIES_SHORT.map(
 						agency =>
