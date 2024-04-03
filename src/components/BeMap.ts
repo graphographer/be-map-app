@@ -1,3 +1,4 @@
+import { HighlightableMap } from 'highlightable-map';
 import { Marker, icon, marker } from 'leaflet';
 import leafletCss from 'leaflet/dist/leaflet.css?inline';
 import { css, html, unsafeCSS } from 'lit';
@@ -6,7 +7,6 @@ import { live } from 'lit/directives/live.js';
 import { autorun, reaction } from 'mobx';
 import bluePin from '../images/blue_pin.png';
 import redPin from '../images/red_pin.png';
-import { BeHighlightableMap } from './BeHighlightableMap';
 import './BeMapCountryDropdown';
 import { StateProvider } from './StateProvider';
 
@@ -47,7 +47,7 @@ const COLOR_FILTER =
 
 @customElement('be-map')
 export class BeMap extends StateProvider {
-	highlightableMap: BeHighlightableMap;
+	highlightableMap: HighlightableMap;
 
 	static styles = [
 		unsafeCSS(leafletCss),
@@ -105,7 +105,7 @@ export class BeMap extends StateProvider {
 
 		this.highlightableMap = document.createElement(
 			'highlightable-map'
-		) as BeHighlightableMap;
+		) as HighlightableMap;
 
 		this.highlightableMap.setAttribute('tooltip', '');
 		this.highlightableMap.setAttribute('zoom', '2.1676183562414115');
@@ -119,16 +119,6 @@ export class BeMap extends StateProvider {
 			) {
 				this.state.setCountry(e.detail.feature.properties.ADM0_A3_US);
 			}
-		});
-
-		Promise.all([
-			import('highlightable-map/src/geoJson.json'),
-			import('leaflet/dist/leaflet.css?inline')
-		]).then(([{ default: geoJson }, { default: css }]) => {
-			this.highlightableMap.setGeoJson(geoJson);
-			const stylesheet = new CSSStyleSheet();
-			stylesheet.replaceSync(css);
-			this.highlightableMap.setCss(stylesheet);
 		});
 
 		let selectedMarker: Marker<any>;

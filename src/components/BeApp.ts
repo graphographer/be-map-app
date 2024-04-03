@@ -1,4 +1,3 @@
-import './BeHighlightableMap';
 import './BeMap';
 import './BeMapCountryDropdown';
 import './BeMapFilters';

@@ -5,9 +5,9 @@ import agencyActivity from '../data/agency_activity.csv';
 import agency_presence from '../data/agency_presence.csv';
 import disbursementByAgency from '../data/disbursement_by_agency.csv';
 import learningOutcomes from '../data/learning_outcomes.csv';
+import output_indicators_v2 from '../data/output_indicators_v2.csv';
 import { provider } from '../state';
 import { State } from '../state/State';
-import output_indicators_v2 from '../data/output_indicators_v2.csv';
 
 import {
 	ArcElement,
@@ -24,6 +24,7 @@ import {
 	Title,
 	Tooltip
 } from 'chart.js';
+import { HighlightableMap } from 'highlightable-map';
 
 Chart.register(
 	CategoryScale,
@@ -48,8 +49,27 @@ state.data.learning_outcomes = learningOutcomes;
 state.data.output_indicators = output_indicators_v2;
 provider.set(state);
 
-// @ts-ignore
-window.state = state;
+async function start() {
+	try {
+		const [{ default: geodata }, { default: leafletCss }] = await Promise.all([
+			import('highlightable-map/src/geoJson.json'),
+			import('leaflet/dist/leaflet.css?inline')
+		]);
+
+		HighlightableMap.setGeoData(geodata as unknown as JSON);
+
+		HighlightableMap.setCss(leafletCss);
+
+		customElements.define('highlightable-map', HighlightableMap);
+		// @ts-ignore
+		window.state = state;
+
+		render(html`<be-app></be-app>`, document.body);
+	} catch (e) {
+		console.error(e);
+		return;
+	}
+}
 
 render(
 	html`
@@ -67,4 +87,4 @@ render(
 	document.head
 );
 
-render(html`<be-app></be-app>`, document.body);
+start();
