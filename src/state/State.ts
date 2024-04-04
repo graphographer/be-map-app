@@ -174,17 +174,17 @@ export class State {
 		return this.fiscalYears[this.fiscalYears.length - 1];
 	}
 
-	get agencyDisbursementsForSelectedCountryAndLatestFY():
+	get agencyDisbursementsForSelectedCountryAndFY():
 		| Record<TAgency, number>
 		| undefined {
-		const { selectedCountry, latestFY } = this;
+		const { selectedCountry, selectedFiscalYear } = this;
 
 		if (!selectedCountry) return undefined;
 
 		const latestDisbursements = mapValues(
 			this.yearlyDisbursementsByCountryAndAgency[selectedCountry],
 			agencyDisbursements => {
-				return agencyDisbursements[latestFY];
+				return agencyDisbursements[selectedFiscalYear];
 			}
 		);
 

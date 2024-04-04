@@ -72,20 +72,20 @@ export class BeMapDonutChart extends StateProvider {
 	}
 
 	get data() {
-		if (!this.state.agencyDisbursementsForSelectedCountryAndLatestFY) {
+		if (!this.state.agencyDisbursementsForSelectedCountryAndFY) {
 			return;
 		}
 		return {
 			labels: Object.keys(
-				this.state.agencyDisbursementsForSelectedCountryAndLatestFY
+				this.state.agencyDisbursementsForSelectedCountryAndFY
 			),
 			datasets: [
 				{
 					data: Object.values(
-						this.state.agencyDisbursementsForSelectedCountryAndLatestFY
+						this.state.agencyDisbursementsForSelectedCountryAndFY
 					),
 					backgroundColor: Object.keys(
-						this.state.agencyDisbursementsForSelectedCountryAndLatestFY
+						this.state.agencyDisbursementsForSelectedCountryAndFY
 					).map(agency => HIGHLIGHT_COLORS[agency])
 				}
 			]
@@ -93,10 +93,10 @@ export class BeMapDonutChart extends StateProvider {
 	}
 
 	render() {
-		if (!this.state.agencyDisbursementsForSelectedCountryAndLatestFY) return '';
+		if (!this.state.agencyDisbursementsForSelectedCountryAndFY) return '';
 
 		const entries = Object.entries(
-			this.state.agencyDisbursementsForSelectedCountryAndLatestFY
+			this.state.agencyDisbursementsForSelectedCountryAndFY
 		).filter(([, amt]) => amt > 0);
 		const total = entries.reduce((acc, [, amt]) => {
 			acc += amt;
@@ -132,7 +132,7 @@ export class BeMapDonutChart extends StateProvider {
 					</tbody>
 					<tfoot>
 						<tr>
-							<td><b>FY${this.state.latestFY} Total:</b></td>
+							<td><b>FY${this.state.selectedFiscalYear} Total:</b></td>
 							<td>${USD_FORMATTER.format(total)}</td>
 						</tr>
 					</tfoot>

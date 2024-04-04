@@ -158,7 +158,7 @@ export class BeApp extends StateProvider {
 									></highlightable-map>
 							  `
 							: ''}
-						${this.state.agencyDisbursementsForSelectedCountryAndLatestFY
+						${this.state.agencyDisbursementsForSelectedCountryAndFY
 							? html` <h4 class="sr-only">
 										${this.state.selectedCountryFormatted}: Overview
 									</h4>
