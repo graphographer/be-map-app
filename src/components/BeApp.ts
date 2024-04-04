@@ -74,6 +74,7 @@ export class BeApp extends StateProvider {
 
 			.flex > * {
 				flex: 0 0 auto;
+				max-width: 100%;
 			}
 
 			/* @media (max-width: 719px) {
