@@ -44,11 +44,13 @@ export class BeMapAgencyPresence extends StateProvider {
 		'Primary',
 		'Secondary',
 		'Workforce Development',
-		'Education Systems Strengthening'
+		'Education Systems Strengthening',
+		'Education Level Not Specified'
 	];
 
 	render() {
 		if (this.state.agencyEducationSupportForSelectedCountry) {
+			console.log('WHY HERE?', this.state.selectedCountry);
 			return html`
 				<table>
 					<caption>
@@ -74,7 +76,7 @@ export class BeMapAgencyPresence extends StateProvider {
 								${BeMapAgencyPresence.agencies.map(([_short, long]) => {
 									return html`
 										<td>
-											${this.state.agencyEducationSupportForSelectedCountry[
+											${this.state.agencyEducationSupportForSelectedCountry![
 												long
 											]?.includes(level)
 												? html`<div class="checked">
@@ -91,11 +93,15 @@ export class BeMapAgencyPresence extends StateProvider {
 
 				<p>
 					<b>Supporting Agencies:</b>
-					${this.state.agenciesInSelectedCountry.join(', ')}
+					${this.state.agenciesInSelectedCountry!.join(', ')}
 				</p>
 			`;
 		} else {
-			return html`<em>No data available.</em>`;
+			return html`<h4>
+					USG BE Support by Education Level(s) and Agency for Fiscal Year
+					${this.state.latestFY}
+				</h4>
+				<em>No data available.</em>`;
 		}
 	}
 }

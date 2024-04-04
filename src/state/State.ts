@@ -9,12 +9,9 @@ import {
 	sortBy
 } from 'lodash-es';
 import { makeAutoObservable, observable, reaction } from 'mobx';
-import {
-	nameToThreeAlphas,
-	threeAlphasToName
-} from '../data/countryNameTo3Alpha';
+import { threeAlphasToName } from '../data/countryNameTo3Alpha';
 import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
-import { TEducationLevel } from '../types/EEducationLevel';
+import { EDUCATION_LEVELS, TEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
 import { TAgencyActivity } from '../types/TAgencyActivity';
 import { TAgencyPresence } from '../types/TAgencyPresence';
@@ -139,36 +136,34 @@ export class State {
 		return interventions;
 	}
 
-	get agencyEducationSupportByCountry(): Record<
-		string,
-		Record<TAgency, TEducationLevel[]>
-	> {
-		return mapValues(
-			groupBy(this.data.agency_activity, 'Country'),
-			activities => {
-				const activitiesByAgency: Record<TAgency, TEducationLevel[]> =
-					mapValues(
-						groupBy(activities, 'Agency') as Record<TAgency, TAgencyActivity[]>,
-						agencyActivities => {
-							return [
-								...agencyActivities.reduce<Set<TEducationLevel>>(
-									(acc, activity) => {
-										activity.educationLevels.forEach(level => acc.add(level));
-										return acc;
-									},
-									new Set()
-								)
-							];
-						}
-					);
+	get agencyEducationSupportByCountry():
+		| Record<string, Record<TAgency, TEducationLevel[]>>
+		| undefined {
+		if (!this.agenciesInSelectedCountry.length) return;
 
-				return activitiesByAgency;
+		return mapValues(
+			groupBy(this.data.agency_presence, 'Country'),
+			presences => {
+				const levelPresenceByAgency = Object.fromEntries(
+					presences.map(presence => {
+						const levels = pickBy(
+							presence,
+							(supported, key) =>
+								supported && EDUCATION_LEVELS.includes(key as TEducationLevel)
+						);
+						return [presence.Agency, Object.keys(levels)];
+					})
+				) as Record<TAgency, TEducationLevel[]>;
+
+				return levelPresenceByAgency;
 			}
 		);
 	}
 
-	get agencyEducationSupportForSelectedCountry() {
-		return this.agencyEducationSupportByCountry[this.selectedCountry];
+	get agencyEducationSupportForSelectedCountry():
+		| Record<TAgency, TEducationLevel[]>
+		| undefined {
+		return this.agencyEducationSupportByCountry?.[this.selectedCountry];
 	}
 
 	get latestFY() {
@@ -235,15 +230,15 @@ export class State {
 		return this.data.agency_presence.reduce((acc, presence) => {
 			const { Country, Agency, 'Agency Support': support } = presence;
 
-			if (!support) return acc;
-
-			const country3Alpha = nameToThreeAlphas.get(Country) || Country;
-
-			if (!acc[country3Alpha]) {
-				acc[country3Alpha] = [];
+			if (!acc[Country]) {
+				acc[Country] = [];
 			}
 
-			acc[country3Alpha].push(Agency);
+			if (!support) {
+				return acc;
+			}
+
+			acc[Country].push(Agency);
 
 			return acc;
 		}, {} as { [k: string]: TAgency[] });
@@ -268,7 +263,7 @@ export class State {
 		});
 	}
 
-	get agenciesInSelectedCountry() {
+	get agenciesInSelectedCountry(): TAgency[] {
 		return this.agenciesInCountry[this.selectedCountry];
 	}
 
@@ -348,7 +343,7 @@ export class State {
 		);
 	}
 
-	selectedCountry: string = '';
+	selectedCountry: string = 'KHM';
 
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);

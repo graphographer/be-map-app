@@ -90,10 +90,12 @@ export class BeMapOutputIndicators extends StateProvider {
 
 	render() {
 		if (!this.state.selectedCountryHasOutputIndicators) {
-			return html`<em>No data available.</em>`;
+			return html`<h4>Results for Fiscal Year ${this.state.latestFY}</h4>
+				<em>No data available.</em>`;
 		}
 
 		return html`
+			<h4>Results for Fiscal Year ${this.state.latestFY}</h4>
 			<p><em>Disaggregated data is provided where/when available.</em></p>
 			${this.learnersReached} ${this.learnerInputs} ${this.learnerOutcomes}
 		`;
