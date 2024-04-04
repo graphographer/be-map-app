@@ -4,7 +4,7 @@ export type TEducationLevel =
 	| 'Secondary'
 	| 'Workforce Development'
 	| 'Education Systems Strengthening'
-	| 'Education Level Not Specified';
+	| 'Education Levels Not Specified';
 
 export const EDUCATION_LEVELS: TEducationLevel[] = [
 	'Pre-Primary',
@@ -12,5 +12,5 @@ export const EDUCATION_LEVELS: TEducationLevel[] = [
 	'Secondary',
 	'Workforce Development',
 	'Education Systems Strengthening',
-	'Education Level Not Specified'
+	'Education Levels Not Specified'
 ];

@@ -17,6 +17,10 @@ export class BeMapAgencyPresence extends StateProvider {
 				margin-top: 0;
 			}
 
+			ul {
+				margin-top: 0;
+			}
+
 			thead th {
 				text-align: center;
 			}
@@ -35,7 +39,7 @@ export class BeMapAgencyPresence extends StateProvider {
 		['DOS', 'U.S. Department of State'],
 		['MCC', 'Millenium Challenge Corporation'],
 		['PC', 'The Peace Corps'],
-		['USAID', 'USAID'],
+		['USAID', 'U.S. Agency for International Development'],
 		['USDA', 'U.S. Department of Agriculture']
 	];
 
@@ -45,12 +49,11 @@ export class BeMapAgencyPresence extends StateProvider {
 		'Secondary',
 		'Workforce Development',
 		'Education Systems Strengthening',
-		'Education Level Not Specified'
+		'Education Levels Not Specified'
 	];
 
 	render() {
 		if (this.state.agencyEducationSupportForSelectedCountry) {
-			console.log('WHY HERE?', this.state.selectedCountry);
 			return html`
 				<table>
 					<caption>
@@ -91,10 +94,14 @@ export class BeMapAgencyPresence extends StateProvider {
 					</tbody>
 				</table>
 
-				<p>
-					<b>Supporting Agencies:</b>
-					${this.state.agenciesInSelectedCountry!.join(', ')}
-				</p>
+				<b>Supporting Agencies:</b>
+				<ul>
+					${BeMapAgencyPresence.agencies
+						.filter(([, long]) =>
+							this.state.agenciesInSelectedCountry.includes(long)
+						)
+						.map(([short, long]) => html`<li>${short} (${long})</li>`)}
+				</ul>
 			`;
 		} else {
 			return html`<h4>

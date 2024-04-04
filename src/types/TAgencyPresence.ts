@@ -12,5 +12,5 @@ export type TAgencyPresence = {
 	Secondary: number;
 	'Workforce Development': number;
 	'Education Systems Strengthening': number;
-	'Education Level Not Specified': boolean;
+	'Education Levels Not Specified': boolean;
 };
