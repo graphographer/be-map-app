@@ -1,3 +1,18 @@
+import {
+	ArcElement,
+	BarController,
+	BarElement,
+	CategoryScale,
+	Chart,
+	DoughnutController,
+	Legend,
+	LineController,
+	LineElement,
+	LinearScale,
+	PointElement,
+	Title,
+	Tooltip
+} from 'chart.js';
 import './BeMap';
 import './BeMapCountryDropdown';
 import './BeMapFilters';
@@ -9,11 +24,24 @@ import './tabs/BeMapDisbursementData';
 import './tabs/BeMapOutcomeIndicators';
 import './tabs/BeMapOutputIndicators';
 
+Chart.register(
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	BarController,
+	Tooltip,
+	Title,
+	LineController,
+	LineElement,
+	PointElement,
+	DoughnutController,
+	ArcElement,
+	Legend
+);
+
 import { css, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
 import { StateProvider } from './StateProvider';
 
-@customElement('be-app')
 export class BeApp extends StateProvider {
 	static styles = [
 		...super.styles,
