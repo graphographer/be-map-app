@@ -21,11 +21,7 @@ export default defineConfig({
 	],
 	build: {
 		rollupOptions: {
-			plugins: [minifyHTML.default()],
-			input: 'src/app/bootstrapBeApp.ts',
-			output: {
-				entryFileNames: '[name].js'
-			}
+			plugins: [minifyHTML.default()]
 		}
 	}
 });
