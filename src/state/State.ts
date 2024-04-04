@@ -347,7 +347,7 @@ export class State {
 		);
 	}
 
-	selectedCountry: string = 'Worldwide';
+	selectedCountry: string = '';
 
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);
