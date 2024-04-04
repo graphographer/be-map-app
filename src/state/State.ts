@@ -347,7 +347,7 @@ export class State {
 		);
 	}
 
-	selectedCountry: string = '';
+	selectedCountry: string = 'KHM';
 
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);

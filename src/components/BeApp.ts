@@ -50,19 +50,6 @@ export class BeApp extends StateProvider {
 				background-color: transparent;
 			}
 
-			.flex {
-				display: flex;
-				align-items: center;
-				justify-items: center;
-				column-gap: 1rem;
-				max-height: 200px;
-				margin: 2rem 0 3rem;
-			}
-
-			.flex > * {
-				flex: 1 0 auto;
-			}
-
 			.filter {
 				border-radius: var(--standard-border-radius);
 				padding: 2rem;
@@ -74,11 +61,26 @@ export class BeApp extends StateProvider {
 				margin-bottom: 0;
 			}
 
-			@media only screen and (max-width: 720px) {
-				.flex > .shrink {
+			.flex {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				column-gap: 4rem;
+				row-gap: 1rem;
+				margin: 3rem 0;
+				max-width: 100%;
+				flex-wrap: wrap;
+			}
+
+			.flex > * {
+				flex: 0 0 auto;
+			}
+
+			/* @media (max-width: 719px) {
+				.flex highlightable-map {
 					display: none;
 				}
-			}
+			} */
 		`
 	];
 
@@ -139,15 +141,8 @@ export class BeApp extends StateProvider {
 				</div>
 
 				<section id="overview">
-					<h2>${this.state.selectedCountryFormatted}</h2>
-
 					<div class="flex">
-						${this.state.agencyDisbursementsForSelectedCountryAndLatestFY
-							? html` <h4 class="sr-only">
-										${this.state.selectedCountryFormatted}: Overview
-									</h4>
-									<be-map-donut-chart class="grow"></be-map-donut-chart>`
-							: ''}
+						<h2>${this.state.selectedCountryFormatted}</h2>
 						${this.state.selectedCountry
 							? html`
 									<highlightable-map
@@ -161,6 +156,12 @@ export class BeApp extends StateProvider {
 										filter="${this.state.selectedCountry}"
 									></highlightable-map>
 							  `
+							: ''}
+						${this.state.agencyDisbursementsForSelectedCountryAndLatestFY
+							? html` <h4 class="sr-only">
+										${this.state.selectedCountryFormatted}: Overview
+									</h4>
+									<be-map-donut-chart class="grow"></be-map-donut-chart>`
 							: ''}
 					</div>
 
