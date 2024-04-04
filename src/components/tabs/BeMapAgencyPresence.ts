@@ -98,7 +98,7 @@ export class BeMapAgencyPresence extends StateProvider {
 				<ul>
 					${BeMapAgencyPresence.agencies
 						.filter(([, long]) =>
-							this.state.agenciesInSelectedCountry.includes(long)
+							this.state.agenciesInSelectedCountry?.includes(long)
 						)
 						.map(([short, long]) => html`<li>${short} (${long})</li>`)}
 				</ul>

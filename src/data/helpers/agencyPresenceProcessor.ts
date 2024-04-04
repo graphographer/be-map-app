@@ -7,6 +7,10 @@ export const agencyPresenceProcessor = dsv({
 		for (const key in row) {
 			const val = row[key];
 
+			if (key === 'Agency' && val === 'USAID') {
+				row[key] = 'U.S. Agency for International Development';
+			}
+
 			if (key === 'Country') {
 				row.Country = nameToThreeAlphas.get(val) || row.Country;
 			}

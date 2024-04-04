@@ -81,7 +81,9 @@ export class State {
 		});
 	}
 
-	get outputIndicatorsByCountry() {
+	get outputIndicatorsByCountry(): {
+		[k: string]: TOutputIndicator;
+	} {
 		return Object.fromEntries(
 			this.data.output_indicators
 				// .filter(output => output.indicators.find(({ value }) => value > 0))
@@ -92,7 +94,7 @@ export class State {
 		| { [k: string]: number }
 		| undefined {
 		return this.outputIndicatorsByCountry[this.selectedCountry]
-			.outputIndicators;
+			?.outputIndicators;
 	}
 	get outputIndicatorsForSelectedCountryStructural(): TOutputIndicatorStructural {
 		const outputIndicatorsByCountryStructural =
@@ -139,7 +141,7 @@ export class State {
 	get agencyEducationSupportByCountry():
 		| Record<string, Record<TAgency, TEducationLevel[]>>
 		| undefined {
-		if (!this.agenciesInSelectedCountry.length) return;
+		if (!this.agenciesInSelectedCountry?.length) return;
 
 		return mapValues(
 			groupBy(this.data.agency_presence, 'Country'),
@@ -149,7 +151,9 @@ export class State {
 						const levels = pickBy(
 							presence,
 							(supported, key) =>
-								supported && EDUCATION_LEVELS.includes(key as TEducationLevel)
+								supported &&
+								(key === 'Education Levels Not Specified' ||
+									EDUCATION_LEVELS.includes(key as TEducationLevel))
 						);
 						return [presence.Agency, Object.keys(levels)];
 					})
@@ -263,7 +267,7 @@ export class State {
 		});
 	}
 
-	get agenciesInSelectedCountry(): TAgency[] {
+	get agenciesInSelectedCountry(): TAgency[] | undefined {
 		return this.agenciesInCountry[this.selectedCountry];
 	}
 
@@ -343,7 +347,7 @@ export class State {
 		);
 	}
 
-	selectedCountry: string = 'KHM';
+	selectedCountry: string = 'Worldwide';
 
 	get selectedCountryFormatted() {
 		return countryNameFormatter(this.selectedCountry);
