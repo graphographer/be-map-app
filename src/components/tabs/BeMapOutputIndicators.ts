@@ -119,7 +119,7 @@ export class BeMapOutputIndicators extends StateProvider {
 								<ul class="flex-grow">
 									${LEARNERS_REACHED_DEMOS.map(demo => {
 										return html`<li class="space-between">
-											<span class="flex-grow">${demo}:</span>
+											<span class="flex-grow">${demo}</span>
 											<span
 												>${US_NUMBER_FORMATTER.format(
 													// @ts-ignore
@@ -132,7 +132,7 @@ export class BeMapOutputIndicators extends StateProvider {
 							</li>`;
 						})}
 						<li class="space-between flex-grow">
-							<span>Total All Ages:</span>
+							<span>Total All Ages</span>
 							<span
 								>${US_NUMBER_FORMATTER.format(
 									this.state.learnersReached.TotalAll as number
@@ -197,7 +197,7 @@ export class BeMapOutputIndicators extends StateProvider {
 											'Total'
 										].map(demo => {
 											return html`<li class="space-between flex-grow">
-												<span>${demo}:</span>
+												<span>${demo}</span>
 												<span
 													>${US_NUMBER_FORMATTER.format(
 														// @ts-ignore
@@ -241,7 +241,7 @@ export class BeMapOutputIndicators extends StateProvider {
 											'Total'
 										].map(demo => {
 											return html`<li class="space-between flex-grow">
-												<span>${demo}:</span>
+												<span>${demo}</span>
 												<span
 													>${US_NUMBER_FORMATTER.format(
 														// @ts-ignore
@@ -261,7 +261,7 @@ export class BeMapOutputIndicators extends StateProvider {
 				${hasFacilitiesRepaired
 					? html`
 							<li class="space-between flex-grow">
-								<span>${EIndicatorHeader.FacilitiesRepaired}:</span>
+								<span>${EIndicatorHeader.FacilitiesRepaired}</span>
 								<span
 									>${US_NUMBER_FORMATTER.format(
 										this.state.outputIndicatorsForSelectedCountryStructural[
@@ -275,7 +275,7 @@ export class BeMapOutputIndicators extends StateProvider {
 				${hasLearningMaterials
 					? html`
 							<li class="space-between flex-grow">
-								<span>${EIndicatorHeader.LearningMaterials}:</span>
+								<span>${EIndicatorHeader.LearningMaterials}</span>
 								<span
 									>${US_NUMBER_FORMATTER.format(
 										this.state.outputIndicatorsForSelectedCountryStructural[
@@ -304,19 +304,19 @@ export class BeMapOutputIndicators extends StateProvider {
 			<ul>
 				${increasedAccess
 					? html`<li class="space-between flex-grow">
-							<span>${[EIndicatorHeader.IncreasedAccess]}:</span>
+							<span>${[EIndicatorHeader.IncreasedAccess]}</span>
 							<span>${US_NUMBER_FORMATTER.format(increasedAccess)}</span>
 					  </li>`
 					: ''}
 				${newEmployment
 					? html`<li class="space-between flex-grow">
-							<span>${[EIndicatorHeader.NewEmployment]}:</span>
+							<span>${[EIndicatorHeader.NewEmployment]}</span>
 							<span>${US_NUMBER_FORMATTER.format(newEmployment)}</span>
 					  </li>`
 					: ''}
 				${softSkills
 					? html`<li class="space-between flex-grow">
-							<span>${[EIndicatorHeader.SoftSkills]}:</span>
+							<span>${[EIndicatorHeader.SoftSkills]}</span>
 							<span>${US_NUMBER_FORMATTER.format(softSkills)}</span>
 					  </li>`
 					: ''}

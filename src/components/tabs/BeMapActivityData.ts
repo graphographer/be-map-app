@@ -7,7 +7,8 @@ import { isEmpty } from 'lodash-es';
 export class BeMapActivityData extends StateProvider {
 	render() {
 		return isEmpty(this.state.activitiesForSelectedCountryByAgency)
-			? html`<em>No data available.</em>`
+			? html`<h4>USG Program Data for Fiscal Year ${this.state.latestFY}</h4>
+					<em>No data available.</em>`
 			: html`
 					<h4>USG Program Data for Fiscal Year ${this.state.latestFY}</h4>
 					<p>
