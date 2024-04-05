@@ -24,11 +24,9 @@ The output is written to `dist`.
 
 It assumes that the `Source Sans Pro` font face is specified in the document head, with 300, 400, and 600 font weights; and with regular and italic styles.
 
-Building the app as above will emit the IIFE `bootstrapBeApp.js` and an `assets` directory will all the necessary bits and pieces. The IIFE asynchronously fetches various data sources and modules, and finally registers the custom element `be-app`.
+Building the app as above will emit `bootstrapBeApp.mjs` and an `assets` directory will all the necessary bits and pieces. The module immediately executes a function that asynchronously fetch various data and modules, injects CSS variable definitions required in the light DOM, and finally registers the custom element `be-app`.
 
 Therefore, it should only be necessary to make the contents of the `dist` directory public, relative to the root of the rendering html document. Something like the following should work.
-
-Fun fact! A custom element used in an HTML document will lazily render as soon as the corresponding custom element name has been registered to a web component.
 
 html```
 
@@ -44,7 +42,7 @@ html```
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i" rel="stylesheet" />
 
-  <script src="./bootstrapBeApp.js"></script>
+  <script defer type="module" src="./bootstrapBeApp.mjs"></script>
 </head>
 
 <body>
@@ -53,3 +51,5 @@ html```
 
 </html>
 ```
+
+Fun fact! A custom element used in an HTML document will lazily render as soon as the corresponding custom element name has been registered to a web component.

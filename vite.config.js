@@ -24,8 +24,9 @@ export default defineConfig({
 			plugins: [minifyHTML.default()],
 			input: 'src/app/bootstrapBeApp.ts',
 			output: {
-				entryFileNames: '[name].js'
-			}
+				entryFileNames: '[name].mjs'
+			},
+			format: 'iife'
 		}
 	}
 });

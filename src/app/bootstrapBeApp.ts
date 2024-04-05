@@ -1,10 +1,20 @@
 import { HighlightableMap } from 'highlightable-map';
-import '../components/styles/light-dom.scss';
+import lightDomStyles from '../components/styles/light-dom.scss?inline';
 import { provider } from '../state';
 import { State } from '../state/State';
 import { BeApp } from '../components/BeApp';
+import { html, render } from 'lit';
 
 async function bootstrapBeApp() {
+	const renderBefore = document.head.lastChild;
+	render(
+		html`<style>
+			${lightDomStyles}
+		</style>`,
+		document.head,
+		{ renderBefore }
+	);
+
 	try {
 		const [
 			{ default: geodata },
