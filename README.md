@@ -24,7 +24,7 @@ The output is written to `dist`.
 
 It assumes that the `Source Sans Pro` font face is specified in the document head, with 300, 400, and 600 font weights; and with regular and italic styles.
 
-Building the app as above will emit `bootstrapBeApp.mjs` and an `assets` directory will all the necessary bits and pieces. The module immediately executes a function that asynchronously fetch various data and modules, injects CSS variable definitions required in the light DOM, and finally registers the custom element `be-app`.
+Building the app as above will emit `bootstrapBeApp.mjs` and an `assets` directory with all the necessary bits and pieces. The module immediately executes a function that asynchronously fetch various data and modules, injects CSS variable definitions required in the light DOM, and finally registers the custom element `be-app`.
 
 Therefore, it should only be necessary to make the contents of the `dist` directory public, relative to the root of the rendering html document. Something like the following should work.
 
