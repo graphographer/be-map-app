@@ -28,27 +28,31 @@ Building the app as above will emit `bootstrapBeApp.mjs` and an `assets` directo
 
 Therefore, it should only be necessary to make the contents of the `dist` directory public, relative to the root of the rendering html document. Something like the following should work.
 
-html```
-
-<!doctype html>
+```html
+<!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Basic Education Support</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Basic Education Support</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin="anonymous"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i"
+			rel="stylesheet"
+		/>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i" rel="stylesheet" />
+		<script defer type="module" src="./bootstrapBeApp.mjs"></script>
+	</head>
 
-  <script defer type="module" src="./bootstrapBeApp.mjs"></script>
-</head>
-
-<body>
-  <be-app></be-app>
-</body>
-
+	<body>
+		<be-app></be-app>
+	</body>
 </html>
 ```
 
