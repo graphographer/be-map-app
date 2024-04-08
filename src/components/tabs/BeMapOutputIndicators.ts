@@ -118,15 +118,19 @@ export class BeMapOutputIndicators extends StateProvider {
 								<span>${level}</span>
 								<ul class="flex-grow">
 									${LEARNERS_REACHED_DEMOS.map(demo => {
-										return html`<li class="space-between">
-											<span class="flex-grow">${demo}</span>
-											<span
-												>${US_NUMBER_FORMATTER.format(
-													// @ts-ignore
-													this.state.learnersReached[level][demo]
-												)}</span
-											>
-										</li>`;
+										// @ts-ignore
+										const val = this.state.learnersReached[level][demo];
+										return val
+											? html`<li class="space-between">
+													<span class="flex-grow">${demo}</span>
+													<span
+														>${US_NUMBER_FORMATTER.format(
+															// @ts-ignore
+															this.state.learnersReached[level][demo]
+														)}</span
+													>
+											  </li>`
+											: '';
 									})}
 								</ul>
 							</li>`;
@@ -196,18 +200,22 @@ export class BeMapOutputIndicators extends StateProvider {
 											EIndicatorDemographic.Females,
 											'Total'
 										].map(demo => {
-											return html`<li class="space-between flex-grow">
-												<span>${demo}</span>
-												<span
-													>${US_NUMBER_FORMATTER.format(
-														// @ts-ignore
-														this.state
-															.outputIndicatorsForSelectedCountryStructural[
-															EIndicatorHeader.Health
-														][demo]
-													)}</span
-												>
-											</li>`;
+											const val =
+												//@ts-ignore
+												this.state.outputIndicatorsForSelectedCountryStructural[
+													EIndicatorHeader.Health
+												][demo];
+											return val
+												? html`<li class="space-between flex-grow">
+														<span>${demo}</span>
+														<span
+															>${US_NUMBER_FORMATTER.format(
+																// @ts-ignore
+																val
+															)}</span
+														>
+												  </li>`
+												: '';
 										})}
 									</ul>
 								</li>
@@ -240,18 +248,22 @@ export class BeMapOutputIndicators extends StateProvider {
 											EIndicatorDemographic.Females,
 											'Total'
 										].map(demo => {
-											return html`<li class="space-between flex-grow">
-												<span>${demo}</span>
-												<span
-													>${US_NUMBER_FORMATTER.format(
-														// @ts-ignore
-														this.state
-															.outputIndicatorsForSelectedCountryStructural[
-															EIndicatorHeader.ProDev
-														][demo]
-													)}</span
-												>
-											</li>`;
+											const val =
+												//@ts-ignore
+												this.state.outputIndicatorsForSelectedCountryStructural[
+													EIndicatorHeader.ProDev
+												][demo];
+											return val
+												? html`<li class="space-between flex-grow">
+														<span>${demo}</span>
+														<span
+															>${US_NUMBER_FORMATTER.format(
+																// @ts-ignore
+																val
+															)}</span
+														>
+												  </li>`
+												: '';
 										})}
 									</ul>
 								</li>
