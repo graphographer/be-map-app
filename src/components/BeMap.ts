@@ -127,46 +127,46 @@ export class BeMap extends StateProvider {
 				// add diagonal pattern svg to shadow root
 				// this.highlightableMap.shadowRoot?.prepend(diagonalTpl());
 
-				const regionalMarkers = new Map(
-					REGIONS.map(([region, latLng]) => {
-						return [
-							region,
-							marker(latLng, {
-								icon: blueMarker,
-								alt: region,
-								title: region
-							}).addTo(this.highlightableMap.leafletMap)
-						];
-					})
-				);
-				regionalMarkers.forEach(marker => {
-					marker.on('click', e => {
-						const {
-							sourceTarget: {
-								options: { title }
-							}
-						} = e;
+				// const regionalMarkers = new Map(
+				// 	REGIONS.map(([region, latLng]) => {
+				// 		return [
+				// 			region,
+				// 			marker(latLng, {
+				// 				icon: blueMarker,
+				// 				alt: region,
+				// 				title: region
+				// 			}).addTo(this.highlightableMap.leafletMap)
+				// 		];
+				// 	})
+				// );
+				// regionalMarkers.forEach(marker => {
+				// 	marker.on('click', e => {
+				// 		const {
+				// 			sourceTarget: {
+				// 				options: { title }
+				// 			}
+				// 		} = e;
 
-						if (title) {
-							this.state.selectedCountry = title;
-						}
-					});
-				});
+				// 		if (title) {
+				// 			this.state.selectedCountry = title;
+				// 		}
+				// 	});
+				// });
 
 				this.disposers.push(
-					reaction(
-						() => this.state.selectedCountry,
-						selectedCountry => {
-							// console.log(selectedCountry, regionalMarkers);
-							if (selectedMarker) {
-								selectedMarker.setIcon(blueMarker);
-							}
-							if (regionalMarkers.has(selectedCountry)) {
-								selectedMarker = regionalMarkers.get(selectedCountry)!;
-								selectedMarker.setIcon(redMarker);
-							}
-						}
-					),
+					// reaction(
+					// 	() => this.state.selectedCountry,
+					// 	selectedCountry => {
+					// 		// console.log(selectedCountry, regionalMarkers);
+					// 		if (selectedMarker) {
+					// 			selectedMarker.setIcon(blueMarker);
+					// 		}
+					// 		if (regionalMarkers.has(selectedCountry)) {
+					// 			selectedMarker = regionalMarkers.get(selectedCountry)!;
+					// 			selectedMarker.setIcon(redMarker);
+					// 		}
+					// 	}
+					// ),
 					autorun(() => {
 						const toHighlight: string[] = [];
 						Object.entries(this.state.totalYearlyDisbursements).forEach(
