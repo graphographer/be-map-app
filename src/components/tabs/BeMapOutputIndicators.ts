@@ -96,7 +96,13 @@ export class BeMapOutputIndicators extends StateProvider {
 
 		return html`
 			<h4>Results for Fiscal Year ${this.state.latestFY}</h4>
-			<p><em>Disaggregated data is provided where/when available.</em></p>
+			<p>
+				<em
+					>Disaggregated data is provided where/when available. These data come
+					from the U.S. Department of Labor, Millennium Challenge Corporation,
+					Peace Corps, USAID, and U.S. Department of Agriculture.</em
+				>
+			</p>
 			${this.learnersReached} ${this.learnerInputs} ${this.learnerOutcomes}
 		`;
 	}
