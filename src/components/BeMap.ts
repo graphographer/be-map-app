@@ -1,34 +1,31 @@
 import { HighlightableMap } from 'highlightable-map';
-import { Marker, icon, marker } from 'leaflet';
 import { css, html, unsafeCSS } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
-import { autorun, reaction } from 'mobx';
-import bluePin from '../images/blue_pin.png';
-import redPin from '../images/red_pin.png';
+import { autorun } from 'mobx';
 import './BeMapCountryDropdown';
 import { StateProvider } from './StateProvider';
 
-const blueMarker = icon({
-	iconUrl: bluePin,
-	iconSize: [36, 36],
-	iconAnchor: [18, 36]
-});
+// const blueMarker = icon({
+// 	iconUrl: bluePin,
+// 	iconSize: [36, 36],
+// 	iconAnchor: [18, 36]
+// });
 
-const redMarker = icon({
-	iconUrl: redPin,
-	iconSize: [36, 36],
-	iconAnchor: [18, 36]
-});
+// const redMarker = icon({
+// 	iconUrl: redPin,
+// 	iconSize: [36, 36],
+// 	iconAnchor: [18, 36]
+// });
 
-const REGIONS: [string, [number, number]][] = [
-	['Africa Regional', [15, 19]],
-	['Asia Regional', [30, 89]],
-	['Middle East Regional', [29, 49]],
-	['Worldwide', [10, -30]],
-	['Europe and Eurasia Regional', [45, 40]],
-	['Latin America and the Caribbean Regional', [8.5, -80.8]]
-];
+// const REGIONS: [string, [number, number]][] = [
+// 	['Africa Regional', [15, 19]],
+// 	['Asia Regional', [30, 89]],
+// 	['Middle East Regional', [29, 49]],
+// 	['Worldwide', [10, -30]],
+// 	['Europe and Eurasia Regional', [45, 40]],
+// 	['Latin America and the Caribbean Regional', [8.5, -80.8]]
+// ];
 
 const HIGHLIGHT_COLORS: Record<string, string> = {
 	4: '#002F6C',
@@ -119,7 +116,7 @@ export class BeMap extends StateProvider {
 			}
 		});
 
-		let selectedMarker: Marker<any>;
+		// let selectedMarker: Marker<any>;
 
 		this.highlightableMap.addEventListener(
 			'hm-rendered',
