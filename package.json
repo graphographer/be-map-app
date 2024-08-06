@@ -4,7 +4,7 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite --force",
+		"dev": "vite",
 		"build": "tsc && vite build",
 		"build-dev": "vite -c vite-build-dev.config.js build"
 	},

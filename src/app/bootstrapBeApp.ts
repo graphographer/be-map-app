@@ -47,7 +47,7 @@ async function bootstrapBeApp() {
 		provider.set(state);
 
 		// @ts-ignore
-		// window.state = state;
+		window.state = state;
 
 		customElements.define('be-app', BeApp);
 	} catch (e) {

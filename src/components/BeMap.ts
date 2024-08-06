@@ -196,8 +196,26 @@ export class BeMap extends StateProvider {
 								}
 
 								el?.style.setProperty('fill', fill);
+
+								// the morocco/western saraha situation
+								if (country === 'MAR') {
+									// toHighlight.push('SAH');
+									const sahEl = this.highlightableMap.countryEls.get('SAH')!;
+									const sahPath =
+										this.highlightableMap.countryFeatures.get('SAH')!;
+
+									sahEl.style.setProperty('fill', fill);
+
+									if (this.state.selectedCountry === 'MAR') {
+										sahEl.classList.add('bwm-selected');
+										sahPath.bringToFront();
+									} else {
+										sahEl.classList.remove('bwm-selected');
+									}
+								}
 							}
 						);
+
 						this.highlightableMap.highlight = toHighlight;
 					})
 				);
@@ -206,6 +224,9 @@ export class BeMap extends StateProvider {
 		);
 
 		this.state.highlightableMap = this.highlightableMap;
+
+		// @ts-ignore
+		window.state = this.state;
 	}
 
 	render() {

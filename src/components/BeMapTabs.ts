@@ -35,7 +35,7 @@ export class BeMapTabs extends StateProvider {
 		route: string;
 		title: string;
 		template: () => TemplateResult<1>;
-		disabled?: () => boolean;
+		disabled?: (() => boolean) | undefined;
 	}[] = [];
 	activeTab: string = '';
 	focusedTab = 0;

@@ -172,7 +172,7 @@ export class BeApp extends StateProvider {
 				<section id="overview">
 					<div class="flex">
 						<h2>${this.state.selectedCountryFormatted}</h2>
-						${this.state.selectedCountry
+						${this.state.selectedCountry && this.state.selectedCountry !== 'MAR'
 							? html`
 									<highlightable-map
 										class="shrink"
