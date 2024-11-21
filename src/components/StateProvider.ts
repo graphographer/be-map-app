@@ -1,23 +1,17 @@
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { provider } from '../state';
-import { computed, makeObservable } from 'mobx';
+import { consume } from '@lit/context';
 import { CSSResult } from 'lit';
+import { stateLitCtx } from './stateLitCtx';
 import { shadowDom } from './styles';
+import { State } from '../state';
 
 export class StateProvider extends MobxLitElement {
 	protected disposers: (() => void)[] = [];
 
 	static styles: CSSResult[] = [shadowDom];
 
-	constructor() {
-		super();
-
-		makeObservable(this, { state: computed });
-	}
-
-	get state() {
-		return provider.get();
-	}
+	@consume({ context: stateLitCtx })
+	state: State = new State();
 
 	disconnectedCallback(): void {
 		this.disposers.forEach(dispose => dispose());

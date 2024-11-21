@@ -5,7 +5,8 @@ import { bootstrapBeMapApp } from '../src/app/bootstrapBeMapApp';
 @customElement('be-map-app')
 export class BeMapApp extends BeApp {
 	protected async scheduleUpdate(): Promise<void> {
-		await bootstrapBeMapApp();
+		const state = await bootstrapBeMapApp();
+		this.state = state!;
 		super.scheduleUpdate();
 	}
 }

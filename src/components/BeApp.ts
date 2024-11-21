@@ -41,8 +41,14 @@ Chart.register(
 
 import { css, html } from 'lit';
 import { StateProvider } from './StateProvider';
+import { provide } from '@lit/context';
+import { stateLitCtx } from './stateLitCtx';
+import { State } from '../state';
 
 export class BeApp extends StateProvider {
+	@provide({ context: stateLitCtx })
+	state!: State;
+
 	static styles = [
 		...super.styles,
 		css`
@@ -164,8 +170,8 @@ export class BeApp extends StateProvider {
 						</h4>
 						<be-map-country-dropdown
 							aria-describedby="results-heading"
-							.countries=${this.state.filteredCountries}
-						></be-map-country-dropdown>
+							.countries=${this.state
+								.filteredCountries}></be-map-country-dropdown>
 					</section>
 				</div>
 
@@ -182,8 +188,7 @@ export class BeApp extends StateProvider {
 										no-control
 										autozoom
 										highlight="${this.state.selectedCountry}"
-										filter="${this.state.selectedCountry}"
-									></highlightable-map>
+										filter="${this.state.selectedCountry}"></highlightable-map>
 							  `
 							: ''}
 						${this.state.agencyDisbursementsForSelectedCountryAndFY
@@ -200,8 +205,7 @@ export class BeApp extends StateProvider {
 								</h4>
 								<be-map-tabs
 									.config=${this.tabsConfig}
-									.activeTab=${'presence'}
-								></be-map-tabs>`
+									.activeTab=${'presence'}></be-map-tabs>`
 						: ''}
 				</section>
 			</main>
