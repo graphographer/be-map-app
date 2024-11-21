@@ -2,14 +2,14 @@ import { Chart } from 'chart.js';
 import { PropertyValueMap, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { computed, makeObservable, reaction } from 'mobx';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 import { USD_FORMATTER } from '../helpers/USD_FORMATTER';
 import { AGENCIES_LONG_TO_SHORT, TAgency } from '../../types/TAgency';
 import { styleMap } from 'lit/directives/style-map.js';
 import { HIGHLIGHT_COLORS } from './BeMapAgencyDisbursementChart';
 
 @customElement('be-map-donut-chart')
-export class BeMapDonutChart extends StateProvider {
+export class BeMapDonutChart extends AppBase {
 	static styles = [
 		...super.styles,
 		css`
@@ -121,8 +121,7 @@ export class BeMapDonutChart extends StateProvider {
 											class="box"
 											style=${styleMap({
 												'background-color': bg
-											})}
-										></div>
+											})}></div>
 										<b>${agency}:</b>
 									</td>
 									<td>${amt}</td>

@@ -4,10 +4,10 @@ import { live } from 'lit/directives/live.js';
 import { TEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
 import { AGENCIES_SHORT, AGENCIES_SHORT_TO_LONG } from '../types/TAgencyShort';
-import { StateProvider } from './StateProvider';
+import { AppBase } from './StateProvider';
 
 @customElement('be-map-filters')
-export class BeMapFilters extends StateProvider {
+export class BeMapFilters extends AppBase {
 	static styles = [
 		...super.styles,
 		css`
@@ -84,8 +84,7 @@ export class BeMapFilters extends StateProvider {
 				<details
 					class="dropdown"
 					@change=${this.handleAgencyChange.bind(this)}
-					aria-describedby="agency-filter-description"
-				>
+					aria-describedby="agency-filter-description">
 					<summary>
 						${this.state.filter.agencies?.length
 							? this.state.filter.agencies.join(', ')
@@ -99,8 +98,7 @@ export class BeMapFilters extends StateProvider {
 									value=${agency}
 									.checked=${live(
 										!!this.state.filter.agencies?.includes(agency)
-									)}
-								/>
+									)} />
 								${AGENCIES_SHORT_TO_LONG[agency]}
 							</label> `
 					)}

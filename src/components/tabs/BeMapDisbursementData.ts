@@ -1,10 +1,10 @@
 import { customElement } from 'lit/decorators.js';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 import { html } from 'lit';
 import '../charts/BeMapAgencyDisbursementChart';
 
 @customElement('be-map-disbursement-data')
-export class BeMapDisbursementData extends StateProvider {
+export class BeMapDisbursementData extends AppBase {
 	render() {
 		if (this.state.disbursementsForSelectedCountryByAgency.length > 0) {
 			return html`<be-map-agency-disbursement-chart></be-map-agency-disbursement-chart>`;

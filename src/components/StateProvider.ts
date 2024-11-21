@@ -5,7 +5,7 @@ import { stateLitCtx } from './stateLitCtx';
 import { shadowDom } from './styles';
 import { State } from '../state';
 
-export class StateProvider extends MobxLitElement {
+export class AppBase extends MobxLitElement {
 	protected disposers: (() => void)[] = [];
 
 	static styles: CSSResult[] = [shadowDom];

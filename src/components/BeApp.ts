@@ -40,12 +40,12 @@ Chart.register(
 );
 
 import { css, html } from 'lit';
-import { StateProvider } from './StateProvider';
+import { AppBase } from './StateProvider';
 import { provide } from '@lit/context';
 import { stateLitCtx } from './stateLitCtx';
 import { State } from '../state';
 
-export class BeApp extends StateProvider {
+export class BeApp extends AppBase {
 	@provide({ context: stateLitCtx })
 	state!: State;
 

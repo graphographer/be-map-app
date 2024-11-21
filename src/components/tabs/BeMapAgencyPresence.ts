@@ -1,11 +1,11 @@
 import { customElement } from 'lit/decorators.js';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 import { css, html } from 'lit';
 import { TAgency } from '../../types/TAgency';
 import { TEducationLevel } from '../../types/EEducationLevel';
 
 @customElement('be-map-agency-presence')
-export class BeMapAgencyPresence extends StateProvider {
+export class BeMapAgencyPresence extends AppBase {
 	static styles = [
 		...super.styles,
 		css`

@@ -1,12 +1,12 @@
 import { customElement, property } from 'lit/decorators.js';
-import { StateProvider } from './StateProvider';
+import { AppBase } from './StateProvider';
 import { css, html } from 'lit';
 import { live } from 'lit/directives/live.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
 
 @customElement('be-map-country-dropdown')
-export class BeMapCountryDropdown extends StateProvider {
+export class BeMapCountryDropdown extends AppBase {
 	static styles = [
 		...super.styles,
 		css`
@@ -41,8 +41,7 @@ export class BeMapCountryDropdown extends StateProvider {
 					countryCode => {
 						return html`<option
 							value="${countryCode}"
-							?selected=${live(this.state.selectedCountry === countryCode)}
-						>
+							?selected=${live(this.state.selectedCountry === countryCode)}>
 							${countryNameFormatter(countryCode)}
 						</option>`;
 					}

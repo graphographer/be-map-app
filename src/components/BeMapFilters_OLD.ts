@@ -3,11 +3,11 @@ import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
 import { EDUCATION_LEVELS, TEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
-import { StateProvider } from './StateProvider';
+import { AppBase } from './StateProvider';
 import { AGENCIES_SHORT, AGENCIES_SHORT_TO_LONG } from '../types/TAgencyShort';
 
 @customElement('be-map-filters')
-export class BeMapFilters extends StateProvider {
+export class BeMapFilters extends AppBase {
 	static styles = [
 		...super.styles,
 		css`
@@ -86,8 +86,7 @@ export class BeMapFilters extends StateProvider {
 					<details
 						class="dropdown"
 						@change=${this.handleAgencyChange.bind(this)}
-						aria-describedby="agency-filter-description"
-					>
+						aria-describedby="agency-filter-description">
 						<summary>
 							<i
 								>${this.state.filter.agencies?.length
@@ -103,8 +102,7 @@ export class BeMapFilters extends StateProvider {
 										value=${agency}
 										.checked=${live(
 											!!this.state.filter.agencies?.includes(agency)
-										)}
-									/>
+										)} />
 									${AGENCIES_SHORT_TO_LONG[agency]}
 								</label> `
 						)}
@@ -117,8 +115,7 @@ export class BeMapFilters extends StateProvider {
 					<details
 						class="dropdown"
 						aria-describedby="education-filter-description"
-						@change=${this.handleEducationChange.bind(this)}
-					>
+						@change=${this.handleEducationChange.bind(this)}>
 						<summary>
 							<i>
 								${this.state.filter.educationLevels?.length
@@ -134,8 +131,7 @@ export class BeMapFilters extends StateProvider {
 										value=${level}
 										.checked=${live(
 											!!this.state.filter.educationLevels?.includes(level)
-										)}
-									/>
+										)} />
 									${level}
 								</label> `
 						)}

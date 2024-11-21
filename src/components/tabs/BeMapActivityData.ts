@@ -1,10 +1,10 @@
 import { customElement } from 'lit/decorators.js';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 import { PropertyValueMap, html } from 'lit';
 import { isEmpty } from 'lodash-es';
 
 @customElement('be-map-activity-data')
-export class BeMapActivityData extends StateProvider {
+export class BeMapActivityData extends AppBase {
 	render() {
 		return isEmpty(this.state.activitiesForSelectedCountryByAgency)
 			? html`<h4>USG Program Data for Fiscal Year ${this.state.latestFY}</h4>

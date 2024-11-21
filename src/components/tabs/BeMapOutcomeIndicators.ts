@@ -1,11 +1,11 @@
 import { customElement } from 'lit/decorators.js';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 import '../charts/BeMapLearningOutcomesChart';
 import '../charts/BeMapLearningOutcomesTable';
 import { css, html } from 'lit';
 
 @customElement('be-map-outcome-indicators')
-export class BeMapOutcomeIndicators extends StateProvider {
+export class BeMapOutcomeIndicators extends AppBase {
 	static styles = [
 		...super.styles,
 		css`

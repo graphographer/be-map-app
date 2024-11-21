@@ -2,7 +2,7 @@ import { Chart } from 'chart.js';
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { computed, makeObservable, reaction } from 'mobx';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 
 const HIGHLIGHT_COLORS: string[] = [
 	'#002F6C',
@@ -14,7 +14,7 @@ const HIGHLIGHT_COLORS: string[] = [
 ];
 
 @customElement('be-map-learning-outcomes-chart-grouped')
-export class BeMapLearningOutomesChartGrouped extends StateProvider {
+export class BeMapLearningOutomesChartGrouped extends AppBase {
 	static styles = [
 		...super.styles,
 		css`

@@ -3,7 +3,7 @@ import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { autorun, reaction } from 'mobx';
 import { TLearningOutcome } from '../../types/TLearningOutcome';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 import {
 	LEVEL_POINT_STYLES,
 	SUBJECT_COLORS
@@ -25,7 +25,7 @@ function getLabel(outcome: TLearningOutcome) {
 }
 
 @customElement('be-map-learning-outcomes-chart')
-export class BeMapLearningOutcomesChart extends StateProvider {
+export class BeMapLearningOutcomesChart extends AppBase {
 	static styles = [
 		...super.styles,
 		css`

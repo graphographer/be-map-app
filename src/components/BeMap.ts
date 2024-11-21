@@ -4,7 +4,7 @@ import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
 import { autorun } from 'mobx';
 import './BeMapCountryDropdown';
-import { StateProvider } from './StateProvider';
+import { AppBase } from './StateProvider';
 
 // const blueMarker = icon({
 // 	iconUrl: bluePin,
@@ -42,7 +42,7 @@ const COLOR_FILTER =
 	'invert(71%) sepia(47%) saturate(346%) hue-rotate(185deg) brightness(150%) contrast(80%)';
 
 @customElement('be-map')
-export class BeMap extends StateProvider {
+export class BeMap extends AppBase {
 	highlightableMap: HighlightableMap;
 
 	static styles = [
@@ -222,36 +222,31 @@ export class BeMap extends StateProvider {
 				<div aria-describedby="key">
 					<div
 						class="box"
-						style="background-color:${HIGHLIGHT_COLORS['1']}"
-					></div>
+						style="background-color:${HIGHLIGHT_COLORS['1']}"></div>
 					<span>$0&ndash;$1m</span>
 				</div>
 				<div>
 					<div
 						class="box"
-						style="background-color:${HIGHLIGHT_COLORS['2']}"
-					></div>
+						style="background-color:${HIGHLIGHT_COLORS['2']}"></div>
 					<span>$1m&ndash;$5m</span>
 				</div>
 				<div>
 					<div
 						class="box"
-						style="background-color:${HIGHLIGHT_COLORS['3']}"
-					></div>
+						style="background-color:${HIGHLIGHT_COLORS['3']}"></div>
 					<span>$5m&ndash;$15m</span>
 				</div>
 				<div>
 					<div
 						class="box"
-						style="background-color:${HIGHLIGHT_COLORS['4']}"
-					></div>
+						style="background-color:${HIGHLIGHT_COLORS['4']}"></div>
 					<span>> $15m</span>
 				</div>
 				<div>
 					<div
 						class="box"
-						style="background-color:${HIGHLIGHT_COLORS.NONE}"
-					></div>
+						style="background-color:${HIGHLIGHT_COLORS.NONE}"></div>
 					<span>No Disbursement Reported</span>
 				</div>
 			</div>
@@ -264,8 +259,7 @@ export class BeMap extends StateProvider {
 								value="${fy}"
 								?selected=${live(
 									this.state.selectedFiscalYear === fy.toString()
-								)}
-							>
+								)}>
 								${fy}
 							</option>`
 					)}

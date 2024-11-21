@@ -13,7 +13,7 @@ import {
 } from 'mobx';
 import { countryNameFormatter } from '../../data/helpers/countryNameFormatter';
 import { AGENCIES_LONG, TAgency } from '../../types/TAgency';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 import { USD_FORMATTER } from '../helpers/USD_FORMATTER';
 
 export const HIGHLIGHT_COLORS: Record<string, string> = {
@@ -32,7 +32,7 @@ const getTitle = (country: string) =>
 	`Yearly Disbursements to ${countryNameFormatter(country)} (by Agency)`;
 
 @customElement('be-map-agency-disbursement-chart')
-export class BeMapAgencyDisbursementChart extends StateProvider {
+export class BeMapAgencyDisbursementChart extends AppBase {
 	static styles = [
 		...super.styles,
 		css`
@@ -153,8 +153,7 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 						(e.target as HTMLInputElement)?.value as TAgency,
 						(e.target as HTMLInputElement).checked
 					);
-				}}
-			>
+				}}>
 				<fieldset>
 					<legend><b>Toggle agency visibility</b></legend>
 
@@ -167,8 +166,7 @@ export class BeMapAgencyDisbursementChart extends StateProvider {
 									})}
 									type="checkbox"
 									value="${agency}"
-									.checked=${live(this.agencyFilter.has(agency))}
-								/>
+									.checked=${live(this.agencyFilter.has(agency))} />
 								${agency}
 							</label>
 						`;

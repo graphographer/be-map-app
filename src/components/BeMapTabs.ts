@@ -1,5 +1,5 @@
 import { customElement } from 'lit/decorators.js';
-import { StateProvider } from './StateProvider';
+import { AppBase } from './StateProvider';
 import { TemplateResult, css, html } from 'lit';
 import { choose } from 'lit/directives/choose.js';
 import { action, makeObservable, observable } from 'mobx';
@@ -10,7 +10,7 @@ function goodMod(i: number, mod: number) {
 }
 
 @customElement('be-map-tabs')
-export class BeMapTabs extends StateProvider {
+export class BeMapTabs extends AppBase {
 	static styles = [
 		...super.styles,
 		css`
@@ -45,8 +45,7 @@ export class BeMapTabs extends StateProvider {
 			<nav
 				class="tabs is-full"
 				@click=${this.handleClick.bind(this)}
-				@keydown=${this.handleKeydown.bind(this)}
-			>
+				@keydown=${this.handleKeydown.bind(this)}>
 				${this.config.map(({ route, title, disabled }) => {
 					return html`<button
 						role="tab"
@@ -57,8 +56,7 @@ export class BeMapTabs extends StateProvider {
 						class="${classMap({
 							active: this.activeTab === route
 						})}"
-						?disabled=${disabled?.()}
-					>
+						?disabled=${disabled?.()}>
 						${title}
 					</button> `;
 				})}

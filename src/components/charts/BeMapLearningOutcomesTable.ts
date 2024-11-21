@@ -1,10 +1,10 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { action, computed, makeObservable } from 'mobx';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 
 @customElement('be-map-learning-outcomes-table')
-export class BeMapLearningOutcomesTable extends StateProvider {
+export class BeMapLearningOutcomesTable extends AppBase {
 	static styles = [
 		...super.styles,
 		css`
@@ -90,8 +90,7 @@ export class BeMapLearningOutcomesTable extends StateProvider {
 														return html`<td
 															class="cursor-default"
 															data-outcome=${i}
-															data-year-index=${j}
-														>
+															data-year-index=${j}>
 															${outcome}%
 														</td>`;
 													} else {

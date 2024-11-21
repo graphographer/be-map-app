@@ -5,7 +5,7 @@ import {
 	EIndicatorEducationLevel,
 	EIndicatorHeader
 } from '../../types/TOutputIndicator';
-import { StateProvider } from '../StateProvider';
+import { AppBase } from '../StateProvider';
 import { US_NUMBER_FORMATTER } from '../helpers/US_NUMBER_FORMATTER';
 
 const LEARNERS_REACHED_LEVELS: EIndicatorEducationLevel[] = [
@@ -23,7 +23,7 @@ const LEARNERS_REACHED_DEMOS: (EIndicatorDemographic | string)[] = [
 ];
 
 @customElement('be-map-output-indicators')
-export class BeMapOutputIndicators extends StateProvider {
+export class BeMapOutputIndicators extends AppBase {
 	static styles = [
 		...super.styles,
 		css`
