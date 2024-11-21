@@ -1,12 +1,26 @@
 {
-	"name": "be-map",
+	"name": "be-map-app",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
+	"main": "dist/BeMapApp.umd.js",
+	"module": "dist/BeMapApp.es.js",
+	"types": "dist/lib/BeMapApp.ts",
+	"exports": {
+		".": {
+			"import": "./dist/BeMapApp.es.js",
+			"require": "./dist/BeMapApp.umd.js",
+			"types": "./dist/lib/BeMapApp.d.ts"
+		}
+	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"build-dev": "vite -c vite-build-dev.config.js build"
+		"dev": "vite --port 5176",
+		"build": "tsc --p ./tsconfig.build.json && vite build",
+		"build-dev": "vite -c vite-build-dev.config.js build",
+		"prepublishOnly": "npm run build"
 	},
 	"dependencies": {
 		"@adobe/lit-mobx": "^2.2.2",
@@ -26,6 +40,7 @@
 		"sass": "^1.71.1",
 		"typescript": "^5.2.2",
 		"vite": "^5.1.4",
-		"vite-bundle-visualizer": "^1.1.0"
+		"vite-bundle-visualizer": "^1.1.0",
+		"vite-plugin-dts": "^4.3.0"
 	}
 }
