@@ -13,7 +13,7 @@ import {
 } from 'mobx';
 import { countryNameFormatter } from '../../data/helpers/countryNameFormatter';
 import { AGENCIES_LONG, TAgency } from '../../types/TAgency';
-import { AppBase } from '../StateProvider';
+import { AppBase } from '../AppBase';
 import { USD_FORMATTER } from '../helpers/USD_FORMATTER';
 
 export const HIGHLIGHT_COLORS: Record<string, string> = {

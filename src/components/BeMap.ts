@@ -1,10 +1,11 @@
 import { HighlightableMap } from 'highlightable-map';
-import { css, html, unsafeCSS } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { PropertyValueMap, css, html, unsafeCSS } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
 import { autorun } from 'mobx';
 import './BeMapCountryDropdown';
-import { AppBase } from './StateProvider';
+import { AppBase } from './AppBase';
+import { State } from '../state';
 
 // const blueMarker = icon({
 // 	iconUrl: bluePin,
@@ -95,6 +96,9 @@ export class BeMap extends AppBase {
 		`
 	];
 
+	@property({ attribute: false })
+	state!: State;
+
 	constructor() {
 		super();
 
@@ -117,7 +121,11 @@ export class BeMap extends AppBase {
 		});
 
 		// let selectedMarker: Marker<any>;
+	}
 
+	protected firstUpdated(
+		_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+	): void {
 		this.highlightableMap.addEventListener(
 			'hm-rendered',
 			() => {
@@ -213,6 +221,7 @@ export class BeMap extends AppBase {
 	}
 
 	render() {
+		if (!this.state) return '';
 		return html`
 			${this.hm}
 			<b id="key"

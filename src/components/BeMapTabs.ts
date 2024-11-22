@@ -1,5 +1,5 @@
 import { customElement } from 'lit/decorators.js';
-import { AppBase } from './StateProvider';
+import { AppBase } from './AppBase';
 import { TemplateResult, css, html } from 'lit';
 import { choose } from 'lit/directives/choose.js';
 import { action, makeObservable, observable } from 'mobx';

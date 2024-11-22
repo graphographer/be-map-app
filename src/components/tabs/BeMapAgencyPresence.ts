@@ -1,5 +1,5 @@
 import { customElement } from 'lit/decorators.js';
-import { AppBase } from '../StateProvider';
+import { AppBase } from '../AppBase';
 import { css, html } from 'lit';
 import { TAgency } from '../../types/TAgency';
 import { TEducationLevel } from '../../types/EEducationLevel';

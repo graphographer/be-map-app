@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
 import { EDUCATION_LEVELS, TEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
-import { AppBase } from './StateProvider';
+import { AppBase } from './AppBase';
 import { AGENCIES_SHORT, AGENCIES_SHORT_TO_LONG } from '../types/TAgencyShort';
 
 @customElement('be-map-filters')

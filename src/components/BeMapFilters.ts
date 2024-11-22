@@ -4,7 +4,7 @@ import { live } from 'lit/directives/live.js';
 import { TEducationLevel } from '../types/EEducationLevel';
 import { TAgency } from '../types/TAgency';
 import { AGENCIES_SHORT, AGENCIES_SHORT_TO_LONG } from '../types/TAgencyShort';
-import { AppBase } from './StateProvider';
+import { AppBase } from './AppBase';
 
 @customElement('be-map-filters')
 export class BeMapFilters extends AppBase {

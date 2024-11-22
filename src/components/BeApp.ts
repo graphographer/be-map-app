@@ -39,16 +39,10 @@ Chart.register(
 	Legend
 );
 
-import { css, html } from 'lit';
-import { AppBase } from './StateProvider';
-import { provide } from '@lit/context';
-import { stateLitCtx } from './stateLitCtx';
-import { State } from '../state';
+import { PropertyValueMap, css, html } from 'lit';
+import { AppBase } from './AppBase';
 
 export class BeApp extends AppBase {
-	@provide({ context: stateLitCtx })
-	state!: State;
-
 	static styles = [
 		...super.styles,
 		css`
@@ -153,10 +147,12 @@ export class BeApp extends AppBase {
 	}
 
 	render() {
+		if (!this.state) return '';
+
 		return html`
 			<main>
 				<section>
-					<be-map></be-map>
+					<be-map .state=${this.state}></be-map>
 				</section>
 
 				<div class="filter">
@@ -210,6 +206,12 @@ export class BeApp extends AppBase {
 				</section>
 			</main>
 		`;
+	}
+
+	protected updated(
+		_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+	): void {
+		console.log('UDPATED', _changedProperties, this.state);
 	}
 
 	protected async scheduleUpdate() {

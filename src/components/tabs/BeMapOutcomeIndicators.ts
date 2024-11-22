@@ -1,5 +1,5 @@
 import { customElement } from 'lit/decorators.js';
-import { AppBase } from '../StateProvider';
+import { AppBase } from '../AppBase';
 import '../charts/BeMapLearningOutcomesChart';
 import '../charts/BeMapLearningOutcomesTable';
 import { css, html } from 'lit';

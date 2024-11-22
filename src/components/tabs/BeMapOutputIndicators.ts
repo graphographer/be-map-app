@@ -5,7 +5,7 @@ import {
 	EIndicatorEducationLevel,
 	EIndicatorHeader
 } from '../../types/TOutputIndicator';
-import { AppBase } from '../StateProvider';
+import { AppBase } from '../AppBase';
 import { US_NUMBER_FORMATTER } from '../helpers/US_NUMBER_FORMATTER';
 
 const LEARNERS_REACHED_LEVELS: EIndicatorEducationLevel[] = [

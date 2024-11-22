@@ -2,7 +2,7 @@ import { Chart } from 'chart.js';
 import { PropertyValueMap, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { computed, makeObservable, reaction } from 'mobx';
-import { AppBase } from '../StateProvider';
+import { AppBase } from '../AppBase';
 import { USD_FORMATTER } from '../helpers/USD_FORMATTER';
 import { AGENCIES_LONG_TO_SHORT, TAgency } from '../../types/TAgency';
 import { styleMap } from 'lit/directives/style-map.js';

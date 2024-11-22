@@ -1,7 +1,7 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { action, computed, makeObservable } from 'mobx';
-import { AppBase } from '../StateProvider';
+import { AppBase } from '../AppBase';
 
 @customElement('be-map-learning-outcomes-table')
 export class BeMapLearningOutcomesTable extends AppBase {

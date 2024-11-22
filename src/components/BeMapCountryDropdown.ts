@@ -1,9 +1,10 @@
+import { PropertyValueMap, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { AppBase } from './StateProvider';
-import { css, html } from 'lit';
 import { live } from 'lit/directives/live.js';
 import { repeat } from 'lit/directives/repeat.js';
+import { runInAction } from 'mobx';
 import { countryNameFormatter } from '../data/helpers/countryNameFormatter';
+import { AppBase } from './AppBase';
 
 @customElement('be-map-country-dropdown')
 export class BeMapCountryDropdown extends AppBase {
@@ -30,6 +31,8 @@ export class BeMapCountryDropdown extends AppBase {
 	countries: string[] = [];
 
 	render() {
+		if (!this.state) return '';
+
 		return html`
 			<select @input=${this.handleInput}>
 				<option value="" ?selected=${live(this.state.selectedCountry === '')}>
@@ -41,7 +44,7 @@ export class BeMapCountryDropdown extends AppBase {
 					countryCode => {
 						return html`<option
 							value="${countryCode}"
-							?selected=${live(this.state.selectedCountry === countryCode)}>
+							?selected=${live(this.state!.selectedCountry === countryCode)}>
 							${countryNameFormatter(countryCode)}
 						</option>`;
 					}
@@ -51,6 +54,6 @@ export class BeMapCountryDropdown extends AppBase {
 	}
 
 	handleInput(e: InputEvent & { target: { value: string } }) {
-		this.state.selectedCountry = e.target!.value;
+		runInAction(() => (this.state!.selectedCountry = e.target!.value));
 	}
 }

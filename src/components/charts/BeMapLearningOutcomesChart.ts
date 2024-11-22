@@ -3,7 +3,7 @@ import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { autorun, reaction } from 'mobx';
 import { TLearningOutcome } from '../../types/TLearningOutcome';
-import { AppBase } from '../StateProvider';
+import { AppBase } from '../AppBase';
 import {
 	LEVEL_POINT_STYLES,
 	SUBJECT_COLORS

@@ -1,5 +1,5 @@
 import { customElement } from 'lit/decorators.js';
-import { AppBase } from '../StateProvider';
+import { AppBase } from '../AppBase';
 import { PropertyValueMap, html } from 'lit';
 import { isEmpty } from 'lodash-es';
 
